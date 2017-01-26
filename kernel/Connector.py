@@ -3,16 +3,18 @@ __author__ = "Manuel Escriche <mev@tid.es>"
 import base64, certifi, requests
 from kconfig import settings
 
+
 class ConnectionToJIRA(Exception):
     pass
+
 
 class Connector:
 
     url_api = {
-        'session':'/rest/auth/1/session',
-        'project':'/rest/api/latest/project',
-        'component':'/rest/api/latest/component/',
-        'search':'/rest/api/latest/search',
+        'session': '/rest/auth/1/session',
+        'project': '/rest/api/latest/project',
+        'component': '/rest/api/latest/component/',
+        'search': '/rest/api/latest/search',
         'user': '/rest/api/latest/user'
     }
     instance = None
@@ -33,22 +35,22 @@ class Connector:
         username = settings.server['JIRA'].username
         password = settings.server['JIRA'].password
         auth = '{}:{}'.format(username, password)
-        keyword = base64.b64encode(bytes(auth,'utf-8'))
+        keyword = base64.b64encode(bytes(auth, 'utf-8'))
         access_key = str(keyword)[2:-1]
         headers = {'Content-Type': 'application/json', "Authorization": "Basic {}".format(access_key)}
         self.root_url = 'https://{}'.format(settings.server['JIRA'].domain)
-        #print(self.root_url)
+        # print(self.root_url)
         self.session = requests.session()
 
-        #url = '{}{}'.format(self.root_url, Connector.url_api['session'])
-        answer =  self.session.get(self.root_url, headers = headers, verify=Connector.verify)
+        # url = '{}{}'.format(self.root_url, Connector.url_api['session'])
+        answer = self.session.get(self.root_url, headers=headers, verify=Connector.verify)
         if answer.status_code != requests.codes.ok:
             raise ConnectionToJIRA
 
         self.session.headers.update({'Content-Type': 'application/json'})
 
     def component(self, cmp_id):
-        #print('component')
+        # print('component')
         url = '{}{}{}'.format(self.root_url, Connector.url_api['component'], cmp_id)
         try:
             answer = self.session.get(url, verify=Connector.verify)
@@ -145,28 +147,29 @@ class JIRA:
         username = settings.server['JIRA'].username
         password = settings.server['JIRA'].password
         auth = '{}:{}'.format(username, password)
-        keyword = base64.b64encode(bytes(auth,'utf-8'))
+        keyword = base64.b64encode(bytes(auth, 'utf-8'))
         access_key = str(keyword)[2:-1]
         headers = {'Content-Type': 'application/json', "Authorization": "Basic {}".format(access_key)}
         self.root_url = 'https://{}'.format(settings.server['JIRA'].domain)
-        #print(self.root_url)
+        # print(self.root_url)
         self.session = requests.session()
 
-        #url = '{}{}'.format(self.root_url, JIRA.url_api['session'])
-        answer =  self.session.get(self.root_url, headers = headers, verify=JIRA.verify)
+        # url = '{}{}'.format(self.root_url, JIRA.url_api['session'])
+        answer = self.session.get(self.root_url, headers=headers, verify=JIRA.verify)
         if answer.status_code != requests.codes.ok:
             raise ConnectionToJIRA
-
 
         self.session.headers.update({'Content-Type': 'application/json'})
 
     def search(self, params):
         url = '{}{}'.format(self.root_url, JIRA.url_api['search'])
+
         try:
             answer = self.session.get(url, params=params, verify=JIRA.verify)
         except Exception:
             raise ConnectionToJIRA
-        #print(answer.url)
+
+        # print(answer.url)
         data = answer.json()
         return data
 

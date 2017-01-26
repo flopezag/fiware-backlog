@@ -1,10 +1,14 @@
+import base64
+import certifi
+import requests
+from kconfig import settings
+
 __author__ = 'Manuel Escriche'
 
-import base64, certifi, requests
-from kconfig import settings
 
 class ConnectionToJIRA(Exception):
     pass
+
 
 class JIRA:
     _fields = '*navigable'
