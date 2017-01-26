@@ -1,0 +1,18 @@
+{% extends "coordination/layout.html" %}
+{% import 'backlogLib.html' as bl %}
+{% import 'identificationLib.html' as idnt %}
+{% block topic %} - Delivery {% endblock %}
+{% block content %}
+    {{ idnt.globalComponentIdentifier(comp)  }}
+
+    {%  call bl.displayBacklog('Scrum Master Tools', reporter, sortedby) %}
+        <tr>
+            <th><a href="{{ url_for('.scrumtools', sortedby='key') }}">Key</a></th>
+            <th><a href="{{ url_for('.scrumtools', sortedby='issueType') }}">Type</a></th>
+            <th><a href="{{ url_for('.scrumtools', sortedby='name') }}">Name</a></th>
+            <th><a href="{{ url_for('.scrumtools', sortedby='status') }}">Status</a></th>
+            <th><a href="{{ url_for('.scrumtools', sortedby='priority') }}">Priority</a></th>
+            <th><a href="{{ url_for('.scrumtools', sortedby='timeSlot') }}">Time Slot</a></th>
+        </tr>
+    {% endcall %}
+{% endblock %}

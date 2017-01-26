@@ -1,0 +1,57 @@
+{% extends "urgent/urgent.html" %}
+{% block topic %} Impeded Issues{% endblock %}
+{% block content %}
+    <section id="urgent">
+
+        <table class='urgent_dashboard'>
+        <colgroup>
+            <col id="key">
+            <col id="type">
+            <col id="name">
+            <col id="status">
+            <col id="priority">
+            <col id="dueDate">
+            <col id="age">
+            <col id="assignee">
+        </colgroup>
+        <thead>
+        <tr id='title'><th colspan="8">URGENT</th></tr>
+        <tbody>
+        <tr id="impeded"><th colspan="8">Impeded </th></tr>
+        {% for issue in impededL %}
+            {% if loop.first %}
+            <tr>
+                <th><a href="{{ url_for('.impeded', sortedby='key') }}">Key</a></th>
+                <th><a href="{{ url_for('.impeded', sortedby='issueType') }}">Type</a></th>
+                <th><a href="{{ url_for('.impeded', sortedby='name') }}">Name</a></th>
+                <th><a href="{{ url_for('.impeded', sortedby='status') }}">Status</a></th>
+                <th><a href="{{ url_for('.impeded', sortedby='priority') }}">Priority</a></th>
+                <th><a href="{{ url_for('.impeded', sortedby='timeSlot') }}">Time Slot</a></th>
+                <th><a href="{{ url_for('.impeded', sortedby='age') }}">Age</a></th>
+                <th><a href="{{ url_for('.impeded', sortedby='assignee') }}">Assignee</a></th>
+            </tr>
+            {% endif %}
+            <tr class="{{ loop.cycle('odd', 'even')}}">
+                <td><a href="{{ issue.url }}" target=_blank> {{ issue.key }}</a> </td>
+                <td> {{ issue.issueType }}</td>
+                <td> {{ issue.name }}</td>
+                <td> {{ issue.status }} </td>
+                <td> {{ issue.priority }} </td>
+                <td> {{ issue.version }}</td>
+                <td style = "text-align: center"> {{ issue.age }}</td>
+                <td> {{ issue.assignee }}</td>
+            </tr>
+            {% if loop.last %}
+            <tr>
+                <td colspan="7"> >>> {{loop.length }} items found</td>
+            </tr>
+            {% endif %}
+        {% else %}
+            <tr>
+                <td colspan="7"> >>> No Impeded Issues found</td>
+            </tr>
+        {% endfor %}
+        </table>
+    </section>
+
+{% endblock %}

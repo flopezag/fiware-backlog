@@ -1,0 +1,75 @@
+{% extends "delivery/delivery.html" %}
+{% block header %} Pending {% block topic %} {% endblock %}{% endblock %}
+{% block content %}
+    <section>
+        <table class='delivery_dashboard'>
+            <colgroup>
+                <col id="id">
+                <col id="name">
+                <col id="leader">
+                <col id="plan">
+                <col id="deadline">
+                <col id="submission">
+                <col id="delivery_issue">
+                <col id="edition_issue">
+            </colgroup>
+        <thead>
+        <tr id='title'><th colspan="8">PENDING DELIVERABLES </th></tr>
+        <tr id='month'><th colspan="8">Project Month = M{{ month }}</th></tr>
+        <tr id='head'>
+            <th> Dow Id </th><th> Deliverable Name </th><th> Owner - Leader </th><th> Plan </th><th> Deadline </th>
+            <th> Submission </th><th>Delivery Issue</th><th>Edition Issue</th>
+        </tr>
+        <tbody>
+        {% for item in data|sort(attribute='deadline') %}
+        <tr>
+            <td class="center"> {{ item.id }} </td>
+            <td > {{ item.title }}</td>
+            <td> {{ item.owner }} - {{ item.leader }} </td>
+            <td class="center"> {{ item.n_month }} </td>
+            <td class="center"> {{ item.deadline }} </td>
+            {% if item.status == "Delivered" %}
+                <td class="center" bgcolor=#00bfff> {{ item.last_submission.strftime("%d-%m-%Y") }} </td>
+            {% elif item.isDelayed %}
+                <td class="center" bgcolor=red> {{ item.delay }} days </td>
+            {% elif item.isUpcoming %}
+                <td class="center" bgcolor=orange> {{ item.delay }} days </td>
+            {% else %}
+                <td></td>
+            {% endif %}
+            {% if item.delivery_issue %}
+                {% set issue = item.delivery_issue %}
+                {% if issue.status == 'Closed' %}
+                    <td class="center" bgcolor=#90EE90><a style="text-decoration: line-through" href="{{ issue.url }}" target=_blank>{{ issue.id }}</a></td>
+                {% else %}
+                    <td class="center"><a href="{{ issue.url }}" target=_blank>{{ issue.id }}</a></td>
+                {% endif %}
+            {% else %}
+                <td class="center"></td>
+            {% endif %}
+            {% if item.edition_issue %}
+                {% set issue = item.edition_issue %}
+                {% if issue.status == 'Closed' %}
+                    <td class="center" bgcolor=#90EE90><a style="text-decoration: line-through" href="{{ issue.url }}" target=_blank">{{ issue.id }}</a></td>
+                {% else %}
+                    <td class="center"><a href="{{ issue.url }}" target=_blank>{{ issue.id }}</a></td>
+                {% endif %}
+            {% else %}
+                <td class="center"></td>
+            {% endif %}
+        </tr>
+        {% endfor %}
+        </table>
+        <!--
+        <button id="btn">Click me!</button>
+        -->
+    </section>
+    <!--
+    <section>
+        <header>
+            <h1> DEPLOYMENT DASHBOARD </h1>
+        </header>
+        OVERVIEW
+    </section>
+    -->
+{% endblock content %}

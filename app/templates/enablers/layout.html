@@ -1,0 +1,13 @@
+{% extends "layout.html" %}
+
+{% block submenu %}
+    <nav  id="menu">
+        <ul>
+            <li><a href="{{ url_for('.helpdesk', enablername=enabler.name) }}" class="active">Helpdesk</a></li>
+            <li><a href="{{ url_for('.backlog', enablername=enabler.name) }}" class="active">Backlog</a></li>
+            <li><a href="{{ url_for('.raw', enablername=enabler.name) }}" class="active">Raw</a></li>
+            <li><a href="{{ url_for('.review', enablername=enabler.name) }}" class="active">Review</a></li>
+        </ul>
+    </nav>
+
+{% endblock %}

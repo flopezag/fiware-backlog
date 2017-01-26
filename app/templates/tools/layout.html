@@ -1,0 +1,15 @@
+{% extends "layout.html" %}
+
+{% block header %} Tools {% block topic %} {% endblock %} {% endblock %}
+
+{% block submenu %}
+    {% set tool = reporter.tool %}
+    <nav  id="menu">
+        <ul>
+            <li><a href="{{ url_for('.dashboard', toolname=tool.name) }}" class="active">Dashboard</a></li>
+            <li><a href="{{ url_for('.raw', toolname=tool.name) }}" class="active">Raw</a></li>
+            <li><a href="{{ url_for('.review', toolname=tool.name) }}" class="active">Review</a></li>
+        </ul>
+    </nav>
+
+{% endblock %}

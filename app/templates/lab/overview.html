@@ -1,0 +1,35 @@
+{% extends "lab/layout.html" %}
+{% import 'identificationLib.html' as idnt %}
+{% import 'overviewLib.html' as ovl %}
+
+{% block tool %} Help Desk and Backlog {% endblock %}
+{% block header %} Lab
+{% block topic %} - Overview {% endblock %}
+{% endblock %}
+{% block content %}
+    <section>
+        {% set labchapter = lab[0] %}
+        {% set labchannel = lab[1] %}
+      <table class="chapter_identification">
+        <colgroup>
+            <col id="concept">
+            <col id="value">
+        </colgroup>
+        <tbody>
+        <tr><td class="key">Chapter: </td> <td class="value">{{ labchapter.name }}</td></tr>
+        <tr><td class="key">Leader: </td> <td class="value">{{ labchapter.leader }}</td></tr>
+        <tr><td class="key">Backlog Tracker: </td>
+            <td class="value"><a href="http://jira.fiware.org/projects/{{ labchapter.tracker }}"
+                                 target="_blank">http://jira.fiware.org/projects/{{ labchapter.tracker }}</a></td></tr>
+        <tr><td class="key">Backlog Inbox: </td> <td class="value"><a href="mailto:{{ labchapter.inbox }}" class="active">{{ labchapter.inbox }}</a></td></tr>
+        <tr><td class="key">Help Desk Tracker: </td>
+            <td class="value"><a href="http://jira.fiware.org/projects/{{ labchannel.tracker }}" target="_blank">
+                http://jira.fiware.org/projects/{{ labchannel.tracker }}</a> - Component=FIWARE-LAB-HELP</td></tr>
+        <tr><td class="key">Help Desk Inbox: </td> <td class="value"><a href="mailto:{{ labchapter.inbox }}" class="active">{{ labchannel.inbox }}</a></td></tr>
+        </tbody>
+    </table>
+    </section>
+    <section>
+        {{ ovl.drawOverview(reporter) }}
+    </section>
+{% endblock %}

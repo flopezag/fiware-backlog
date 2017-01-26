@@ -1,0 +1,25 @@
+{% extends "layout.html" %}
+{% block tool %} Help Desk {% endblock %}
+{% block header %} {% block topic %} {% endblock %} {% endblock %}
+
+{% block submenu %}
+     <nav  id="menu">
+        <ul>
+            <li><a href="{{ url_for('.main') }}" class="active">Main</a></li>
+            <li><a href="{{ url_for('.lab') }}" class="active">M-Lab</a></li>
+            <li><a href="{{ url_for('.tech') }}" class="active">M-Tech</a></li>
+            <li><a href="{{ url_for('.coaches') }}" class="active">Coaches</a></li>
+            <li><a href="{{ url_for('.tools') }}" class="active"> Tools Support</a></li>
+        </ul>
+    </nav>
+    <!--
+    <script>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+                m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+        ga('create', 'UA-80877512-3', 'auto');
+        ga('send', 'pageview');
+    </script>
+    -->
+{% endblock %}

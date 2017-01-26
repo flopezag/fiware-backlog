@@ -1,0 +1,17 @@
+{% extends "coordination/layout.html" %}
+{% import 'backlogLib.html' as bl %}
+{% import 'identificationLib.html' as idnt %}
+{% block topic %} - Delivery {% endblock %}
+{% block content %}
+    {{ idnt.globalComponentIdentifier(comp)  }}
+    {%  call bl.displayBacklog('Delivery', reporter, sortedby) %}
+        <tr>
+            <th><a href="{{ url_for('.delivery', sortedby='key') }}">Key</a></th>
+            <th><a href="{{ url_for('.delivery', sortedby='issueType') }}">Type</a></th>
+            <th><a href="{{ url_for('.delivery', sortedby='name') }}">Name</a></th>
+            <th><a href="{{ url_for('.delivery', sortedby='status') }}">Status</a></th>
+            <th><a href="{{ url_for('.delivery', sortedby='priority') }}">Priority</a></th>
+            <th><a href="{{ url_for('.delivery', sortedby='timeSlot') }}">Time Slot</a></th>
+        </tr>
+    {% endcall %}
+{% endblock %}

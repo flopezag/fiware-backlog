@@ -1,0 +1,121 @@
+{% extends "enablers/layout.html" %}
+
+{% block tool %} Backlog {% endblock %}
+{% block header %} Enablers {% block topic %} - {{ reporter.enabler.name }} {% endblock %} {% endblock %}
+
+{% block content %}
+    {% set enabler = reporter.enabler %}
+
+
+    <section id="enabler">
+
+        <table class='enabler_identification'>
+            <colgroup>
+                <col id="concept">
+                <col id="value">
+            </colgroup>
+            <tbody>
+            <tr class="name"><td class="key">Enabler Name: </td> <td class="value">{{ enabler.name }}</td></tr>
+            <tr><td class="key">Enabler Owner: </td>   <td class="value">{{ enabler.owner }} - {{ enabler.leader|safe }}</td></tr>
+            <tr><td class="key">Enabler Chapter: </td><td class="value">{{ enabler.chapter }}</td></tr>
+            <tr><td class="key">Enabler Type: </td><td class="value">{{ enabler.type }}</td></tr>
+            <tr><td class="key">Enabler Mode: </td><td class="value">{{ enabler.mode }}</td></tr>
+            <tr><td class="key">Enabler Keyword: </td> <td class="value">{{ enabler.backlogKeyword }}</td></tr>
+
+            <tr><td class="key">Backlog Composition: </td><td class="value"> {{ reporter.length }} Issues =
+                    {{ reporter.issueType['Epic'] }} Epics +
+                    {{ reporter.issueType['Feature'] }} Features +
+                    {{ reporter.issueType['Story'] }} Stories +
+                    {{ reporter.issueType['WorkItem'] }} WorkItems +
+                    {{ reporter.issueType['Bug'] }} Bugs
+                </td></tr>
+            <tr><td class="key">Backlog Time Perspectives: </td><td class="value"> {{ reporter.length }} Issues =
+                {{ reporter.perspective['Implemented'] }} Implemented +
+                <b style="color:red"> {{ reporter.perspective['Working On'] }}  Working On </b> +
+                {{ reporter.perspective['Foreseen'] }} Foreseen
+                </td> </tr>
+            <tr><td class="key"><b style="color:red">Sprint Backlog</b> Status: </td>
+                <td class="value"> <b style="color:red"> {{ reporter.sprint_status.items()|sum(attribute="1") }}  Issues </b> =
+                {% for item in reporter.sprint_status %}
+                    {% if loop.first %}
+                        {{ reporter.sprint_status[item] }} {{ item }}
+                    {% else %}
+                        + {{ reporter.sprint_status[item] }} {{ item }}
+                    {% endif %}
+                {% endfor %}
+                </td></tr>
+
+            </tbody>
+        </table>
+
+        <table class='backlog_dashboard'>
+
+        <colgroup>
+            <col id="key">
+            <col id="type">
+            <col id="name">
+            <col id="status">
+            <col id="priority">
+            <col id="timeSlot">
+        </colgroup>
+        <thead>
+        <tr id='title'><th colspan="6">PRODUCT BACKLOG</th></tr>
+
+        <tbody>
+        {% set issues = reporter.backlog %}
+        {% for issue in issues %}
+            {% if loop.first %}
+            <tr>
+                <th><a href="{{ url_for('.raw', enablername=enabler.name, sortedby='key') }}">Key</a></th>
+                <th><a href="{{ url_for('.raw', enablername=enabler.name, sortedby='issueType') }}">Type</a></th>
+                <th><a href="{{ url_for('.raw', enablername=enabler.name, sortedby='name') }}">Name</a></th>
+                <th><a href="{{ url_for('.raw', enablername=enabler.name, sortedby='status') }}">Status</a></th>
+                <th><a href="{{ url_for('.raw', enablername=enabler.name, sortedby='priority') }}">Priority</a></th>
+                <th><a href="{{ url_for('.raw', enablername=enabler.name, sortedby='timeSlot') }}">Time Slot</a></th>
+            </tr>
+            {% endif %}
+            <tr class="{{ loop.cycle('odd', 'even')}}">
+                {% if issue.OKtests %}
+                    <td style="background-color:lightgreen">
+                {% else %}
+                    <td style="background-color:red">
+                {% endif %}
+                    <a href="{{ issue.url }}" target=_blank> {{ issue.key }}</a> </td>
+                <td class="center"> {{ issue.issueType }}</td>
+
+
+                    <td>
+                {% if issue.p_url %}
+                    <a href="{{ issue.p_url }}" target=_blank> {{ issue.name }}</a>
+                {% else %}
+                    {{ issue.name }}
+                {% endif %}
+                    </td>
+
+
+                <td class="center"> {{ issue.status }}
+                    {% if issue.status == 'Closed' %}
+                     ({{ issue.resolution }})
+                    {% endif %}
+                </td>
+                <td class="center"> {{ issue.priority }}</td>
+                <td class="center">
+                    {% if issue.issueType != 'Epic' %}
+                        {{ issue.version }}
+                    {% endif %}
+                </td>
+            </tr>
+            {% if loop.last %}
+            <tr>
+                <td colspan="5"> >>> {{loop.length }} items found</td>
+            </tr>
+            {% endif %}
+            {% else %}
+            <tr>
+                <td colspan="5"> >>> No Issues Found </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </section>
+
+{% endblock %}

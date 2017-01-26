@@ -1,0 +1,388 @@
+{% extends "layout.html" %}
+
+{% block tool %} Backlog {% endblock %}
+{% block header %} Enablers {% endblock %}
+
+
+{% block content %}
+    <p>
+        <form method="POST" action="{{ url_for('enablers.overview') }}" align="center">
+          Enablers:  {{ form.select}} <input type="submit" value="GO!!" style="width: 80px; height: 40px;" >
+        </form>
+    </p>
+    <section id="overview">
+
+        <table class="enabler_identification">
+            <colgroup>
+                <col id="concept">
+                <col id="value">
+            </colgroup>
+            <tbody>
+                <tr><td class="key"># Enablers </td>   <td class="value">{{ analyser.enablersBook|length }}</td></tr>
+
+                <tr><td class="key">Backlog Composition: </td><td class="value"> {{ analyser.length }} Issues =
+                    {{ analyser.issueType['Epic'] }} Epics +
+                    {{ analyser.issueType['Feature'] }} Features +
+                    {{ analyser.issueType['Story'] }} Stories +
+                    {{ analyser.issueType['WorkItem'] }} WorkItems +
+                    {{ analyser.issueType['Bug'] }} Bugs
+                </td></tr>
+                <tr><td class="key">Backlog Time Perspectives</td><td class="value"> {{ analyser.length }} Issues =
+                {{ analyser.perspective['Implemented'] }} Implemented +
+                <b style="color:red"> {{ analyser.perspective['Working On'] }} Working On </b>+
+                {{ analyser.perspective['Foreseen'] }} Foreseen
+                </td> </tr>
+                <tr><td class="key"><b style="color:red">Sprint Backlog</b> Status: </td>
+                <td class="value"> <b style="color:red"> {{ analyser.sprint_status.items()|sum(attribute="1") }}  Issues </b> =
+                {% for item in analyser.sprint_status %}
+                    {% if loop.first %}
+                        {{ analyser.sprint_status[item] }} {{ item }}
+                    {% else %}
+                        + {{ analyser.sprint_status[item] }} {{ item }}
+                    {% endif %}
+                {% endfor %}
+                </td></tr>
+            </tbody>
+        </table>
+
+        <table class='backlog_graphs'>
+            <colgroup>
+                <col class="column">
+                <col class="column">
+                <col class="column">
+            </colgroup>
+            <tbody>
+            <tr>
+            <td id="composition-graph" class="chart">
+        <script>
+        var chart = new Highcharts.Chart({
+            chart: {
+                renderTo: 'composition-graph',
+                plotBackgroundColor: null,
+                plotBorderWidth: 1,
+                plotShadow: false
+            },
+            title: {
+                text: 'Tech Backlog Composition'
+            },
+            tooltip: {
+                pointFormat: '<b>{point.y} issues ({point.percentage:.1f}%) share</b>'
+            },
+            plotOptions: {
+                pie: {
+                    dataLabels: {
+                        enabled: true,
+                        format: '<b>{point.name}</b>: <br/> {point.y} ({point.percentage:.1f}%)'
+                    }
+                }
+            },
+            series: [{
+                type: 'pie',
+                name: 'Issue type',
+                data: {{ analyser.issueType_graph_data|safe }}
+            }]
+        });
+        </script>
+                </td>
+
+            <td id="perspective-graph" class="chart">
+        <script>
+        var chart = new Highcharts.Chart({
+            chart: {
+                type: 'column',
+                renderTo: 'perspective-graph'
+            },
+            title: {
+                text: 'Tech Backlog Time Perspective'
+            },
+            xAxis: {
+                type: 'category',
+                labels: {
+                    rotation: -45,
+                    fontSize: '13px',
+                    fontFamily: 'Verdana, sans-serif'
+                }
+            },
+            yAxis: {
+                min: 0,
+                title: null
+            },
+            legend: {
+                enabled:false
+            },
+            tooltip: {
+                pointFormat: '<b>{point.y} issues</b>'
+            },
+            series: [{
+                name: 'Time Perspective',
+                data: {{ analyser.perspective_graph_data|safe }},
+                dataLabels: {
+                    enabled: true
+                }
+            }]
+        });
+        </script>
+            </td>
+
+            <td id="errors-graph" class="chart">
+            <script>
+            var chart = new Highcharts.Chart({
+            chart: {
+                renderTo: 'errors-graph',
+                plotBackgroundColor: null,
+                plotBorderWidth: 1,
+                plotShadow: false
+            },
+            title: {
+                text: "Backlog - Issues with Errors"
+            },
+            tooltip: {
+                pointFormat: '<b>{point.y} issues ({point.percentage:.1f}%) share</b>'
+            },
+            plotOptions: {
+                pie: {
+                    dataLabels: {
+                        enabled: true,
+                        format: '<b>{point.name}</b>: <br/> {point.y} ({point.percentage:.1f}%)'
+                    }
+                }
+            },
+            series: [{
+                type: 'pie',
+                name: 'Issue status share',
+                data: {{ analyser.errors_graph_data|safe }}
+            }]
+            });
+            </script>
+            </td>
+
+            </tr>
+            <tr>
+                <td id="burndown-graph" colspan="2">
+                <script>
+            var chart = new Highcharts.Chart({
+
+            chart: {
+                renderTo: 'burndown-graph',
+                plotBackgroundColor: null,
+                plotBorderWidth: 1,
+                plotShadow: false
+            },
+            title: {
+                text: "Sprint Backlog Evolution"
+            },
+            legend: {
+                layout: 'horizontal',
+                align: 'center',
+                itemMarginTop: 20,
+                verticalAlign: 'top',
+                borderWidth: 0
+            },
+            xAxis: {
+                title: {
+                  text: "# Day in month"
+                },
+                categories: {{ analyser.burndown_graph_data.categories|safe }}
+            },
+            yAxis: {
+                title: {
+                    text: 'Issues (#)'
+                },
+                floor: 0
+            },
+            plotOptions: {
+                column: {
+                    dataLabels: {
+                        enabled: true
+                    }
+                }
+            },
+            series: [
+                {{ analyser.burndown_graph_data.reference|safe }},
+                {{ analyser.burndown_graph_data.actual|safe }},
+                {{ analyser.burndown_graph_data.closed|safe }}
+            ]
+        });
+                </script>
+            </td>
+                <td id="status-graph" class="chart">
+        <script>
+        var chart = new Highcharts.Chart({
+            chart: {
+                renderTo: 'status-graph',
+                plotBackgroundColor: null,
+                plotBorderWidth: 1,
+                plotShadow: false
+            },
+            title: {
+                text: "Sprint Backlog Status"
+            },
+            tooltip: {
+                pointFormat: '<b>{point.y} issues ({point.percentage:.1f}%) share</b>'
+            },
+            plotOptions: {
+                pie: {
+                    dataLabels: {
+                        enabled: true,
+                        format: '<b>{point.name}</b>: <br/> {point.y} ({point.percentage:.1f}%)'
+                    }
+                }
+            },
+            series: [{
+                type: 'pie',
+                name: 'Issue status',
+                data: {{ analyser.sprint_status_graph_data|safe }}
+            }]
+        });
+        </script>
+                </td>
+            </tr>
+              <tr>
+             <td id="historic-graph" colspan="3">
+                <script>
+            var chart = new Highcharts.Chart({
+
+            chart: {
+                renderTo: 'historic-graph',
+                plotBackgroundColor: null,
+                plotBorderWidth: 1,
+                plotShadow: false
+            },
+            title: {
+                text: "Enablers Backlog Evolution"
+            },
+            legend: {
+                layout: 'horizontal',
+                align: 'center',
+                itemMarginTop: 20,
+                verticalAlign: 'top',
+                borderWidth: 0
+            },
+            xAxis: {
+                title: {
+                  text: "#Month"
+                },
+                categories: {{ analyser.implemented_graph_data.categories|safe }},
+                max: {{ analyser.implemented_graph_data.ncategories }}
+            },
+            yAxis: {
+                title: {
+                    text: 'Issues (#)'
+                },
+                floor: 0
+            },
+
+            plotOptions: {
+                column: {
+                    dataLabels: {
+                        enabled: true
+                    }
+                }
+            },
+            series: [
+                {{ analyser.implemented_graph_data.created|safe }},
+                {{ analyser.implemented_graph_data.resolved|safe }},
+                {{ analyser.implemented_graph_data.updated|safe }},
+                {{ analyser.implemented_graph_data.released|safe }},
+                {{ analyser.implemented_graph_data.progress|safe }}
+            ]
+        });
+                </script>
+            </td>
+        </tr>
+        </table>
+
+        <table class='enablers_graph'>
+            <colgroup>
+                <col class="column">
+            </colgroup>
+            <tbody>
+            <tr>
+            <td id="enablers-workingOn-graph" class="overview_chart">
+            <script>
+            var chart = new Highcharts.Chart({
+            chart: {
+                type: 'bar',
+                renderTo: 'enablers-workingOn-graph'
+            },
+            title: {
+                text: "Sprint Backlog Status by Enabler"
+            },
+            xAxis: {
+                categories: {{ analyser.enablers|safe }}
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                    text: '# Issues'
+                },
+                stackLabels: {
+                    enabled: true,
+                    style: {
+                        fontWeight: 'bold',
+                        color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
+                    }
+                }
+            },
+            legend: {
+                verticalAlign: 'top',
+                y: 25
+            },
+            plotOptions: {
+                series: {
+                    stacking: 'normal'
+                    }
+            },
+            series: {{ analyser.enablers_sprint_status_graph_data|safe }}
+            });
+            </script>
+            </td>
+            </tr>
+
+            <tr>
+            <td id="enablers-errors-graph" class="overview_chart">
+            <script>
+            var chart = new Highcharts.Chart({
+            chart: {
+                type: 'bar',
+                renderTo: 'enablers-errors-graph'
+            },
+            title: {
+                text: "Backlog Errors by Enabler"
+            },
+            xAxis: {
+                categories: {{ analyser.enablers|safe }}
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                    text: '# Issues'
+                },
+                stackLabels: {
+                    enabled: true,
+                    style: {
+                        fontWeight: 'bold',
+                        color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
+                    }
+                }
+            },
+            legend: {
+                verticalAlign: 'top',
+                y: 25
+            },
+            plotOptions: {
+                series: {
+                    stacking: 'normal'
+                    }
+            },
+            series: {{ analyser.enablers_errors_graph_data|safe }}
+            });
+            </script>
+            </td>
+            </tr>
+        </table>
+
+    </section>
+
+{% endblock %}
+

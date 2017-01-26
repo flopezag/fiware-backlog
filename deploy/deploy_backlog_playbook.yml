@@ -1,0 +1,61 @@
+---
+# ------------------------
+# Deploy the general stuff
+# ------------------------
+- hosts: apache2
+  become: yes
+  strategy: debug
+
+  vars:
+    ssh_public_key_content: "{{ lookup('file', ssh_public_key ) }}"
+  vars_files:
+    - vars/main.yml
+ 
+  pre_tasks:
+    - name: Add apt-get repository to install python-3.6 on Ubuntu 14.04
+      apt_repository: repo='ppa:jonathonf/python-3.6'
+
+    - name: Update APT cache
+      apt: update_cache=yes
+
+  tasks:
+
+    # General tasks
+    - name: install virtualenv
+      apt: name=python-virtualenv state=present update_cache=yes
+
+    - name: install python3.6
+      apt: name=python3.6 state=present update_cache=yes
+
+    - name: disable net.ipv6.conf.all.disable_ipv6
+      sysctl: name=net.ipv6.conf.all.disable_ipv6 value=1 state=present
+
+    - name: disable net.ipv6.conf.default.disable_ipv6
+      sysctl: name=net.ipv6.conf.default.disable_ipv6 value=1 state=present
+ 
+    - name: disable net.ipv6.conf.lo.disable_ipv6
+      sysctl: name=net.ipv6.conf.lo.disable_ipv6 value=1 state=present
+
+    - name: distribute host file
+      template: src=templates/hosts.j2 dest=/etc/hosts
+
+    # Install apache2
+    - name: install apache2
+      apt: name=apache2 update_cache=yes state=latest
+
+    - name: enabled mod_rewrite
+      apache2_module: name=rewrite state=present
+      notify:
+        - restart apache2
+
+    # Install backlog code
+    - name: Install git
+      apt: name=git state=present update_cache=yes
+
+    - name: git clone backlog code
+      # Example read-write git checkout from github
+      git: repo=https://github.com/flopezag/fiware-backlog.git dest=/var/www/fiware-backlog
+
+  handlers:
+    - name: restart apache2
+      service: name=apache2 state=restarted

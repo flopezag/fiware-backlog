@@ -1,0 +1,25 @@
+{% extends "lab/layout.html" %}
+{% import 'backlogLib.html' as bl %}
+{% import 'identificationLib.html' as idnt %}
+{% block tool %} Backlog {% endblock %}
+{% block header %} Lab {% block topic %} - Test Bed {% endblock %}  {% endblock %}
+
+
+{% block content %}
+    <section>
+        {{ bl.compositionBacklog('Lab-Recovery', analyser) }}
+        {{ bl.drawBacklog(analyser) }}
+    </section>
+    <section>
+    {%  call bl.displayBacklog('Test Bed', reporter, sortedby) %}
+        <tr>
+            <th><a href="{{ url_for('.testbed', sortedby='key') }}">Key</a></th>
+            <th><a href="{{ url_for('.testbed', sortedby='issueType') }}">Type</a></th>
+            <th><a href="{{ url_for('.testbed', sortedby='name') }}">Name</a></th>
+            <th><a href="{{ url_for('.testbed', sortedby='status') }}">Status</a></th>
+            <th><a href="{{ url_for('.testbed', sortedby='priority') }}">Priority</a></th>
+            <th><a href="{{ url_for('.testbed', sortedby='timeSlot') }}">Time Slot</a></th>
+        </tr>
+    {% endcall %}
+    </section>
+{% endblock %}

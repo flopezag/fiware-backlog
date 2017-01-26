@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="author" content="Manuel Escriche">
+    <link rel=stylesheet href="{{ url_for('static', filename='style.css') }}">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico')}}" type="image/x-icon" >
+
+    <script src="http://code.highcharts.com/adapters/standalone-framework.js"></script>
+    <script src="http://code.highcharts.com/highcharts.js"></script>
+    <script src="http://code.highcharts.com/modules/exporting.js"></script>
+
+    {% block head %}
+    <title>FIWARE - Backlog Management </title>
+    {% endblock head %}
+
+
+</head>
+
+<body>
+
+    <header id="site_header">
+        <img style="float:left" src="{{ url_for('static', filename='fiware_logo.jpg') }}" height="64"  alt="FIWARE">
+        <h1 > {% block tool %} {% endblock %} Management : {% block header %} {% endblock %} </h1>
+        <p id="projectTime"> {{ calendar.projectTime }}</p>
+
+        <nav>
+            <ul>
+
+                <li><a style= "color:red" href="{{ url_for('urgent.main') }}" class="active"><b>Urgent-Desk</b></a></li>
+                <li><a style= "color:orange" href="{{ url_for('accountsdesk.overview')}}" class="active">Accounts-Desk</a></li>
+                <li><a style= "color:orange" href="{{ url_for('helpdesk.overview')}}" class="active">Help-Desk</a></li>
+                <li><a style= "color:orange" href="{{ url_for('delivery.dashboard') }}" class="active">Delivery-Desk</a></li>
+                <li style="background-color:lightskyblue">
+                    <a style= "color:darkgreen" href="{{ url_for('lab.overview')}}" class="active"><b>Lab</b></a></li>
+                <li><a style= "color:seagreen" href="{{ url_for('enablers.overview') }}" class="active">Enablers</a></li>
+                <li><a style= "color:seagreen" href="{{ url_for('chapters.overview') }}" class="active">Chapters</a></li>
+                <li><a style= "color:seagreen" href="{{ url_for('workgroups.overview') }}" class="active">Work Groups</a></li>
+                <li><a style= "color:seagreen" href="{{ url_for('coordination.overview') }}" class="active">Global</a></li>
+
+                <li><a href="{{ url_for('guide.dochome') }}" class="active">Guide</a> </li>
+                <li><a href="{{ url_for('auth.logout') }}" class="active">Log out</a></li>
+
+            </ul>
+        </nav>
+        {% block submenu %}
+        {% endblock submenu %}
+
+    </header>
+
+    <section id="messages">
+
+    {% for message in get_flashed_messages() %}
+        <div class=flash>{{ message }}</div>
+    {% endfor %}
+
+    </section>
+
+    {% block content %}
+    {% endblock content %}
+
+    <footer id="site_footer">
+        <hr style="margin-bottom:0;">
+        <nav>
+            <ul>
+                <li>
+                    <small>
+                    <a href="http://www.tid.es" target=_blank class="active">© Telefónica Investigación y Desarrollo SAU</a></li>
+                    </small>
+                <li>
+                    <small>
+                    Scrum Master: <a href="mailto:fernando.lopez@fiware.org" class="active">Fernando López Aguilar</a>
+                    </small>
+                </li>
+            </ul>
+                    <small>
+                    2016-2017 © The use of <a href="/">FIWARE backlog</a> website is subject to the acceptance of the <a href="http://forge.fiware.org/plugins/mediawiki/wiki/fiware/index.php/FIWARE_Privacy_Policy" target="a_blank">Personal Data Protection Policy</a> and <a href="http://forge.fiware.org/plugins/mediawiki/wiki/fiware/index.php/Cookies_Policy_FIWARE" target="a_blank">Cookies Policy</a>.
+                    </small>
+
+        </nav>
+    </footer>
+
+</body>
+</html>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang='en'>
+<meta charset="UTF-8"/>
+<link rel=stylesheet href="{{ url_for('static', filename='style.css') }}"/>
+<link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico')}}" type="image/x-icon" />
+
+<head>
+    <title>FIWARE - Help Desk and Backlog Management - Login </title>
+    <style type="text/css">
+        body {margin: 0cm; padding: 1cm; background-color: darkseagreen;}
+        h1 { color: red; margin: 0.5cm; padding: 5px; }
+    </style>
+</head>
+
+<body>
+    <header align="center" with=100% >
+        <img src="{{ url_for('static', filename='fiware_banner.jpg') }}" align="center"/>
+    </header>
+
+    <div class = "content" align="center" with=100% >
+    <h1>FIWARE - Help Desk and Backlog Management</h1>
+    {% if error %}
+    <p class=error> <strong>Error:</strong> {{ error }} </p>
+    {% endif %}
+
+    <form method="POST" action="{{ url }}" align="center">
+        {{ form.hidden_tag() }}
+        <br>
+        <table align=center border=0>
+        <tr>
+            <td>{{ form.username.label }} {{ form.username(size=20) }}</td>
+        </tr>
+        <tr>
+            <td>{{ form.password.label }} {{ form.password(size=20) }}</td>
+        </tr>
+        <tr>
+            <td align="right"> <input type="submit" value="Login" style="width: 80px; height: 40px;" autofocus> </td>
+        </tr>
+        </table>
+    </form>
+    <br>
+    </div>
+
+    <footer align="center" with=100% margin=0.5cm>
+        <hr>
+        Coordinator: Telefónica Investigación y Desarrollo S.A. Unipersonal. <br>
+        <small>© 2011-2016 <a href="http://fiware.org" target="_blank">FIWARE (Core Platform of the Future Internet)</a></small>
+    </footer>
+</body>
+</html>

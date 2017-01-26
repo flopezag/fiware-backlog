@@ -1,0 +1,162 @@
+{% extends "enablers/layout.html" %}
+{% import 'identificationLib.html' as idnt %}
+{% import 'helpdeskLib.html' as hd %}
+
+{% block tool %} Help Desk {% endblock %}
+
+{% block header %} Main Desk - Tech Channel
+    {% block topic %} - {{ enabler.name }} {% endblock %}
+{% endblock %}
+
+{% block content %}
+    <nav>
+        <form method="POST" action="{{ url_for('enablers.helpdesk', enablername=enabler.name) }}" align="center">
+           Help desks: {{ form.select}} <input type="submit" value="GO!!" style="width: 80px; height: 40px;" >
+        </form>
+    </nav>
+    <section id="enabler">
+
+        <table class='enabler_identification'>
+            <colgroup>
+                <col id="concept">
+                <col id="value">
+            </colgroup>
+            <tbody>
+            {{ idnt.identifyEnabler(enabler)}}
+
+        </table>
+    </section>
+
+    <section>
+    {% if reporter|length %}
+    {% set stats = reporter.stats %}
+        <p style="text-align: center; margin-bottom: 0; font-weight: bold; font-size: 30" > {{ reporter.title }} HELP DESK PERFORMANCE </p>
+        <p style="text-align: center; margin-bottom: 0; margin-top: 0">
+        ALL: n = {{ stats.n }};
+        {{ hd.displayStats(stats) }}
+        </p>
+
+        {% set stats = reporter.statsOfRecent %}
+        <p style="text-align: center; margin-bottom: 0; margin-top: 0; color:green">
+        CREATED IN LAST 60 DAYS: n = {{ stats.n }};
+        {{ hd.displayStats(stats) }}
+        </p>
+
+        {% set stats = reporter.statsOfPending %}
+        <p style="text-align: center; margin-bottom: 0; margin-top: 0; color:red">
+        PENDING: n = {{ stats.n }};
+        {{ hd.displayStats(stats) }}
+        </p>
+
+        <table class='desk_graphs'>
+            <colgroup>
+                <col class="column">
+                <col class="column">
+            </colgroup>
+
+            <tbody>
+            {{ hd.drawEvolutionDesk(reporter) }}
+        </table>
+
+    {% endif %}
+    </section>
+
+
+    <section>
+    <p align="center"><b>JIRA Filter</b>: project = HELP AND issuetype in (Monitor, extRequest) AND HD-Enabler = "{{ enabler.name }}"</p>
+    <p align="center"><b>Naming Pattern</b>: FIWARE.(Request|Question).Tech.{{ enabler.chapter }}.{{ enabler.backlogKeyword }}.&lt;Topic&gt;(.&lt;Item&gt)+$; </p>
+    <p align="center" style="font-size:80%">
+        <u>Questions</u> are issues comming from StackOverFlow and Askbot Q/A platform. Their jira issue type is Monitor <br>
+        <u>Requests</u> are issues comming through support email lists. Their jira issue type is extRequest
+    </p>
+    <p align="center"></p>
+    </section>
+
+    <section>
+        <table class='help_board'>
+        <colgroup>
+            <col id="key">
+            <col id="channel">
+            <col id="name">
+            <col id="status">
+            <col id="priority">
+            <col id="age">
+            <col id="assignee">
+            <col id="links">
+        </colgroup>
+        <thead>
+        <tr id='title'><th colspan="8">HELP DESK</th></tr>
+        <tbody>
+        <tr id="unresolved"><th colspan="8">Unresolved Requests </th></tr>
+
+        {% for issue in data.unresolved %}
+            {% if loop.first %}
+            <tr>
+                <th><a href="{{ url_for('.helpdesk', enablername=enabler.name, sortedby='key') }}">Key</a></th>
+                <th>Channel</th>
+                <th><a href="{{ url_for('.helpdesk', enablername=enabler.name, sortedby='name') }}">Summary</a></th>
+                <th><a href="{{ url_for('.helpdesk', enablername=enabler.name, sortedby='status') }}">Status</a></th>
+                <th><a href="{{ url_for('.helpdesk', enablername=enabler.name, sortedby='priority') }}">Priority</a></th>
+                <th><a href="{{ url_for('.helpdesk', enablername=enabler.name, sortedby='age') }}"> Age</a></th>
+                <th><a href="{{ url_for('.helpdesk', enablername=enabler.name, sortedby='assignee') }}">Assignee</a></th>
+                <th>Links</th>
+            </tr>
+            {% endif %}
+            <tr class="{{ loop.cycle('odd', 'even')}}">
+                {{ hd.displayIssue(issue) }}
+            </tr>
+            {% if loop.last %}
+            <tr>
+                <td colspan="7"> >>> {{loop.length }} items found</td>
+            </tr>
+            {% endif %}
+        {% else %}
+            <tr>
+                <td colspan="7"> >>> No Issues found</td>
+            </tr>
+        {% endfor %}
+        </table>
+
+        <table class='help_board'>
+        <colgroup>
+            <col id="resolved">
+            <col id="key">
+            <col id="name">
+            <col id="status">
+            <col id="priority">
+            <col id="age">
+            <col id="assignee">
+            <col id="links">
+        </colgroup>
+        <tbody>
+        <tr style="background-color: yellowgreen"><th colspan="9">Resolved Requests</th></tr>
+        {% for issue in data.resolved|sort(attribute='resolutionDate', reverse=True) %}
+            {% if loop.first %}
+            <tr>
+                <th>Resolution Date</th>
+                <th>Key</th>
+                <th>Summary</th>
+                <th>Status</th>
+                <th>Resolution</th>
+                <th>Priority</th>
+                <th>Age</th>
+                <th>Assignee</th>
+                <th>Links</th>
+            </tr>
+            {% endif %}
+            <tr class="{{ loop.cycle('odd', 'even')}}">
+                {{ hd.displayResolvedIssue(issue) }}
+            </tr>
+            {% if loop.last %}
+            <tr>
+                <td colspan="7"> >>> {{loop.length }} items found</td>
+            </tr>
+            {% endif %}
+        {% else %}
+            <tr>
+                <td colspan="7"> >>> No Issues found</td>
+            </tr>
+        {% endfor %}
+        </table>
+    </section>
+{% endblock %}

@@ -1,0 +1,19 @@
+{% extends "layout.html" %}
+{% block tool %} Backlog {% endblock %}
+{% block header %} Global {% block topic %} {% endblock %} {% endblock %}
+
+{% block submenu %}
+    <nav  id="menu">
+        <ul>
+            <li><a href="{{ url_for('.success_stories') }}" class="active">Success Stories</a></li>
+            <li><a href="{{ url_for('.friendliness') }}" class="active">Friendliness</a></li>
+            <li><a href="{{ url_for('.qualityassurance') }}" class="active">Quality Assurance</a></li>
+            <li><a href="{{ url_for('.delivery') }}" class="active">Delivery</a></li>
+            <li><a href="{{ url_for('.docs') }}" class="active">Docs</a></li>
+            <li><a href="{{ url_for('.issues') }}" class="active">Issues</a></li>
+            <li><a href="{{ url_for('.risks') }}" class="active">Risks</a></li>
+            <li><a href="{{ url_for('.agile') }}" class="active">Agile</a></li>
+            <li><a href="{{ url_for('.scrumtools') }}" class="active">SM Tools</a></li>
+        </ul>
+    </nav>
+{% endblock %}

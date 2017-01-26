@@ -1,0 +1,16 @@
+{% extends "layout.html" %}
+
+{% block submenu %}
+
+    <nav  id="menu">
+        <ul>
+            <li><a href="{{ url_for('.coordination') }}" class="active">Coordination</a></li>
+            <li><a href="{{ url_for('.ghelpdesk') }}" class="active">HelpDesk</a></li>
+            <li><a href="{{ url_for('.gbacklog') }}" class="active">Backlog</a></li>
+            <li><a href="{{ url_for('.deployment') }}" class="active">Deployment</a></li>
+            <li><a href="{{ url_for('.recovery') }}" class="active">Recovery</a></li>
+            <li><a href="{{ url_for('.testbed') }}" class="active">TestBed</a></li>
+        </ul>
+    </nav>
+
+{% endblock %}

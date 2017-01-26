@@ -1,0 +1,583 @@
+{% macro drawBacklog(reporter) %}
+    <table class='backlog_graphs'>
+        <colgroup>
+            <col class="column">
+            <col class="column">
+            <col class="column">
+        </colgroup>
+        <tbody>
+        {{ draw_backlog(reporter) }}
+    </table>
+{% endmacro %}
+
+{% macro drawWorkGroupBacklog(reporter) %}
+    <table class='backlog_graphs'>
+        <colgroup>
+            <col class="column">
+            <col class="column">
+            <col class="column">
+        </colgroup>
+        <tbody>
+    {{ draw_backlog(reporter) }}
+        <tr>
+            <td id="workingGroups-workingOn-graph" class="overview_chart" colspan="3">
+                <script>
+                    var chart = new Highcharts.Chart({
+                        chart: {
+                            type: 'column',
+                            renderTo: 'workingGroups-workingOn-graph'
+                        },
+                        title: {
+                            text: "Sprint Backlog by Component "
+                        },
+                        xAxis: {
+                            categories: {{ reporter.groups|safe }}
+                        },
+                        yAxis: {
+                            min: 0,
+                            title: {
+                                text: '# Issues'
+                            },
+                            stackLabels: {
+                                enabled: true,
+                                style: {
+                                    fontWeight: 'bold',
+                                    color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
+                                }
+                            }
+                        },
+                        legend: {
+                            verticalAlign: 'top',
+                            y: 25
+                        },
+                        plotOptions: {
+                            series: {
+                                stacking: 'normal'
+                            }
+                        },
+                        series: {{ reporter.frame_status_graph_data|safe }}
+                    });
+                </script>
+            </td>
+        </tr>
+    </table>
+{% endmacro %}
+
+
+{% macro drawWorkGroupsBacklog(reporter) %}
+    <table class='backlog_graphs'>
+        <colgroup>
+            <col class="column">
+            <col class="column">
+            <col class="column">
+        </colgroup>
+        <tbody>
+    {{ draw_backlog(reporter) }}
+        <tr>
+            <td id="wg-workingOn-graph" class="overview_chart" colspan="3">
+                <script>
+                    var chart = new Highcharts.Chart({
+                        chart: {
+                            type: 'column',
+                            renderTo: 'wg-workingOn-graph'
+                        },
+                        title: {
+                            text: "Working Groups' Sprint Backlogs "
+                        },
+                        xAxis: {
+                            categories: {{ reporter.workGroups|safe }}
+                        },
+                        yAxis: {
+                            min: 0,
+                            title: {
+                                text: '# Sprint Backlog Issues'
+                            },
+                            stackLabels: {
+                                enabled: true,
+                                style: {
+                                    fontWeight: 'bold',
+                                    color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
+                                }
+                            }
+                        },
+                        legend: {
+                            verticalAlign: 'top',
+                            y: 25
+                        },
+                        plotOptions: {
+                            series: {
+                                stacking: 'normal'
+                            }
+                        },
+                        series: {{ reporter.wg_sprint_status_graph_data|safe}}
+                    });
+                </script>
+            </td>
+        </tr>
+    </table>
+{% endmacro %}
+
+{% macro draw_backlog(reporter) %}
+    <tr>
+        <td id="composition-graph" class="chart">
+            <script>
+                var chart = new Highcharts.Chart({
+                        chart: {
+                            renderTo: 'composition-graph',
+                            plotBackgroundColor: null,
+                            plotBorderWidth: 1,
+                            plotShadow: false
+                        },
+                        title: {
+                            text: 'Backlog Composition'
+                        },
+                        tooltip: {
+                            pointFormat: '<b>{point.y} issues ({point.percentage:.1f}%) share</b>'
+                        },
+                        plotOptions: {
+                            pie: {
+                                dataLabels: {
+                                    enabled: true,
+                                    format: '<b>{point.name}</b>: <br/> {point.y} ({point.percentage:.1f}%)'
+                                }
+                            }
+                        },
+                        series: [{
+                            type: 'pie',
+                            name: 'Issue type',
+                            data: {{ reporter.issueType_graph_data|safe }}
+                        }]
+                    });
+            </script>
+        </td>
+        <td id="perspective-graph" class="chart">
+            <script>
+                var chart = new Highcharts.Chart({
+                        chart: {
+                            type: 'column',
+                            renderTo: 'perspective-graph'
+                        },
+                        title: {
+                            text: 'Backlog Time Perspective'
+                        },
+                        xAxis: {
+                            type: 'category',
+                            labels: {
+                                rotation: -45,
+                                fontSize: '13px',
+                                fontFamily: 'Verdana, sans-serif'
+                            }
+                        },
+                        yAxis: {
+                            min: 0,
+                            title: null
+                        },
+                        legend: {
+                            enabled:false
+                        },
+                        tooltip: {
+                            pointFormat: '<b>{point.y} issues</b>'
+                        },
+                        series: [{
+                            name: 'Time Perspective',
+                            data: {{ reporter.perspective_graph_data|safe }},
+                            dataLabels: {
+                                enabled: true
+                            }
+                        }]
+                    });
+            </script>
+        </td>
+        <td id="errors-graph" class="chart">
+            <script>
+                var chart = new Highcharts.Chart({
+                        chart: {
+                            renderTo: 'errors-graph',
+                            plotBackgroundColor: null,
+                            plotBorderWidth: 1,
+                            plotShadow: false
+                        },
+                        title: {
+                            text: "Backlog - Issues with Errors"
+                        },
+                        tooltip: {
+                            pointFormat: '<b>{point.y} issues ({point.percentage:.1f}%) share</b>'
+                        },
+                        plotOptions: {
+                            pie: {
+                                dataLabels: {
+                                    enabled: true,
+                                    format: '<b>{point.name}</b>: <br/> {point.y} ({point.percentage:.1f}%)'
+                                }
+                            }
+                        },
+                        series: [{
+                            type: 'pie',
+                            name: 'Issue status share',
+                            data: {{ reporter.errors_graph_data|safe }}
+                        }]
+                    });
+            </script>
+        </td>
+    </tr>
+    <tr>
+        <td id="burndown-graph" colspan="2">
+            <script>
+                var chart = new Highcharts.Chart({
+                        chart: {
+                            renderTo: 'burndown-graph',
+                            plotBackgroundColor: null,
+                            plotBorderWidth: 1,
+                            plotShadow: false
+                        },
+                        title: {
+                            text: "Sprint Backlog Evolution"
+                        },
+                        legend: {
+                            layout: 'horizontal',
+                            align: 'center',
+                            itemMarginTop: 20,
+                            verticalAlign: 'top',
+                            borderWidth: 0
+                        },
+                        xAxis: {
+                            title: {
+                                text: "# Day in month"
+                            },
+                            categories: {{ reporter.burndown_graph_data.categories|safe }}
+                        },
+                        yAxis: {
+                            title: {
+                                text: 'Issues (#)'
+                            },
+                            floor: 0
+                        },
+                        plotOptions: {
+                            column: {
+                                dataLabels: {
+                                    enabled: true
+                                }
+                            }
+                        },
+                        series: [
+                            {{ reporter.burndown_graph_data.reference|safe }},
+                            {{ reporter.burndown_graph_data.actual|safe }},
+                            {{ reporter.burndown_graph_data.closed|safe }}
+                        ]
+                    });
+            </script>
+        </td>
+        <td id="status-graph" class="chart">
+            <script>
+                var chart = new Highcharts.Chart({
+                        chart: {
+                            renderTo: 'status-graph',
+                            plotBackgroundColor: null,
+                            plotBorderWidth: 1,
+                            plotShadow: false
+                        },
+                        title: {
+                            text: "Sprint Backlog Status"
+                        },
+                        tooltip: {
+                            pointFormat: '<b>{point.y} issues ({point.percentage:.1f}%) share</b>'
+                        },
+                        plotOptions: {
+                            pie: {
+                                dataLabels: {
+                                    enabled: true,
+                                    format: '<b>{point.name}</b>: <br/> {point.y} ({point.percentage:.1f}%)'
+                                }
+                            }
+                        },
+                        series: [{
+                            type: 'pie',
+                            name: 'Issue status share',
+                            data: {{ reporter.sprint_status_graph_data|safe }}
+                        }]
+                    });
+            </script>
+        </td>
+    </tr>
+    <tr>
+    {% if reporter.composition_graph_data %}
+        <td id="historic-graph" colspan="2">
+            <script>
+                var chart = new Highcharts.Chart({
+                        chart: {
+                            renderTo: 'historic-graph',
+                            plotBackgroundColor: null,
+                            plotBorderWidth: 1,
+                            plotShadow: false
+                        },
+                        title: {
+                            text: "Backlog Evolution"
+                        },
+                        legend: {
+                            layout: 'horizontal',
+                            align: 'center',
+                            itemMarginTop: 20,
+                            verticalAlign: 'top',
+                            borderWidth: 0
+                        },
+                        xAxis: {
+                            title: {
+                                text: "#Month"
+                            },
+                            categories: {{ reporter.implemented_graph_data.categories|safe }},
+                            max: {{ reporter.implemented_graph_data.ncategories }}
+                        },
+                        yAxis: {
+                            title: {
+                                text: 'Issues (#)'
+                            },
+                            floor: 0
+                        },
+                        plotOptions: {
+                            column: {
+                                dataLabels: {
+                                    enabled: true
+                                }
+                            }
+                        },
+                        series: [
+                            {{ reporter.implemented_graph_data.created|safe }},
+                            {{ reporter.implemented_graph_data.resolved|safe }},
+                            {{ reporter.implemented_graph_data.updated|safe }},
+                            {{ reporter.implemented_graph_data.released|safe }},
+                            {{ reporter.implemented_graph_data.progress|safe }}
+                        ]
+                    });
+            </script>
+        </td>
+        <td id="comp-weight" class="chart">
+            <script>
+                var chart = new Highcharts.Chart({
+                    chart: {
+                        renderTo: 'comp-weight',
+                        plotBackgroundColor: null,
+                        plotBorderWidth: 1,
+                        plotShadow: false
+                    },
+                    title: {
+                        text: "Components' Contribution"
+                    },
+                    tooltip: {
+                        pointFormat: '<b>{point.y} issues ({point.percentage:.1f}%) share</b>'
+                    },
+                    plotOptions: {
+                        pie: {
+                            dataLabels: {
+                                enabled: true,
+                                format: '<b>{point.name}</b>: <br/> {point.y} ({point.percentage:.1f}%)'
+                            }
+                        }
+                    },
+                    series: [{
+                        type: 'pie',
+                        name: 'Component',
+                        data: {{ reporter.composition_graph_data|safe }}
+                    }]
+                });
+            </script>
+        </td>
+    {% else %}
+        <td id="historic-graph" colspan="3">
+            <script>
+                var chart = new Highcharts.Chart({
+                        chart: {
+                            renderTo: 'historic-graph',
+                            plotBackgroundColor: null,
+                            plotBorderWidth: 1,
+                            plotShadow: false
+                        },
+                        title: {
+                            text: "Backlog Evolution"
+                        },
+                        legend: {
+                            layout: 'horizontal',
+                            align: 'center',
+                            itemMarginTop: 20,
+                            verticalAlign: 'top',
+                            borderWidth: 0
+                        },
+                        xAxis: {
+                            title: {
+                                text: "#Month"
+                            },
+                            categories: {{ reporter.implemented_graph_data.categories|safe }},
+                            max: {{ reporter.implemented_graph_data.ncategories }}
+                        },
+                        yAxis: {
+                            title: {
+                                text: 'Issues (#)'
+                            },
+                            floor: 0
+                        },
+                        plotOptions: {
+                            column: {
+                                dataLabels: {
+                                    enabled: true
+                                }
+                            }
+                        },
+                        series: [
+                            {{ reporter.implemented_graph_data.created|safe }},
+                            {{ reporter.implemented_graph_data.resolved|safe }},
+                            {{ reporter.implemented_graph_data.updated|safe }},
+                            {{ reporter.implemented_graph_data.released|safe }},
+                            {{ reporter.implemented_graph_data.progress|safe }}
+                        ]
+                    });
+            </script>
+        </td>
+    {% endif %}
+    </tr>
+{% endmacro %}
+
+{% macro compositionBacklog(name, reporter) %}
+    <table class='enabler_identification'>
+        <colgroup>
+            <col id="concept">
+            <col id="value">
+        </colgroup>
+        <thead>
+            <tr id='title'><th colspan="2">{{ name }} Backlog Summary</th></tr>
+        <tbody>
+        <tr><td class="key">Backlog Composition: </td>
+            <td class="value"> {{ reporter|length }} Issues =
+                {% for item in reporter.issueType %}
+                    {% if loop.first %}
+                        {{ reporter.issueType[item] }} {{ item }}
+                    {% else %}
+                        + {{ reporter.issueType[item] }} {{ item }}
+                    {% endif %}
+                {% endfor %}
+            </td></tr>
+        <tr><td class="key"> Backlog Time Perspectives: </td>
+            <td class="value"> {{ reporter|length }} Issues =
+                {{ reporter.perspective['Implemented'] }} Implemented +
+                <b style="color:red"> {{ reporter.perspective['Working On'] }} Working On </b> +
+                {{ reporter.perspective['Foreseen'] }} Foreseen
+            </td> </tr>
+        <tr><td class="key"><b style="color:red">Sprint Backlog</b> Status: </td>
+            <td class="value"> <b style="color:red"> {{ reporter.sprint_status.items()|sum(attribute="1") }}  Issues </b> =
+                {% for item in reporter.sprint_status %}
+                    {% if loop.first %}
+                        {{ reporter.sprint_status[item] }} {{ item }}
+                    {% else %}
+                        + {{ reporter.sprint_status[item] }} {{ item }}
+                    {% endif %}
+                {% endfor %}
+            </td></tr>
+        </tbody>
+    </table>
+{% endmacro %}
+
+
+{% macro displayBacklog(name, reporter, sortedby) %}
+        <table class='backlog_dashboard'>
+            <colgroup>
+                <col id="key">
+                <col id="type">
+                <col id="name">
+                <col id="status">
+                <col id="priority">
+                <col id="timeSlot">
+            </colgroup>
+            <thead>
+            <tr id='title'><th colspan="6">{{ name }} Backlog</th></tr>
+            <tbody>
+        {% set issues = reporter %}
+        {% for frame in ('Foreseen','Working On','Implemented') %}
+            <tr id="{{ loop.cycle('foreseen','working','implemented') }}">
+                <th colspan="6">
+                    {% if frame == 'Working On' %} Sprint Backlog
+                    {% else %} {{ frame }}
+                    {% endif %}
+                </th>
+            </tr>
+            {% for issue in issues|sort(attribute=sortedby, reverse=True) if issue.frame in frame %}
+                {% if loop.first %}
+                    {{ caller() }}
+                {% endif %}
+                <tr class="{{ loop.cycle('odd', 'even')}}">
+                    <td><a href="{{ issue.url }}" target=_blank> {{ issue.key }}</a> </td>
+                    <td class="center"> {{ issue.issueType }}</td>
+                    <td>
+                        {% if issue.p_url %}
+                            <a href="{{ issue.p_url }}" target=_blank> {{ issue.name }}</a>
+                        {% else %}
+                            {{ issue.name }}
+                        {% endif %}
+                    </td>
+                    <td class="center"> {{ issue.status }}</td>
+                    <td class="center"> {{ issue.priority }}</td>
+                    <td class="center"> {{ issue.version }}</td>
+                </tr>
+                {% if loop.last %}
+                    <tr>
+                        <td colspan="5"> >>> {{loop.length }} items found</td>
+                    </tr>
+                {% endif %}
+            {% else %}
+                <tr>
+                    <td colspan="5"> >>> No Issues found</td>
+                </tr>
+            {% endfor %}
+        {% endfor %}
+        </table>
+{% endmacro %}
+
+
+{% macro displayNoBacklog(name, reporter) %}
+    {% set issues = reporter %}
+    {% if issues %}
+        <table class='backlog_dashboard'>
+        <colgroup>
+            <col id="key">
+            <col id="type">
+            <col id="name">
+            <col id="status">
+            <col id="priority">
+            <col id="timeSlot">
+        </colgroup>
+        <thead>
+        <tr ><th colspan="6">{{ name }} </th></tr>
+        <tbody>
+        {% for issue in issues %}
+            {% if loop.first %}
+                <tr>
+                    <th>Key</th>
+                    <th>Type</th>
+                    <th>Name</th>
+                    <th>Status</th>
+                    <th>Priority</th>
+                    <th>Time Slot</th>
+                </tr>
+            {% endif %}
+            <tr class="{{ loop.cycle('odd', 'even')}}">
+                <td><a href="{{ issue.url }}" target=_blank> {{ issue.key }}</a> </td>
+                <td class="center"> {{ issue.issueType }}</td>
+                <td>
+                    {% if issue.p_url %}
+                        <a href="{{ issue.p_url }}" target=_blank> {{ issue.name }}</a>
+                    {% else %}
+                        {{ issue.name }}
+                    {% endif %}
+                </td>
+                <td class="center"> {{ issue.status }}</td>
+                <td class="center"> {{ issue.priority }}</td>
+                <td class="center"> {{ issue.version }}</td>
+            </tr>
+            {% if loop.last %}
+                <tr>
+                        <td colspan="5"> >>> {{loop.length }} items found</td>
+                    </tr>
+            {% endif %}
+        {% endfor %}
+        </table>
+    {% endif %}
+{% endmacro %}
+
+

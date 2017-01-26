@@ -1,0 +1,61 @@
+{% extends "urgent/urgent.html" %}
+{% block topic %} Overdue Issues {% endblock %}
+
+{% block content %}
+    <section id="urgent">
+        <table class='urgent_dashboard'>
+        <colgroup>
+            <col id="key">
+            <col id="type">
+            <col id="name">
+            <col id="status">
+            <col id="priority">
+            <col id="dueDate">
+            <col id="delay">
+            <col id="assignee">
+        </colgroup>
+        <thead>
+        <tr id='title'><th colspan="8">URGENT</th></tr>
+        <tbody>
+
+        <tr id="overdue"><th colspan="8">Overdue </th></tr>
+        {% for issue in overdue %}
+            {% if loop.first %}
+            <tr>
+                <th><a href="{{ url_for('.overdue', sortedby='key') }}">Key</a></th>
+                <th><a href="{{ url_for('.overdue', sortedby='issueType') }}">Type</a></th>
+                <th><a href="{{ url_for('.overdue', sortedby='name') }}">Name</a></th>
+                <th><a href="{{ url_for('.overdue', sortedby='status') }}">Status</a></th>
+                <th><a href="{{ url_for('.overdue', sortedby='priority') }}">Priority</a></th>
+                <th><a href="{{ url_for('.overdue', sortedby='duedate') }}"> Due Date</a></th>
+                <th><a href="{{ url_for('.overdue', sortedby='delay') }}"> Delay</a></th>
+                <th><a href="{{ url_for('.overdue', sortedby='assignee') }}">Assignee</a></th>
+            </tr>
+            {% endif %}
+            <tr class="{{ loop.cycle('odd', 'even')}}">
+                <td><a href="{{ issue.url }}" target=_blank> {{ issue.key }}</a> </td>
+                <td> {{ issue.issueType }}</td>
+                <td> {{ issue.name }}</td>
+                <td> {{ issue.status }} </td>
+                {% if issue.priority == 'Blocker' %}
+                <td style= "background-color: red"> {{ issue.priority }} </td>
+                {% else %}
+                   <td> {{ issue.priority }} </td>
+                {% endif %}
+                <td> {{ issue.duedate }}</td>
+                <td style = "text-align: center"> {{ issue.delay }}</td>
+                <td> {{ issue.assignee }}</td>
+            </tr>
+            {% if loop.last %}
+            <tr>
+                <td colspan="8"> >>> {{loop.length }} items found</td>
+            </tr>
+            {% endif %}
+        {% else %}
+            <tr>
+                <td colspan="8"> >>> No Overdue Issues found</td>
+            </tr>
+        {% endfor %}
+        </table>
+    </section>
+{% endblock %}

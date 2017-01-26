@@ -1,0 +1,18 @@
+{% extends "coordination/layout.html" %}
+{% import 'backlogLib.html' as bl %}
+{% import 'identificationLib.html' as idnt %}
+{% block topic %} - Risks {% endblock %}
+{% block content %}
+    {{ idnt.globalComponentIdentifier(comp)  }}
+
+    {%  call bl.displayBacklog('Risks Management', reporter, sortedby) %}
+        <tr>
+            <th><a href="{{ url_for('.risks', sortedby='key') }}">Key</a></th>
+            <th><a href="{{ url_for('.risks', sortedby='issueType') }}">Type</a></th>
+            <th><a href="{{ url_for('.risks', sortedby='name') }}">Name</a></th>
+            <th><a href="{{ url_for('.risks', sortedby='status') }}">Status</a></th>
+            <th><a href="{{ url_for('.risks', sortedby='priority') }}">Priority</a></th>
+            <th><a href="{{ url_for('.risks', sortedby='timeSlot') }}">Time Slot</a></th>
+        </tr>
+    {% endcall %}
+{% endblock %}

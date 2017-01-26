@@ -1,0 +1,19 @@
+---
+# Set to absent to take down machines
+instance_state: present
+
+# The name of the key pair you will use to log in
+# as set in OpenStack (see the OpenStack security dashboard)
+key_name: apache2.pem
+
+# Id of the networks to run in (can be found in the OpenStack
+# dashboard)
+network_internal_name: node-int-net-01
+network_external_name: public-ext-net-01
+
+# Name of the user used to install everything
+# on the remote systems
+user: ubuntu
+
+# Name of apache2 user
+apache2_user: ubuntu

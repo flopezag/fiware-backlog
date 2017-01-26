@@ -1,0 +1,15 @@
+{% extends "layout.html" %}
+{% block tool %} Urgent Desk {% endblock %}
+{% block header %} {% block topic %} {% endblock %} {% endblock %}
+
+{% block submenu %}
+     <nav  id="menu">
+        <ul>
+            <li><a href="{{ url_for('.upcoming') }}" class="active">Upcoming</a></li>
+            <li><a href="{{ url_for('.overdue') }}" class="active">Overdue</a></li>
+            <li><a href="{{ url_for('.blockers') }}" class="active">Blockers</a></li>
+            <li><a href="{{ url_for('.impeded') }}" class="active">Impeded</a></li>
+            <li><a href="{{ url_for('.aged') }}" class="active">Forgotten?</a></li>
+        </ul>
+    </nav>
+{% endblock %}

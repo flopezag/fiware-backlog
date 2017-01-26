@@ -1,0 +1,17 @@
+{% extends "layout.html" %}
+
+{% block header %} Tech {% block topic %} {% endblock %}  {% endblock %}
+
+{% block submenu %}
+    {% set chapter = reporter.chaptername %}
+    <nav  id="menu">
+        <ul>
+            <li><a href="{{ url_for('.helpdesk', chaptername=chapter) }}" class="active">Helpdesk</a></li>
+            <li><a href="{{ url_for('.backlog', chaptername=chapter) }}" class="active">Backlog</a></li>
+            <li><a href="{{ url_for('.raw', chaptername=chapter) }}" class="active">Raw</a></li>
+            <li><a href="{{ url_for('.review', chaptername=chapter) }}" class="active">Review</a></li>
+        </ul>
+    </nav>
+
+{% endblock %}
+

@@ -1,0 +1,29 @@
+{% extends "lab/layout.html" %}
+{% import 'backlogLib.html' as bl %}
+{% import 'identificationLib.html' as idnt %}
+{% block tool %} Backlog {% endblock %}
+{% block header %} Lab {% block topic %} - Node: {{ node.name }}  {% endblock %} {% endblock %}
+
+{% block content %}
+    <nav>
+        <form method="POST" action="{{ url_for('lab.backlog', nodename=node.name) }}" align="center">
+           Nodes' Backlog: {{ form.select}} <input type="submit" value="GO!!" style="width: 80px; height: 40px;" >
+        </form>
+    </nav>
+    <section>
+        {{ bl.compositionBacklog(node.name, backlog) }}
+        {{ bl.drawBacklog(reporter) }}
+    </section>
+
+    <section>
+    {%  call bl.displayBacklog(node.name, backlog, sortedby) %}
+        <tr>
+            <th><a href="{{ url_for('.backlog', nodename=node.name, sortedby='key') }}">Key</a></th>
+            <th><a href="{{ url_for('.backlog', nodename=node.name, sortedby='issueType') }}">Type</a></th>
+            <th><a href="{{ url_for('.backlog', nodename=node.name, sortedby='name') }}">Name</a></th>
+            <th><a href="{{ url_for('.backlog', nodename=node.name, sortedby='status') }}">Status</a></th>
+            <th><a href="{{ url_for('.backlog', nodename=node.name, sortedby='priority') }}">Priority</a></th>
+            <th><a href="{{ url_for('.backlog', nodename=node.name, sortedby='timeSlot') }}">Time Slot</a></th>
+    {% endcall %}
+    </section>
+{% endblock %}

@@ -1,0 +1,214 @@
+
+{% macro draw_monthly_evolution(reporter) %}
+    <tr>
+        <td id="monthly-graph">
+            <script>
+                var chart = new Highcharts.Chart({
+                    chart:{
+                        renderTo:'monthly-graph',
+                        plotBackgroundColor: null,
+                        plotBorderWidth: 1,
+                        plotShadow: false
+                    },
+                    title:{
+                        text: "Sprint Help Desk Evolution"
+                    },
+                    legend:{
+                        layout: 'horizontal',
+                        align: 'center',
+                        itemMarginTop: 20,
+                        verticalAlign: 'top',
+                        borderWidth: 0
+                    },
+                    xAxis: {
+                        title: {
+                            text: "#day"
+                        },
+                        categories: {{ reporter.monthly_evolution_graph_data.categories|safe }},
+                        max: {{ reporter.monthly_evolution_graph_data.ncategories }}
+                    },
+                    yAxis: {
+                        title: {
+                            text: '#Issues'
+                        },
+                        floor: 0
+                    },
+                    plotOptions: {
+                        column: {
+                            dataLabels: {
+                                enabled: true
+                            }
+                        }
+                    },
+                    series: [
+                        {{ reporter.monthly_evolution_graph_data.created|safe }},
+                        {{ reporter.monthly_evolution_graph_data.resolved|safe }},
+                        {{ reporter.monthly_evolution_graph_data.progress|safe }}
+                    ]
+                })
+            </script>
+
+        </td>
+        <td id="burndown-graph">
+            <script>
+                var chart = new Highcharts.Chart({
+                        chart: {
+                            renderTo: 'burndown-graph',
+                            plotBackgroundColor: null,
+                            plotBorderWidth: 1,
+                            plotShadow: false
+                        },
+                        title: {
+                            text: "Sprint Backlog Evolution"
+                        },
+                        legend: {
+                            layout: 'horizontal',
+                            align: 'center',
+                            itemMarginTop: 20,
+                            verticalAlign: 'top',
+                            borderWidth: 0
+                        },
+                        xAxis: {
+                            title: {
+                                text: "# Day in month"
+                            },
+                            categories: {{ reporter.burndown_graph_data.categories|safe }}
+                        },
+                        yAxis: {
+                            title: {
+                                text: 'Issues (#)'
+                            },
+                            floor: 0
+                        },
+                        plotOptions: {
+                            column: {
+                                dataLabels: {
+                                    enabled: true
+                                }
+                            }
+                        },
+                        series: [
+                            {{ reporter.burndown_graph_data.reference|safe }},
+                            {{ reporter.burndown_graph_data.actual|safe }},
+                            {{ reporter.burndown_graph_data.closed|safe }}
+                        ]
+                    });
+            </script>
+        </td>
+    </tr>
+{% endmacro %}
+
+{% macro draw_evolution(reporter) %}
+    <tr>
+        <td id="evolution-graph" class="chart">
+            <script>
+                var chart = new Highcharts.Chart({
+                    chart: {
+                        renderTo: "evolution-graph",
+                        plotBackgroundColor: null,
+                        plotBorderWidth: 1,
+                        plotShadow: false
+                    },
+                    title: {
+                        text: "Help Desk Evolution"
+                    },
+                    legend: {
+                        layout: 'horizontal',
+                        align: 'center',
+                        itemMarginTop: 20,
+                        verticalAlign: 'top',
+                        borderWidth: 0
+                    },
+                    xAxis: {
+                        title: {
+                            text: "#Month"
+                        },
+                        categories: {{ reporter.evolution_graph_data.categories|safe }},
+                        max: {{ reporter.evolution_graph_data.ncategories }}
+                    },
+                    yAxis: {
+                        title: {
+                            text: '#Issues'
+                        },
+                        floor: 0
+                    },
+                    plotOptions: {
+                        column: {
+                            dataLabels: {
+                                enabled: true
+                            }
+                        }
+                    },
+                    series: [
+                        {{ reporter.evolution_graph_data.created|safe }},
+                        {{ reporter.evolution_graph_data.resolved|safe }},
+                        {{ reporter.evolution_graph_data.progress|safe }},
+                        {{ reporter.evolution_graph_data.summary|safe }}
+                    ]
+                });
+            </script>
+        </td>
+        <td id="historic-graph">
+            <script>
+                var chart = new Highcharts.Chart({
+                        chart: {
+                            renderTo: 'historic-graph',
+                            plotBackgroundColor: null,
+                            plotBorderWidth: 1,
+                            plotShadow: false
+                        },
+                        title: {
+                            text: "Backlog Evolution"
+                        },
+                        legend: {
+                            layout: 'horizontal',
+                            align: 'center',
+                            itemMarginTop: 20,
+                            verticalAlign: 'top',
+                            borderWidth: 0
+                        },
+                        xAxis: {
+                            title: {
+                                text: "#Month"
+                            },
+                            categories: {{ reporter.implemented_graph_data.categories|safe }},
+                            max: {{ reporter.implemented_graph_data.ncategories }}
+                        },
+                        yAxis: {
+                            title: {
+                                text: 'Issues (#)'
+                            },
+                            floor: 0
+                        },
+                        plotOptions: {
+                            column: {
+                                dataLabels: {
+                                    enabled: true
+                                }
+                            }
+                        },
+                        series: [
+                            {{ reporter.implemented_graph_data.created|safe }},
+                            {{ reporter.implemented_graph_data.resolved|safe }},
+                            {{ reporter.implemented_graph_data.updated|safe }},
+                            {{ reporter.implemented_graph_data.released|safe }},
+                            {{ reporter.implemented_graph_data.progress|safe }}
+                        ]
+                    });
+            </script>
+        </td>
+    </tr>
+{% endmacro %}
+
+{% macro drawOverview(reporter) %}
+    <table class='scrum_graphs'>
+        <colgroup>
+            <col class="column">
+            <col class="column">
+        </colgroup>
+        <tbody>
+        {{ draw_monthly_evolution(reporter) }}
+        {{ draw_evolution(reporter) }}
+    </table>
+
+{% endmacro %}

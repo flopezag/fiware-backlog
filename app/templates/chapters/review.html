@@ -1,0 +1,145 @@
+{% extends "chapters/layout.html" %}
+{% block tool %} Backlog {% endblock %}
+{% block topic %} - {{ analyser.chaptername }} {% endblock %}
+
+{% block content %}
+{% set chaptername = analyser.chaptername %}
+
+  <section id="identification">
+        <table class="chapter_identification">
+            <colgroup>
+                <col id="concept">
+                <col id="value">
+            </colgroup>
+            <tbody>
+                <tr><td class="key"># Chapter </td> <td class="value">{{ analyser.chaptername }}</td></tr>
+
+                <tr><td class="key">Backlog Composition: </td><td class="value"> {{ analyser.length }} Issues =
+                    {{ analyser.issueType['Epic'] }} Epics +
+                    {{ analyser.issueType['Feature'] }} Features +
+                    {{ analyser.issueType['Story'] }} Stories +
+                    {{ analyser.issueType['WorkItem'] }} WorkItems +
+                    {{ analyser.issueType['Bug'] }} Bugs
+                </td></tr>
+                <tr><td class="key">Backlog Time Perspectives</td><td class="value"> {{ analyser.length }} Issues =
+                {{ analyser.perspective['Implemented'] }} Implemented +
+                <b style="color:red"> {{ analyser.perspective['Working On'] }} Working On </b>+
+                {{ analyser.perspective['Foreseen'] }} Foreseen
+                </td> </tr>
+                <tr><td class="key"><b style="color:red">Sprint Backlog</b> Status: </td>
+                <td class="value"> <b style="color:red"> {{ analyser.sprint_status.items()|sum(attribute="1") }}  Issues </b> =
+                {% for item in analyser.sprint_status %}
+                    {% if loop.first %}
+                        {{ analyser.sprint_status[item] }} {{ item }}
+                    {% else %}
+                        + {{ analyser.sprint_status[item] }} {{ item }}
+                    {% endif %}
+                {% endfor %}
+                </td></tr>
+            </tbody>
+        </table>
+  </section>
+
+    <section>
+        <table class='chapter_identification'>
+            <colgroup>
+                <col id="concept">
+                <col id="value">
+            </colgroup>
+            <thead>
+                <tr id='title'><th colspan="2" style="font-size: 30px">COORDINATION REVIEW METRICS</th></tr>
+                <tr><th style="position: relative; right: 10px; text-align:right;">CRITERIA</th>
+                    <th style="position: relative; left: 10px; text-align:left"># TESTS PASSED</th></tr>
+            <tbody>
+            {% for rule in reporter.backlog.rules %}
+                {% if rule in reporter.backlog.testMetrics['OK'] %}
+                <tr>
+                    {% if reporter.backlog.testStatus[rule] %}
+                    <td class="key" style="background-color: lightgreen;">
+                    {% else %}
+                    <td class="key" style="background-color: red;">
+                    {% endif %}
+                    {{ rule }} </td>
+
+                    <td class="value">
+                        {{ reporter.backlog.testMetrics['OK'][rule] }} <b style="color:green"> OK </b>  --
+                        {{ reporter.backlog.testMetrics['KO'][rule] }} <b style="color:red"> KO </b>
+                    </td>
+                </tr>
+                {% endif %}
+                {% if loop.last %}
+                    <tr><td class="key">Total</td>
+                    <td class="value">
+                        {{ reporter.backlog.testMetrics['OK'].values()|sum}} <b style="color:green"> OK </b> --
+                        {{ reporter.backlog.testMetrics['KO'].values()|sum}} <b style="color:red"> KO </b>
+                    </td>
+                    </tr>
+                {% endif %}
+            {% endfor %}
+
+        </table>
+    </section>
+    <section>
+        <table class='backlog_dashboard'>
+        <colgroup>
+            <col id="key">
+            <col id="type">
+            <col id="name">
+            <col id="status">
+            <col id="priority">
+            <col id="timeSlot">
+            <col id="assignee">
+        </colgroup>
+        <thead>
+        <tr id='title'><th colspan="7">COORDINATION BACKLOG REVIEW</th></tr>
+
+        <tbody>
+        {% set issues = reporter.backlog.wrong %}
+        {% for issue in issues %}
+            {% if loop.first %}
+            <tr>
+                <th><a href="{{ url_for('.review', chaptername=chaptername, sortedby='key') }}">Key</a></th>
+                <th><a href="{{ url_for('.review', chaptername=chaptername, sortedby='issueType') }}">Type</a></th>
+                <th><a href="{{ url_for('.review', chaptername=chaptername, sortedby='name') }}">Name</a></th>
+                <th><a href="{{ url_for('.review', chaptername=chaptername, sortedby='status') }}">Status</a></th>
+                <th><a href="{{ url_for('.review', chaptername=chaptername, sortedby='priority') }}">Priority</a></th>
+                <th><a href="{{ url_for('.review', chaptername=chaptername, sortedby='timeSlot') }}">Time Slot</a></th>
+                <th><a href="{{ url_for('.review', chaptername=chaptername, sortedby='assignee') }}">Assignee</a></th>
+            </tr>
+            {% endif %}
+            <tr class="odd">
+
+                <td style="background-color:red"><a href="{{ issue.url }}" target=_blank> {{ issue.key }}</a> </td>
+                <td class="center"> {{ issue.issueType }}</td>
+
+                <td>
+                {% if issue.p_url %}
+                    <a href="{{ issue.p_url }}" target=_blank> {{ issue.name }}</a>
+                {% else %}
+                    {{ issue.name }}
+                {% endif %}
+                </td>
+
+                <td class="center"> {{ issue.status }}</td>
+                <td class="center"> {{ issue.priority }}</td>
+                <td class="center"> {{ issue.version }}</td>
+                <td class="center"> {{ issue.assignee }}</td>
+            </tr>
+
+                <tr class='even' style="height: 30px; background-color: blanchedalmond"><td></td><td colspan="6">{{ issue.getErrorMessage }}</td></tr>
+
+            {% if loop.last %}
+            <tr>
+                <td colspan="7"> >>> {{loop.length }} items found</td>
+            </tr>
+
+            {% endif %}
+            {% else %}
+            <tr style="height: 30px">
+                <td colspan="7" style="text-align: center">  NO WRONG Issues found  --  CONGRATULATIONS!!!</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </section>
+
+{% endblock %}

@@ -1,0 +1,36 @@
+<VirtualHost *:80>
+	# The ServerName directive sets the request scheme, hostname and port that
+	# the server uses to identify itself. This is used when creating
+	# redirection URLs. In the context of virtual hosts, the ServerName
+	# specifies what hostname must appear in the request's Host: header to
+	# match this virtual host. For the default virtual host (this file) this
+	# value is not decisive as it is used as a last resort host regardless.
+	# However, you must set it for any further virtual host explicitly.
+
+    ServerName backlog.fiware.org
+	ServerAdmin fernando.lopez@fiware.org
+
+    Alias /guide /var/www/fiware-backlog/docs
+
+    <Directory /var/www/fiware-backlog/docs>
+                Order deny,allow
+                Allow from all
+    </Directory>
+
+	WSGIScriptAlias / /var/www/fiware-backlog/fiware-backlog.wsgi
+
+    <Directory /var/www/fiware-backlog>
+		Order deny,allow
+        Allow from all
+	</Directory>
+
+    WSGIScriptReloading On
+	WSGIPassAuthorization On
+    WSGIDaemonProcess fiware-backlog user=backlog group=www-data threads=25 maximum-requests=1000 home=/var/www/fiware-backlog/app
+    WSGIProcessGroup fiware-backlog
+    WSGIApplicationGroup %{GLOBAL}
+
+	LogLevel info
+	ErrorLog /var/www/fiware-backlog/logs/error.log
+	CustomLog /var/www/fiware-backlog/logs/access.log combined
+</VirtualHost>
