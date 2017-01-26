@@ -75,22 +75,22 @@ def trackersbookNodesk():
 @api.route("/enablersbook")
 @authentication
 def get_enablersBook():
-    book = {item:{'component': enablersBook[item].key,
-                  'owner':enablersBook[item].leader,
+    book = {item: {'component': enablersBook[item].key,
+                  'owner': enablersBook[item].leader,
                   'chapter': enablersBook[item].chapter,
-                  'backlog_keyword':enablersBook[item].backlogKeyword} for item in enablersBook}
-    return jsonify({'book':book})
+                  'backlog_keyword': enablersBook[item].backlogKeyword} for item in enablersBook}
+    return jsonify({'book': book})
 
 @api.route("/nodesbook")
 @authentication
 def get_nodesBook():
-    book = {item:{'support':helpdeskNodesBook[item].support} for item in helpdeskNodesBook}
-    return jsonify({'book':book})
+    book = {item: {'support': helpdeskNodesBook[item].support} for item in helpdeskNodesBook}
+    return jsonify({'book': book})
 
 @api.route("/chaptersbook")
 @authentication
 def get_chaptersBook():
     #_book = chaptersBook
-    book = {item:{'coordination_key':chaptersBook[item].coordination.key,
-                  'leader':chaptersBook[item].coordination.leader} for item in chaptersBook}
-    return jsonify({'book':book})
+    book = {item: {'coordination_key': chaptersBook[item].coordination.key,
+                  'leader': chaptersBook[item].coordination.leader} for item in chaptersBook}
+    return jsonify({'book': book})

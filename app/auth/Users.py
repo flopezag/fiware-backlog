@@ -1,11 +1,13 @@
-__author__ = "Manuel Escriche <mev@tid.es>"
-
-import base64, requests
+import base64
+import requests
 from flask_login import UserMixin
 from flask_wtf import Form
 from wtforms import StringField, PasswordField
 from wtforms.validators import DataRequired
 from kconfig import settings
+
+__author__ = "Manuel Escriche <mev@tid.es>"
+
 
 class User(UserMixin):
     __data__ = dict()
@@ -19,15 +21,17 @@ class User(UserMixin):
                                   displayName=displayName,
                                   accessKey=accessKey,
                                   jSession=jSession)
+
     def get_id(self):
         return self.id
 
     def __repr__(self):
-        return '<User %r>' % (self.displayName)
+        return '<User %r>' % self.displayName
 
     @staticmethod
     def get(userid):
         return User(**User.__data__[userid])
+
 
 class LoginForm(Form):
 
@@ -46,25 +50,27 @@ class LoginForm(Form):
 
     def validate(self):
         rv = Form.validate(self)
-        if not rv: return False
+
+        if not rv:
+            return False
 
         user = self.username.data
         _auth = '{}:{}'.format(self.username.data, self.password.data)
-        #print(_auth)
-        keyword = base64.b64encode(bytes(_auth,'utf-8'))
-        #print(keyword)
+        # print(_auth)
+        keyword = base64.b64encode(bytes(_auth, 'utf-8'))
+        # print(keyword)
         self._access_key = str(keyword)[2:-1]
-        #print(self._access_key)
+        # print(self._access_key)
         headers = {'Content-Type': 'application/json', "Authorization": "Basic {}".format(self._access_key)}
-        #print(LoginForm.url)
-        #print(headers)
+        # print(LoginForm.url)
+        # print(headers)
         req_session = requests.session()
         try:
             answer = req_session.get(LoginForm.url, headers=headers, verify=False)
         except:
             raise Exception
-        #print(headers)
-        #print('answer - status=', answer.status_code)
+        # print(headers)
+        # print('answer - status=', answer.status_code)
         if answer.status_code != 200:
             return False
         data = dict(answer.json())

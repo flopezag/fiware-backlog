@@ -20,11 +20,14 @@ class Tracker:
     @property
     def tracker(self):
         return self.keystone
+
     @property
     def key(self):
         return self.keystone
+
     def __repr__(self):
         return '{0.name}, {0.keystone}'.format(self)
+
 
 class Chapter(Tracker):
     def __init__(self, chapter):
@@ -48,12 +51,14 @@ class HelpDesk(Tracker):
         self.channels = OrderedDict((name, helpdeskCompBookByName[name])
                                   for name in helpdeskCompBookByName if helpdeskCompBookByName[name].tracker == self.keystone )
 
+
 class AccountsDesk(Tracker):
     def __init__(self, tracker):
         super().__init__(tracker)
         tagsList = [child.tag for child in tracker]
         self.channels = OrderedDict((name, accountsDeskBookByName[name])
                                   for name in accountsDeskBookByName if accountsDeskBookByName[name].tracker == self.keystone )
+
 
 class WorkGroup(Tracker):
     def __init__(self, tracker):
@@ -132,6 +137,7 @@ class ChapterBook:
                                              if type(trackersBook[item]) == Chapter)
         self.chaptersByName = OrderedDict((trackersBook[item].name, trackersBook[item]) for item in trackersBook
                                               if type(trackersBook[item]) == Chapter)
+
     def __getitem__(self, item):
         if item in self.chaptersByKey: return self.chaptersByKey[item]
         if item in self.chaptersByName: return self.chaptersByName[item]
@@ -161,10 +167,12 @@ class WorkGroupBook:
                                              if type(trackersBook[item]) == WorkGroup)
         self.workingGroupByName = OrderedDict((trackersBook[item].name, trackersBook[item]) for item in trackersBook
                                               if type(trackersBook[item]) == WorkGroup)
+
     def __getitem__(self, item):
         if item in self.workingGroupByKey: return self.workingGroupByKey[item]
         if item in self.workingGroupByName: return self.workingGroupByName[item]
         raise KeyError
+
     def __iter__(self):
         return self.workingGroupByName.__iter__()
 
@@ -174,6 +182,7 @@ class WorkGroupBook:
 
     def __len__(self):
         return len(self.workingGroupByKey)
+
 
 class HelpDeskBook:
     _singlenton = None
@@ -189,6 +198,7 @@ class HelpDeskBook:
                                              if type(trackersBook[item]) == HelpDesk)
         self.deskByName = OrderedDict((trackersBook[item].name, trackersBook[item]) for item in trackersBook
                                               if type(trackersBook[item]) == HelpDesk)
+
     def __getitem__(self, item):
         if item in self.deskByKey: return self.deskByKey[item]
         if item in self.deskByName: return self.deskByName[item]
@@ -265,30 +275,29 @@ class LabBook:
         return len(self.labsByKey)
 
 
+# trackersBook = TrackerBook()
+# trackersBookByKey = trackersBook.trackersByKey
+# trackersBookByName = trackersBook.trackersByName
 
-#trackersBook = TrackerBook()
-#trackersBookByKey = trackersBook.trackersByKey
-#trackersBookByName = trackersBook.trackersByName
+# chaptersBook = ChapterBook()
+# chaptersBookByName = chaptersBook.chaptersByName
+# chaptersBookByKey = chaptersBook.chaptersByKey
 
-#chaptersBook = ChapterBook()
-#chaptersBookByName = chaptersBook.chaptersByName
-#chaptersBookByKey = chaptersBook.chaptersByKey
+# workGroupBook = WorkGroupBook()
+# workGroupByName = workGroupBook.workingGroupByName
+# workGroupByKey = workGroupBook.workingGroupByKey
 
-#workGroupBook = WorkGroupBook()
-#workGroupByName = workGroupBook.workingGroupByName
-#workGroupByKey = workGroupBook.workingGroupByKey
+# helpdeskBook = HelpDeskBook()
+# helpdeskBookByName = helpdeskBook.deskByName
+# helpdeskBookByKey = helpdeskBook.deskByKey
 
-#helpdeskBook = HelpDeskBook()
-#helpdeskBookByName = helpdeskBook.deskByName
-#helpdeskBookByKey = helpdeskBook.deskByKey
+# accountsdeskBook = AccountsDeskBook()
+# accountsdeskBookByName = accountsdeskBook.deskByName
+# accountsdeskBookByKey = accountsdeskBook.deskByKey
 
-#accountsdeskBook = AccountsDeskBook()
-#accountsdeskBookByName = accountsdeskBook.deskByName
-#accountsdeskBookByKey = accountsdeskBook.deskByKey
-
-#labsBook = LabBook()
-#labsBookByName = labsBook.labsByName
-#labsBookByKey = labsBook.labsByKey
+# labsBook = LabBook()
+# labsBookByName = labsBook.labsByName
+# labsBookByKey = labsBook.labsByKey
 
 if __name__ == "__main__":
     pass

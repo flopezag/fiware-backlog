@@ -1,5 +1,3 @@
-__author__ = "Manuel Escriche <mev@tid.es>"
-
 from flask import render_template, request, redirect, url_for, flash
 from flask_login import login_required
 from flask_wtf import Form
@@ -12,6 +10,9 @@ from kernel.NM_HelpDeskReporter import DeckReporter, ChannelReporter
 from kernel.NM_LabReporter import LabReporter
 
 from . import lab
+
+__author__ = "Manuel Escriche <mev@tid.es>"
+
 
 class SelectForm(Form):
     select = SelectField(u'Items')
@@ -27,9 +28,10 @@ def overview():
     reporter = LabReporter().fromFile()
 
     return render_template('lab/overview.html',
-                           lab = (labchapter,labchannel),
-                           reporter = reporter,
-                           calendar = agileCalendar )
+                           lab=(labchapter, labchannel),
+                           reporter=reporter,
+                           calendar=agileCalendar)
+
 
 @lab.route("/coordination")
 @login_required

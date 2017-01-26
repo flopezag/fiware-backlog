@@ -221,6 +221,5 @@ class Risk(BacklogIssue):
         super().__init__(issue)
 
 
-
 if __name__ == "__main__":
     pass

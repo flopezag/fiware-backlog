@@ -16,11 +16,11 @@ class Settings:
     def __init__(self):
         self.codeHome = os.path.dirname(os.path.abspath(__file__))
         self.configHome = os.path.join(os.path.split(self.codeHome)[0], 'site_config')
-        #base = os.path.split(self.codeHome)[0]
-        #self.storeHome = os.path.join(os.path.split(base)[0], 'store')
-        #print(self.storeHome)
+        # base = os.path.split(self.codeHome)[0]
+        # self.storeHome = os.path.join(os.path.split(base)[0], 'store')
+        # print(self.storeHome)
         xmlfile = os.path.join(self.configHome, 'Settings.xml')
-        #print(xmlfile)
+        # print(xmlfile)
         tree = ET.parse(xmlfile)
         root = tree.getroot()
         self.server = dict()

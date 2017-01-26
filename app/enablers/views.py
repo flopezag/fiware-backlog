@@ -1,5 +1,3 @@
-__author__ = "Manuel Escriche <mev@tid.es>"
-
 from flask import Blueprint, render_template, abort, request, redirect, url_for, flash
 from flask_login import login_required
 from flask_wtf import FlaskForm
@@ -14,25 +12,30 @@ from kernel.NM_HelpDeskReporter import DeckReporter
 
 from . import enablers
 
+__author__ = "Manuel Escriche <mev@tid.es>"
+
+
 class SelectForm(FlaskForm):
     select = SelectField(u'Enabler')
+
 
 @enablers.route("/", methods=['GET', 'POST'])
 @enablers.route("/overview", methods=['GET', 'POST'])
 @login_required
 def overview():
     form = SelectForm()
-    options = [(n, item) for n,item in enumerate(enablersBookByName)]
+    options = [(n, item) for n, item in enumerate(enablersBookByName)]
     if request.method == 'POST':
         enablername = dict(options)[int(form.select.data)]
         return redirect(url_for('enablers.backlog', enablername=enablername))
     form.select.choices = [(n,'{} - {} - {} ({})'.format(n+1,
                                                          enablersBookByName[item].chapter,
                                                          item, enablersBookByName[item].mode))
-                           for n,item in enumerate(enablersBookByName)]
+                           for n, item in enumerate(enablersBookByName)]
     analyser = EnablersAnalyser.fromFile()
     analyser.enablersBook = enablersBook
-    return render_template('enablers/overview.html', analyser = analyser, calendar=agileCalendar, form=form)
+    return render_template('enablers/overview.html', analyser=analyser, calendar=agileCalendar, form=form)
+
 
 @enablers.route("/backlog/<enablername>", methods=['GET', 'POST'])
 @login_required
@@ -40,12 +43,14 @@ def backlog(enablername):
     enabler = enablersBook[enablername]
     form = SelectForm()
 
-    options = [(n, item) for n,item in enumerate(enablersBookByName)]
+    options = [(n, item) for n, item in enumerate(enablersBookByName)]
     if request.method == 'POST':
         enablername = dict(options)[int(form.select.data)]
         return redirect(url_for('enablers.backlog', enablername=enablername))
 
-    form.select.choices = [(n,'{} - {} - {} ({})'.format(n+1, enablersBookByName[item].chapter, item, enablersBookByName[item].mode)) for n,item in enumerate(enablersBookByName)]
+    form.select.choices = [(n, '{} - {} - {} ({})'
+                            .format(n+1, enablersBookByName[item].chapter, item, enablersBookByName[item].mode))
+                           for n, item in enumerate(enablersBookByName)]
 
     try:
         backlogFactory = BacklogFactory.getInstance()
@@ -62,6 +67,7 @@ def backlog(enablername):
                            enabler=enabler,
                            reporter=reporter,
                            calendar=agileCalendar, form=form)
+
 
 @enablers.route("/backlog/<enablername>/raw")
 @login_required
@@ -80,9 +86,10 @@ def raw(enablername):
     backlog.sort(key=backlog.sortDict[sortedby])
     reporter = EnablerReporter(enablername, backlog)
     return render_template('enablers/raw.html',
-                           enabler = enabler,
+                           enabler=enabler,
                            reporter=reporter,
                            calendar=agileCalendar)
+
 
 @enablers.route("/backlog/<enablername>/review")
 @login_required
@@ -102,6 +109,7 @@ def review(enablername):
                            enabler = enabler,
                            reporter=reporter,
                            calendar=agileCalendar)
+
 
 @enablers.route("/helpdesk/<enablername>", methods=['GET', 'POST'])
 @login_required
@@ -143,6 +151,7 @@ def publish():
 @login_required
 def packages():
     pass
+
 
 @enablers.route("/<enablername>/deploy")
 @login_required

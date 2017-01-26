@@ -1,15 +1,17 @@
-__author__ = 'Manuel Escriche'
-
-import logging, os
+import logging
+import os
 from flask import Flask
 from flask_login import LoginManager
 from config import config
 from kconfig import settings
 
+__author__ = 'Manuel Escriche'
+
 login_manager = LoginManager()
-#login_manager.session_protection = 'strong'
+# login_manager.session_protection = 'strong'
 login_manager.login_view = 'auth.login'
 login_manager.login_message = "Welcome to FIWARE Backlog Management Website!!!"
+
 
 def create_app(config_name):
     app = Flask(__name__.split('.')[0])

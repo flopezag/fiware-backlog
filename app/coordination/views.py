@@ -1,5 +1,3 @@
-__author__ = 'Manuel Escriche'
-
 from flask import render_template, flash, request, redirect, url_for
 from flask_login import login_required
 from kernel import agileCalendar
@@ -9,11 +7,15 @@ from kconfig import coordinationBookByName
 
 from . import coordination
 
+__author__ = 'Manuel Escriche'
+
+
 @coordination.route("/")
 @coordination.route("/overview")
 @login_required
 def overview():
     return redirect(url_for('coordination.delivery'))
+
 
 @coordination.route("/success-stories")
 @login_required
@@ -25,10 +27,11 @@ def success_stories():
     sortedby = request.args.get('sortedby') if request.args.get('sortedby') else 'timeSlot'
 
     return render_template('coordination/success_stories.html',
-                           comp = cmp,
-                           reporter = backlog,
+                           comp=cmp,
+                           reporter=backlog,
                            sortedby=sortedby,
                            calendar=agileCalendar)
+
 
 @coordination.route("/friendliness")
 @login_required
@@ -40,10 +43,11 @@ def friendliness():
     sortedby = request.args.get('sortedby') if request.args.get('sortedby') else 'timeSlot'
 
     return render_template('coordination/friendliness.html',
-                           comp = cmp,
-                           reporter = backlog,
+                           comp=cmp,
+                           reporter=backlog,
                            sortedby=sortedby,
                            calendar=agileCalendar)
+
 
 @coordination.route("/qualityassurance")
 @login_required
@@ -55,10 +59,11 @@ def qualityassurance():
     sortedby = request.args.get('sortedby') if request.args.get('sortedby') else 'timeSlot'
 
     return render_template('coordination/quality_assurance.html',
-                           comp = cmp,
-                           reporter = backlog,
+                           comp=cmp,
+                           reporter=backlog,
                            sortedby=sortedby,
                            calendar=agileCalendar)
+
 
 @coordination.route("/issues")
 @login_required
@@ -70,10 +75,11 @@ def issues():
     sortedby = request.args.get('sortedby') if request.args.get('sortedby') else 'timeSlot'
 
     return render_template('coordination/issues.html',
-                           comp = cmp,
-                           reporter = backlog,
+                           comp=cmp,
+                           reporter=backlog,
                            sortedby=sortedby,
                            calendar=agileCalendar)
+
 
 @coordination.route("/risks")
 @login_required
@@ -85,10 +91,11 @@ def risks():
     sortedby = request.args.get('sortedby') if request.args.get('sortedby') else 'timeSlot'
 
     return render_template('coordination/risks.html',
-                           comp = cmp,
-                           reporter = backlog,
+                           comp=cmp,
+                           reporter=backlog,
                            sortedby=sortedby,
                            calendar=agileCalendar)
+
 
 @coordination.route("/delivery")
 @login_required
@@ -101,8 +108,8 @@ def delivery():
     sortedby = request.args.get('sortedby') if request.args.get('sortedby') else 'timeSlot'
 
     return render_template('coordination/delivery.html',
-                           comp = cmp,
-                           reporter = backlog,
+                           comp=cmp,
+                           reporter=backlog,
                            sortedby=sortedby,
                            calendar=agileCalendar)
 
@@ -117,10 +124,11 @@ def docs():
     sortedby = request.args.get('sortedby') if request.args.get('sortedby') else 'timeSlot'
 
     return render_template('coordination/docs.html',
-                           comp = cmp,
-                           reporter = backlog,
+                           comp=cmp,
+                           reporter=backlog,
                            sortedby=sortedby,
                            calendar=agileCalendar)
+
 
 @coordination.route("/agile")
 @login_required
@@ -132,10 +140,11 @@ def agile():
     sortedby = request.args.get('sortedby') if request.args.get('sortedby') else 'timeSlot'
 
     return render_template('coordination/agile.html',
-                           comp = cmp,
-                           reporter = backlog,
+                           comp=cmp,
+                           reporter=backlog,
                            sortedby=sortedby,
                            calendar=agileCalendar)
+
 
 @coordination.route("/scrum-master")
 @login_required
@@ -147,7 +156,7 @@ def scrumtools():
     sortedby = request.args.get('sortedby') if request.args.get('sortedby') else 'timeSlot'
 
     return render_template('coordination/scrum_tools.html',
-                           comp = cmp,
-                           reporter = backlog,
+                           comp=cmp,
+                           reporter=backlog,
                            sortedby=sortedby,
                            calendar=agileCalendar)

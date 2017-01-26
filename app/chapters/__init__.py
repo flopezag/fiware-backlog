@@ -1,7 +1,6 @@
+from flask import Blueprint
+from . import views
+
 __author__ = 'Manuel Escriche'
 
-from flask import Blueprint
-
 chapters = Blueprint('chapters', __name__)
-
-from . import views

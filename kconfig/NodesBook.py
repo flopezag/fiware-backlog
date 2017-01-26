@@ -46,8 +46,8 @@ class NodesBook(OrderedDict):
             return 'Unknown'
 
 
-#tHelpDeskNodesBook = NodesBook()
-#helpdeskNodesBook = tHelpDeskNodesBook
+# tHelpDeskNodesBook = NodesBook()
+# helpdeskNodesBook = tHelpDeskNodesBook
 
 if __name__ == "__main__":
     pass

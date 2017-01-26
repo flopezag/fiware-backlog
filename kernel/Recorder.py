@@ -3,6 +3,7 @@ __author__ = 'Manuel Escriche'
 import os, pickle
 from kernel import settings
 
+
 class Recorder:
     def __init__(self, filename):
         self.filename = filename

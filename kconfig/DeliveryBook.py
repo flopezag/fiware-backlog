@@ -153,7 +153,7 @@ class DeliverableBook(OrderedDict):
     def scheduled(self):
         return [item for item in self.values() if item.isPending]
 
-#deliveryBook = DeliverableBook()
+# deliveryBook = DeliverableBook()
 
 if __name__ == "__main__":
     pass
