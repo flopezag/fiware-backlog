@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-import sys
 import os
 import logging
 from config import config
@@ -10,18 +9,21 @@ from kernel.LocalStorage import updateLab
 
 __author__ = "Manuel Escriche <mev@tid.es>"
 
-if os.getenv('FLASK_CONFIG') == 'production':
+# Get the corresponding environment variable for flask_confing
+flask_config = os.getenv('FLASK_CONFIG')
+
+if flask_config == 'production':
     activate_this = '/var/www/fiware-backlog/venv/bin/activate_this.py'
     # exec(open(activate_this, "rb").read(), globals(), locals())
     exec(open(activate_this, "rb").read(), dict(__file__=activate_this))
-    sys.path.insert(0, '/var/www/fiware-backlog/app')
-    sys.path.insert(0, '/var/www/fiware-backlog/app/kernel')
+    # sys.path.insert(0, '/var/www/fiware-backlog/app')
+    # sys.path.insert(0, '/var/www/fiware-backlog/app/kernel')
 
 
-config = config[os.getenv('FLASK_CONFIG') or 'default']
-settings.storeHome = config.STORE
+configuration = config[flask_config or 'default']
+settings.storeHome = configuration.STORE
 
-filename = os.path.join(config.LOGS, 'backloganalyser.log')
+filename = os.path.join(configuration.LOGS, 'backloganalyser.log')
 logging.basicConfig(filename=filename,
                     format='%(asctime)s|%(levelname)s:%(message)s',
                     datefmt='%Y-%m-%d %H:%M:%S',
@@ -29,7 +31,7 @@ logging.basicConfig(filename=filename,
 
 logging.info('hello world!')
 logging.info('FLASK_CONFIG={}'.format(os.getenv('FLASK_CONFIG')))
-logging.info('LOGS={}'.format(config.LOGS))
+logging.info('LOGS={}'.format(configuration.LOGS))
 
 logging.info('>>>>> updateHelpDesk')
 updateHelpDesk()

@@ -1,5 +1,3 @@
-__author__ = "Manuel Escriche <mev@tid.es>"
-
 import re
 from flask import Blueprint, render_template, abort, request, redirect, url_for, flash
 from flask_login import login_required
@@ -15,10 +13,12 @@ from kernel.Desk import TrackerDeskReporter
 from kernel.DataBoard import Data
 from kernel.NM_AccountsDeskReporter import ADeck, DeskReporter, ChannelReporter
 
+__author__ = "Manuel Escriche <mev@tid.es>"
 
 
 class SelectForm(Form):
     select = SelectField(u'Items')
+
 
 @accountsdesk.route("/")
 @accountsdesk.route("/overview")
@@ -34,14 +34,18 @@ def requests():
     form = SelectForm()
     deskname = 'Accounts-Desk'
     desk = accountsdeskBookByName[deskname]
-    options = [(n,item) for n,item in enumerate(desk.channels)]
+    options = [(n, item) for n, item in enumerate(desk.channels)]
+
     if request.method == 'POST':
         channelname = dict(options)[int(form.select.data)]
+
         return redirect(url_for('.requestToChannel', channelname=channelname))
+
     form.select.choices = options
 
     if refresh:
         data = ADeck(*Data.getAccountDeskRequests())
+        
         if data.source == 'store':
             flash('Unable to get fresh data from JIRA server')
         else:
@@ -54,10 +58,10 @@ def requests():
     reporter = DeskReporter.fromFile(desk)
 
     return render_template('accountsdesk/requests.html',
-                           desk = desk,
-                           data = data,
-                           reporter = reporter,
-                           form = form,
+                           desk=desk,
+                           data=data,
+                           reporter=reporter,
+                           form=form,
                            calendar=agileCalendar)
 
 
@@ -68,7 +72,7 @@ def requestFromChannel(channelname):
     form = SelectForm()
     deskname = 'Accounts-Desk'
     desk = accountsdeskBookByName[deskname]
-    options = [(n,item) for n,item in enumerate(desk.channels)]
+    options = [(n, item) for n, item in enumerate(desk.channels)]
     if request.method == 'POST':
         channelname = dict(options)[int(form.select.data)]
         return redirect(url_for('.requestFomChannel', channelname=channelname))
@@ -88,10 +92,12 @@ def requestFromChannel(channelname):
         reporter = ChannelReporter.fromFile(channel)
 
     return render_template('accountsdesk/requestFromChannel.html',
-                           book = accountsdeskBookByName, deskname = deskname, channelname=channelname,
-                           data = data,
-                           reporter = reporter,
-                           form = form,
+                           book=accountsdeskBookByName,
+                           deskname=deskname,
+                           channelname=channelname,
+                           data=data,
+                           reporter=reporter,
+                           form=form,
                            calendar=agileCalendar)
 
 
@@ -102,7 +108,7 @@ def provision():
         issuesFactory = IssuesFactory.getInstance()
         accountList = issuesFactory.getIssuesFromRequest('lab.accounts.unresolved')
     except Exception:
-        #print(Exception)
+        # print(Exception)
         accountList = IssuesList.fromFile('lab.accounts.unresolved')
         flash('Data from local storage obtained at {}'.format(accountList.timestamp))
 
@@ -121,15 +127,17 @@ def provision():
     reporter = TrackerDeskReporter(accountLabList, 'FLUA', 'ACCOUNTS PROVISIONING')
 
     return render_template('accountsdesk/provision.html',
-                           reporter = reporter,
+                           reporter=reporter,
                            issuesList=accountList,
                            allList=accountLabList,
                            calendar=agileCalendar)
+
 
 @accountsdesk.route("/provisioning/nodes/<nodename>")
 @login_required
 def provisionInNode(nodename):
     nodes = labsBookByName['Lab'].nodes
+
     try:
         issuesFactory=IssuesFactory.getInstance()
         accountLabList = issuesFactory.getIssuesFromRequest('lab.accounts')
@@ -137,9 +145,10 @@ def provisionInNode(nodename):
         accountLabList = IssuesList.fromFile('lab.accounts')
         flash('Data from local storage obtained at {}'.format(accountLabList.timestamp))
 
-    accountLabList = [issue for issue in accountLabList
-                    if re.match(r'Assign Resources [\w\s]+ for:', issue.reference)]
+    accountLabList = [issue for issue in accountLabList if re.match(r'Assign Resources [\w\s]+ for:', issue.reference)]
+
     reporter = TrackerDeskReporter(accountLabList, 'FLUA', 'ACCOUNTS PROVISIONING')
+
     return render_template('accountsdesk/provisionInNode.html',
-                           reporter = reporter,
+                           reporter=reporter,
                            calendar=agileCalendar)
