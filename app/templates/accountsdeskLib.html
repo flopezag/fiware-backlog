@@ -1,0 +1,584 @@
+{% macro deskIdentifier(desk) %}
+    <table class='desk_identification'>
+        <colgroup>
+            <col id="concept">
+            <col id="value">
+        </colgroup>
+        <tbody>
+        <tr><td class="key">Desk:</td> <td class ="value">{{ desk.name }}</td></tr>
+        <tr><td class="key">Leader:</td> <td class="value">{{ desk.leader }}</td></tr>
+        <tr><td class="key">Tracker:</td>
+            <td class="value">
+                <a href="http://jira.fiware.org/projects/{{ desk.tracker }}" target="_blank">http://jira.fiware.org/projects/{{ desk.tracker }}</a>
+            </td>
+        </tr>
+        <tr><td class="key">Channels: </td><td class="value">{{ caller() }}</td></tr>
+    </table>
+{% endmacro %}
+
+{% macro channelIdentifier(book, desk, channel) %}
+    {% set reporter = book[desk].channels[channel] %}
+    <table class='channel_identification'>
+        <colgroup>
+            <col id="concept">
+            <col id="value">
+        </colgroup>
+        <tbody>
+        <tr><td class="key">Desk:</td> <td class ="value">{{ book[desk].name }}</td></tr>
+        <tr><td class="key">Channel:</td> <td class="value">{{ reporter.name }}</td></tr>
+        <tr><td class="key">Leader:</td> <td class="value">{{ reporter.leader }}</td></tr>
+        <tr><td class="key">Tracker:</td> <td class="value"><a href="http://jira.fiware.org/projects/{{ reporter.tracker }}"
+                                                              target="_blank">http://jira.fiware.org/projects/{{ reporter.tracker }}</a></td></tr>
+        <tr><td class="key">Desk's Channels:</td><td class="value">{{ caller() }}</td></tr>
+    </table>
+{% endmacro %}
+
+{% macro drawChannelEvolution(reporter) %}
+    <tr>
+        <td id="evolution-graph" class="chart">
+            <script>
+                var chart = new Highcharts.Chart({
+                    chart: {
+                        renderTo: "evolution-graph",
+                        plotBackgroundColor: null,
+                        plotBorderWidth: 1,
+                        plotShadow: false
+                    },
+                    title: {
+                        text: "Desk Evolution"
+                    },
+                    legend: {
+                        layout: 'horizontal',
+                        align: 'center',
+                        itemMarginTop: 20,
+                        verticalAlign: 'top',
+                        borderWidth: 0
+                    },
+                    xAxis: {
+                        title: {
+                            text: "#Month"
+                        },
+                        categories: {{ reporter.evolution_graph_data.categories|safe }}
+                    },
+                    yAxis: {
+                        title: {
+                            text: '#Issues'
+                        },
+                        floor: 0
+                    },
+                    plotOptions: {
+                        column: {
+                            dataLabels: {
+                                enabled: true
+                            }
+                        }
+                    },
+                    series: [
+                        {{ reporter.evolution_graph_data.created|safe }},
+                        {{ reporter.evolution_graph_data.resolved|safe }},
+                        {{ reporter.evolution_graph_data.progress|safe }},
+                        {{ reporter.evolution_graph_data.summary|safe }}
+                    ]
+                });
+            </script>
+        </td>
+        <td id="resolutionTime-graph" class="chart">
+            <script>
+                var chart = new Highcharts.Chart({
+            chart: {
+                type: 'column',
+                renderTo: 'resolutionTime-graph'
+            },
+            title: {
+                text: 'Issues Resolution Time'
+            },
+            xAxis: {
+                type: 'category',
+                title: {
+                  text: "Age: #days"
+                },
+                categories: {{ reporter.resolutionTime_graph_data.categories|safe }},
+                labels: {
+                    rotation: -45,
+                    fontSize: '13px',
+                    fontFamily: 'Verdana, sans-serif'
+                }
+            },
+            yAxis: {
+                title: {
+                  text: "#Issues"
+                },
+                min: 0
+            },
+            legend: {
+                layout: 'horizontal',
+                align: 'center',
+                itemMarginTop: 20,
+                verticalAlign: 'top',
+                borderWidth: 0
+            },
+            tooltip: {
+                pointFormat: '<b>{point.y} issues</b>'
+            },
+            series: [{{ reporter.resolutionTime_graph_data.time|safe }},
+                     {{ reporter.resolutionTime_graph_data.recent|safe }},
+                     {{ reporter.resolutionTime_graph_data.age|safe }}]
+        });
+            </script>
+        </td>
+{% endmacro %}
+
+{% macro drawDeskEvolution(reporter) %}
+    <tr>
+        <td id="evolution-graph" class="chart">
+            <script>
+                var chart = new Highcharts.Chart({
+                    chart: {
+                        renderTo: "evolution-graph",
+                        plotBackgroundColor: null,
+                        plotBorderWidth: 1,
+                        plotShadow: false
+                    },
+                    title: {
+                        text: "Desk Evolution"
+                    },
+                    legend: {
+                        layout: 'horizontal',
+                        align: 'center',
+                        itemMarginTop: 20,
+                        verticalAlign: 'top',
+                        borderWidth: 0
+                    },
+                    xAxis: {
+                        title: {
+                            text: "#Month"
+                        },
+                        categories: {{ reporter.evolution_graph_data.categories|safe }}
+                    },
+                    yAxis: {
+                        title: {
+                            text: '#Issues'
+                        },
+                        floor: 0
+                    },
+                    plotOptions: {
+                        column: {
+                            dataLabels: {
+                                enabled: true
+                            }
+                        }
+                    },
+                    series: [
+                        {{ reporter.evolution_graph_data.created|safe }},
+                        {{ reporter.evolution_graph_data.resolved|safe }},
+                        {{ reporter.evolution_graph_data.progress|safe }},
+                        {{ reporter.evolution_graph_data.summary|safe }}
+                    ]
+                });
+            </script>
+        </td>
+        <td id="resolutionTime-graph" class="chart">
+            <script>
+                var chart = new Highcharts.Chart({
+            chart: {
+                type: 'column',
+                renderTo: 'resolutionTime-graph'
+            },
+            title: {
+                text: 'Issues Resolution Time'
+            },
+            xAxis: {
+                type: 'category',
+                title: {
+                  text: "Age: #days"
+                },
+                categories: {{ reporter.resolutionTime_graph_data.categories|safe }},
+                labels: {
+                    rotation: -45,
+                    fontSize: '13px',
+                    fontFamily: 'Verdana, sans-serif'
+                }
+            },
+            yAxis: {
+                title: {
+                  text: "#Issues"
+                },
+                min: 0
+            },
+            legend: {
+                layout: 'horizontal',
+                align: 'center',
+                itemMarginTop: 20,
+                verticalAlign: 'top',
+                borderWidth: 0
+            },
+            tooltip: {
+                pointFormat: '<b>{point.y} issues</b>'
+            },
+            series: [{{ reporter.resolutionTime_graph_data.time|safe }},
+                     {{ reporter.resolutionTime_graph_data.recent|safe }},
+                     {{ reporter.resolutionTime_graph_data.age|safe }}]
+        });
+            </script>
+        </td>
+    </tr>
+        <tr>
+        <td id="channels-weight" class="chart">
+            <script>
+                var chart = new Highcharts.Chart({
+                    chart: {
+                        renderTo: 'channels-weight',
+                        plotBackgroundColor: null,
+                        plotBorderWidth: 1,
+                        plotShadow: false
+                    },
+                    title: {
+                        text: "Desk Channels' Contribution"
+                    },
+                    subtitle: {
+                        text: 'Overview: #Total issues in channel'
+                    },
+                    tooltip: {
+                        pointFormat: '<b>{point.y} issues ({point.percentage:.1f}%) share</b>'
+                    },
+                    plotOptions: {
+                        pie: {
+                            dataLabels: {
+                                enabled: true,
+                                format: '<b>{point.name}</b>: <br/> {point.y} ({point.percentage:.1f}%)'
+                            }
+                        }
+                    },
+                    series: [{
+                        type: 'pie',
+                        name: 'Channel',
+                        data: {{ reporter.composition_graph.all|safe }}
+                    }]
+                });
+            </script>
+        </td>
+        <td id="channels-reaction" class="chart">
+            <script>
+                var char = new Highcharts.Chart({
+                    chart: {
+                        renderTo: 'channels-reaction',
+                        plotBackgroundColor: null,
+                        plotBorderWidth: 1,
+                        plotShadow: false,
+                        type: 'column'
+                    },
+                    title: {
+                        text: "Desk Channels' Behaviour"
+                    },
+                    subtitle: {
+                        text: 'Mean Reaction Time'
+                    },
+                    xAxis: {
+                        categories: {{ reporter.behaviour_graph.categories|safe }},
+                        crosshair: true
+                    },
+                    yAxis: {
+                        min: 0,
+                        title: {
+                            text: 'Average Reaction Time (#days)'
+                        }
+                    },
+                    tooltip: {
+                        headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                        pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                        '<td style="padding:0"><b>{point.y:.1f} days</b></td></tr>',
+                        footerFormat: '</table>',
+                        shared: true,
+                        useHTML: true
+                    },
+                    plotOptions: {
+                        column: {
+                            pointPadding: 0,
+                            borderWidth: 0
+                        }
+                    },
+                    series: [{
+                        name: 'Mean',
+                        data: {{ reporter.behaviour_graph.all|safe }}
+                    }, {
+                        name: "Last 60 days' Mean",
+                        data: {{ reporter.behaviour_graph.recent|safe }},
+                        color: 'green'
+                    }]
+                });
+            </script>
+        </td>
+    </tr>
+{% endmacro %}
+
+{% macro drawDeskChannels(reporter) %}
+
+    <tr>
+        <td id="channels-lastpending-weight" class="chart">
+            <script>
+                var chart = new Highcharts.Chart({
+                    chart: {
+                        renderTo: 'channels-lastpending-weight',
+                        plotBackgroundColor: null,
+                        plotBorderWidth: 1,
+                        plotShadow: false,
+                        type: 'column'
+                    },
+                    title: {
+                        text: "Desk Channels' Contribution"
+                    },
+                    subtitle: {
+                        text: 'Progress: #Issues resolved in last 30 days'
+                    },
+                    tooltip: {
+                        pointFormat: '<b>{point.y} issues ({point.percentage:.1f}%) share</b>'
+                    },
+                    plotOptions: {
+                        pie: {
+                            dataLabels: {
+                                enabled: true,
+                                format: '<b>{point.name}</b>: <br/> {point.y} ({point.percentage:.1f}%)'
+                            }
+                        }
+                    },
+                    series: [{
+                        type: 'pie',
+                        name: 'Channel',
+                        data: {{ reporter.composition_graph.vveryrecent|safe }}
+                    }]
+                });
+            </script>
+        </td>
+        <td id="channels-lastpending-reaction" class="chart">
+            <script>
+                var char = new Highcharts.Chart({
+                    chart: {
+                        renderTo: 'channels-lastpending-reaction',
+                        plotBackgroundColor: null,
+                        plotBorderWidth: 1,
+                        plotShadow: false,
+                        type: 'column'
+                    },
+                    title: {
+                        text: "Desk Channels' Behaviour"
+                    },
+                    subtitle: {
+                        text: 'Progress - Pending'
+                    },
+                    xAxis: {
+                        categories: {{ reporter.behaviour_graph.categories|safe }},
+                        crosshair: true
+                    },
+                    yAxis: {
+                        min: 0,
+                        title: {
+                            text: 'Average Age (#days)'
+                        }
+                    },
+                    tooltip: {
+                        headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                        pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                        '<td style="padding:0"><b>{point.y:.1f} days</b></td></tr>',
+                        footerFormat: '</table>',
+                        shared: true,
+                        useHTML: true
+                    },
+                    plotOptions: {
+                        column: {
+                            pointPadding: 0,
+                            borderWidth: 0
+                        }
+                    },
+                    series: [{
+                        name: 'Resolved in last 30 days',
+                        data: {{ reporter.behaviour_graph.veryrecent|safe }},
+                        color: 'green'
+                    },{
+                        name: 'Pending Issues',
+                        data: {{ reporter.behaviour_graph.pending|safe }},
+                        color: '#ff4040'
+                    }]
+                });
+            </script>
+        </td>
+    </tr>
+    <tr>
+        <td id="channels-pending-weight" class="chart">
+            <script>
+                var chart = new Highcharts.Chart({
+                    chart: {
+                        renderTo: 'channels-pending-weight',
+                        plotBackgroundColor: null,
+                        plotBorderWidth: 1,
+                        plotShadow: false
+                    },
+                    title: {
+                        text: "Desk Channels' Contribution "
+                    },
+                    subtitle: {
+                        text: 'Homework: # Pending Issues'
+                    },
+                    tooltip: {
+                        pointFormat: '<b>{point.y} issues ({point.percentage:.1f}%) share</b>'
+                    },
+                    plotOptions: {
+                        pie: {
+                            dataLabels: {
+                                enabled: true,
+                                format: '<b>{point.name}</b>: <br/> {point.y} ({point.percentage:.1f}%)'
+                            }
+                        }
+                    },
+                    series: [{
+                        type: 'pie',
+                        name: 'Channel',
+                        data: {{ reporter.composition_graph.ppending|safe }}
+                    }]
+                });
+            </script>
+        </td>
+        <td id="channels-pending-reaction" class="chart">
+            <script>
+                var char = new Highcharts.Chart({
+                    chart: {
+                        renderTo: 'channels-pending-reaction',
+                        plotBackgroundColor: null,
+                        plotBorderWidth: 1,
+                        plotShadow: false,
+                        type: 'column'
+                    },
+                    title: {
+                        text: "Desk Channels' Behaviour"
+                    },
+                    subtitle: {
+                        text: 'Pending Issues Age Mean'
+                    },
+                    xAxis: {
+                        categories: {{ reporter.behaviour_graph.categories|safe }},
+                        crosshair: true
+                    },
+                    yAxis: {
+                        min: 0,
+                        title: {
+                            text: 'Average Age (#days)'
+                        }
+                    },
+                    tooltip: {
+                        headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                        pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                        '<td style="padding:0"><b>{point.y:.1f} days</b></td></tr>',
+                        footerFormat: '</table>',
+                        shared: true,
+                        useHTML: true
+                    },
+                    plotOptions: {
+                        column: {
+                            pointPadding: 0,
+                            borderWidth: 0
+                        }
+                    },
+                    series: [{
+                        name: 'Pending Issues - Age mean',
+                        data: {{ reporter.behaviour_graph.pending|safe }},
+                        color: '#ff4040'
+                    }]
+                });
+            </script>
+        </td>
+    </tr>
+{% endmacro %}
+
+{% macro displayLinks(issue) %}
+    <td>
+        {% if issue.linkedIssues %}
+            {% for link in issue.linkedIssues %}
+                {% if loop.first %}
+                    {% if link.status in ( 'Closed', 'Done') %}
+                    <a style="text-decoration: line-through" href="{{ link.url }}">{{ link }}</a>
+                    {% else %}
+                    <a href="{{ link.url }}">{{ link }}</a>
+                    {% endif %}
+                {% else %}
+                    {% if link.status in ( 'Closed', 'Done') %}
+                    <br><a style="text-decoration: line-through" href="{{ link.url }}">{{ link }}</a>
+                    {% else %}
+                    <br><a href="{{ link.url }}">{{ link }}</a>
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+
+    </td>
+{% endmacro %}
+
+{% macro displayIssue(issue) %}
+    <td><a href="{{ issue.url }}" target=_blank> {{ issue.key }}</a> </td>
+    {% if issue.channel == 'Unassigned' %}
+        <td style = "color: red"> {{ issue.channel.name }}</td>
+    {% else %}
+        <td> {{ issue.channel.name }}</td>
+    {% endif %}
+    <td>{{ issue.name }}</td>
+    <td> {{ issue.status }} </td>
+    <td style = "text-align: center"> {{ issue.age }}</td>
+    {% if issue.assignee == 'None' %}
+        <td style = "color: red"> {{ issue.assignee }}</td>
+    {% else %}
+        <td> {{ issue.assignee }}</td>
+    {% endif %}
+    {{  displayLinks(issue) }}
+{% endmacro %}
+
+{% macro displayChannelIssue(issue) %}
+    <td><a href="{{ issue.url }}" target=_blank> {{ issue.key }}</a> </td>
+    <td>{{ issue.channel.name }}</td>
+    <td>{{ issue.name }}</td>
+    <td> {{ issue.status }} </td>
+    <td style = "text-align: center"> {{ issue.age }}</td>
+    {% if issue.assignee == 'None' %}
+        <td style = "color: red"> {{ issue.assignee }}</td>
+    {% else %}
+        <td> {{ issue.assignee }}</td>
+    {% endif %}
+    {{  displayLinks(issue) }}
+{% endmacro %}
+
+{% macro displayResolvedIssue(issue) %}
+    <td style = "text-align: center">{{ issue.resolutionDate }}</td>
+    <td><a href="{{ issue.url }}" target=_blank> {{ issue.key }}</a> </td>
+    <td>{{ issue.name }}</td>
+    <td> {{ issue.status }} </td>
+
+    {% if issue.resolution == 'Dismissed' %}
+        <td style = "color: red"> {{ issue.resolution }}</td>
+    {% else %}
+        <td> {{ issue.resolution }}</td>
+    {% endif %}
+
+    <td style = "text-align: center"> {{ issue.age }}</td>
+    {% if issue.assignee == 'None' %}
+        <td style = "color: red"> {{ issue.assignee }}</td>
+    {% else %}
+        <td> {{ issue.assignee }}</td>
+    {% endif %}
+    {{ displayLinks(issue) }}
+{% endmacro %}
+
+{% macro displayStats(stats) %}
+    {% if stats.n %}
+        min = {{ stats.min }} days;
+        max = {{ stats.max }} days;
+    {% endif %}
+    {% if stats.mean %}
+        mean = {{ '{0:0.1f}'.format(stats.mean) }} days;
+    {% endif %}
+    {% if stats.median %}
+        median = {{ '{0:0.1f}'.format(stats.median) }} days;
+    {% endif %}
+    {% if stats.mode %}
+        mode = {{ '{0:0.1f}'.format(stats.mode) }} days;
+    {% endif %}
+    {% if stats.stdev %}
+        std dev = {{ '{0:0.1f}'.format(stats.stdev) }} days;
+    {% endif %}
+{% endmacro %}

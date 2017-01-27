@@ -1,0 +1,76 @@
+{% extends "helpdesk/layout.html" %}
+{% import 'helpdeskLib.html' as hd %}
+{% import 'identificationLib.html' as idnt %}
+{% block header %} Main Desk {% block topic %} - Overview {% endblock %} {% endblock %}
+
+
+{% block content %}
+    <section>
+        {% set desk = maindesk %}
+        {% set reporter = mainreporter %}
+
+        {% call idnt.deskOverviewIdentifier(desk) %}
+            {{ url_for('helpdesk.main') }}
+        {% endcall %}
+        <p style="text-align: center; margin-bottom: 0; margin-top: 0"> MAIN HELP DESK - OVERALL STATISTICS </p>
+        {% set stats = reporter.stats %}
+        <p style="text-align: center; margin-bottom: 0; margin-top: 0"> ALL: n = {{ stats.n }};
+            {{ hd.displayStats(stats) }}
+        </p>
+        {% set stats = reporter.statsOfRecent %}
+        <p style="text-align: center; margin-bottom: 0; margin-top: 0; color:green">CREATED IN LAST 60 DAYS: n = {{ stats.n }};
+            {{ hd.displayStats(stats) }}
+        </p>
+        {% set stats = reporter.statsOfPending %}
+        <p style="text-align: center; margin-bottom: 0; margin-top: 0; color:red">PENDING: n = {{ stats.n }};
+            {{ hd.displayStats(stats) }}
+        </p>
+
+        <table class='desk_graphs'>
+            <colgroup>
+                <col class="column">
+                <col class="column">
+            </colgroup>
+
+            <tbody>
+            {{ hd.drawEvolutionNDesk('0', reporter) }}
+            {{ hd.drawChannelsNDesk('0',reporter) }}
+
+        </table>
+    </section>
+    <section>
+        {% set desk = coachdesk %}
+        {% set reporter = coachreporter %}
+
+        {% call idnt.deskOverviewIdentifier(desk) %}
+            {{ url_for('helpdesk.coaches') }}
+        {% endcall %}
+
+        <p style="text-align: center; margin-bottom: 0; margin-top: 0"> COACHES HELP DESK - OVERALL STATISTICS </p>
+        {% set stats = reporter.stats %}
+        <p style="text-align: center; margin-bottom: 0; margin-top: 0">ALL: n = {{ stats.n }};
+            {{ hd.displayStats(stats) }}
+        </p>
+        {% set stats = reporter.statsOfRecent %}
+        <p style="text-align: center; margin-bottom: 0; margin-top: 0; color:green"> CREATED IN LAST 60 DAYS: n = {{ stats.n }};
+            {{ hd.displayStats(stats) }}
+        </p>
+        {% set stats = reporter.statsOfPending %}
+        <p style="text-align: center; margin-bottom: 0; margin-top: 0; color:red">PENDING: n = {{ stats.n }};
+            {{ hd.displayStats(stats) }}
+        </p>
+
+        <table class='desk_graphs'>
+            <colgroup>
+                <col class="column">
+                <col class="column">
+            </colgroup>
+
+            <tbody>
+            {{ hd.drawEvolutionNDesk('1', reporter) }}
+            {{ hd.drawChannelsNDesk('1',reporter) }}
+
+        </table>
+    </section>
+
+{% endblock %}

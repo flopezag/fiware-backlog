@@ -1,0 +1,12 @@
+{% extends "layout.html" %}
+{% block tool %} Delivery Desk {% endblock %}
+
+{% block submenu %}
+    <nav  id="menu">
+        <ul>
+            <li><a href="{{ url_for('.dashboard') }}" class="active">Dashboard</a></li>
+            <li><a href="{{ url_for('.delivered') }}" class="active">Delivered</a></li>
+            <li><a href="{{ url_for('.pending') }}" class="active">Pending</a></li>
+        </ul>
+    </nav>
+{% endblock %}

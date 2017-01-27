@@ -1,0 +1,132 @@
+{% extends "helpdesk/layout.html" %}
+{% import 'helpdeskLib.html' as hd %}
+{% import 'identificationLib.html' as idnt %}
+{% block header %} Internal Desk
+{% block topic %} - Tools Support {% endblock %}
+{% endblock %}
+{% block content %}
+    <section>
+        {% call idnt.deskIdentifier(desk) %}
+        <form method="POST" action="{{ url_for('.tools') }}" align="left">
+           {{ form.select }} <input type="submit" value="GO!!" style="width: 80px; height: 40px;" >
+        </form>
+        {% endcall %}
+
+
+        <p style="text-align: center; margin-bottom: 0; margin-top: 0">OVERALL STATISTICS</p>
+        {% set stats = reporter.stats %}
+        <p style="text-align: center; margin-bottom: 0; margin-top: 0">ALL: n = {{ stats.n }};
+            {{ hd.displayStats(stats) }}
+        </p>
+        {% set stats = reporter.statsOfRecent %}
+        <p style="text-align: center; margin-bottom: 0; margin-top: 0; color:green">CREATED IN LAST 60 DAYS: n = {{ stats.n }};
+            {{ hd.displayStats(stats) }}
+        </p>
+        {% set stats = reporter.statsOfPending %}
+        <p style="text-align: center; margin-bottom: 0; margin-top: 0; color:red">PENDING: n = {{ stats.n }};
+            {{ hd.displayStats(stats) }}
+        </p>
+        <table class='desk_graphs'>
+            <colgroup>
+                <col class="column">
+                <col class="column">
+            </colgroup>
+
+            <tbody>
+            {{ hd.drawDeskChannels(reporter) }}
+            {{ hd.drawMonthEvolution(data) }}
+        </table>
+        <p style="text-align: center; margin-bottom: 0; margin-top: 0">
+            Graph computed with data collected at {{ data.timestamp }} <br>
+            <a href="{{ url_for('helpdesk.tools', refresh=True) }}"> Refresh Graph</a>
+        </p>
+    </section>
+
+    <section id="urgent">
+        <table class='urgent_dashboard'>
+        <colgroup>
+            <col id="key">
+            <col id="channel">
+            <col id="summary">
+            <col id="status">
+            <col id="priority">
+            <col id="age">
+            <col id="assignee">
+        </colgroup>
+        <thead>
+        <tr id='title'><th colspan="8">TOOLS SUPPORT HELP DESK</th></tr>
+        <tbody>
+
+        <tr id="overdue"><th colspan="8">Unresolved Requests </th></tr>
+        {% for issue in data.unresolved %}
+            {% if loop.first %}
+            <tr>
+                <th>Key</th>
+                <th>Channel</th>
+                <th>Summary</th>
+                <th>Status</th>
+                <th>Priority</th>
+                <th>Age</th>
+                <th>Assignee</th>
+                <th>Links</th>
+            </tr>
+            {% endif %}
+            <tr class="{{ loop.cycle('odd', 'even')}}">
+                {{ hd.displayDeskIssue(issue) }}
+            </tr>
+            {% if loop.last %}
+            <tr>
+                <td colspan="8"> >>> {{loop.length }} items found</td>
+            </tr>
+            {% endif %}
+        {% else %}
+            <tr>
+                <td colspan="8"> >>> No Issues found</td>
+            </tr>
+        {% endfor %}
+        </table>
+
+        <table class='urgent_dashboard'>
+        <colgroup>
+            <col id="resolved">
+            <col id="key">
+            <col id="name">
+            <col id="status">
+            <col id="resolution">
+            <col id="priority">
+            <col id="age">
+            <col id="assignee">
+            <col id="links">
+        </colgroup>
+        <tbody>
+        <tr style="background-color: yellowgreen"><th colspan="9">Resolved Requests in last 60 days </th></tr>
+        {% for issue in data.lastResolved %}
+            {% if loop.first %}
+            <tr>
+                <th>Resolution Date</th>
+                <th>Key</th>
+                <th>Summary</th>
+                <th>Status</th>
+                <th>Resolution</th>
+                <th>Priority</th>
+                <th>Age</th>
+                <th>Assignee</th>
+                <th>Links</th>
+            </tr>
+            {% endif %}
+            <tr class="{{ loop.cycle('odd', 'even')}}">
+               {{ hd.displayResolvedIssue(issue) }}
+            </tr>
+            {% if loop.last %}
+            <tr>
+                <td colspan="7"> >>> {{loop.length }} items found</td>
+            </tr>
+            {% endif %}
+        {% else %}
+            <tr>
+                <td colspan="7"> >>> No Issues found</td>
+            </tr>
+        {% endfor %}
+        </table>
+    </section>
+{% endblock %}

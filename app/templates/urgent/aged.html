@@ -1,0 +1,54 @@
+{% extends "urgent/urgent.html" %}
+{% block topic %} Aged Issues {% endblock %}
+{% block content %}
+    <section id="urgent">
+        <table class='urgent_dashboard'>
+        <colgroup>
+            <col id="key">
+            <col id="type">
+            <col id="name">
+            <col id="status">
+            <col id="priority">
+            <col id="dueDate">
+            <col id="assignee">
+        </colgroup>
+        <thead>
+        <tr id='title'><th colspan="7">URGENT</th></tr>
+        <tbody>
+
+        <tr id="overdue"><th colspan="7">Issues aged > 100 days </th></tr>
+        {% for issue in aged %}
+            {% if loop.first %}
+            <tr>
+                <th><a href="{{ url_for('.aged', sortedby='key') }}">Key</a></th>
+                <th><a href="{{ url_for('.aged', sortedby='issueType') }}">Type</a></th>
+                <th><a href="{{ url_for('.aged', sortedby='name') }}">Name</a></th>
+                <th><a href="{{ url_for('.aged', sortedby='status') }}">Status</a></th>
+                <th><a href="{{ url_for('.aged', sortedby='priority') }}">Priority</a></th>
+                <th><a href="{{ url_for('.aged', sortedby='age') }}"> Age</a></th>
+                <th><a href="{{ url_for('.aged', sortedby='assignee') }}">Assignee</a></th>
+            </tr>
+            {% endif %}
+            <tr class="{{ loop.cycle('odd', 'even')}}">
+                <td><a href="{{ issue.url }}" target=_blank> {{ issue.key }}</a> </td>
+                <td> {{ issue.issueType }}</td>
+                <td> {{ issue.name }}</td>
+                <td> {{ issue.status }} </td>
+                <td> {{ issue.priority }} </td>
+                <td> {{ issue.age }}</td>
+                <td> {{ issue.assignee }}</td>
+            </tr>
+            {% if loop.last %}
+            <tr>
+                <td colspan="7"> >>> {{loop.length }} items found</td>
+            </tr>
+            {% endif %}
+        {% else %}
+            <tr>
+                <td colspan="7"> >>> No Aged Issues found</td>
+            </tr>
+        {% endfor %}
+
+        </table>
+    </section>
+{% endblock %}

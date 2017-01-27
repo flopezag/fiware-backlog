@@ -1,0 +1,14 @@
+{% extends "layout.html" %}
+{% block tool %} Accounts Desk {% endblock %}
+{% block header %} {% block topic %} {% endblock %}  {% endblock %}
+
+{% block submenu %}
+
+    <nav  id="menu">
+        <ul>
+            <li><a href="{{ url_for('.requests') }}" class="active">Requests</a></li>
+            <li><a href="{{ url_for('.provision')   }}" class="active">Provisioning</a></li>
+        </ul>
+    </nav>
+
+{% endblock %}>

@@ -1,0 +1,252 @@
+.flash { background: #cee5F5; padding: 0.5em; border: 1px solid #aacbe2; text-align: center}
+.error { background: yellow; padding: 0.5em; }
+
+.delivery_dashboard { background: white; margin: 20px; padding: 5px 5px; border-color: black; border: 1px solid }
+.delivery_dashboard > colgroup > col#id {width:5%}
+.delivery_dashboard > colgroup > col#backlog {width:8%}
+.delivery_dashboard > colgroup > col#name {width:40%}
+.delivery_dashboard > colgroup > col#leader {width:22%}
+.delivery_dashboard > colgroup > col#plan {width:5%}
+.delivery_dashboard > colgroup > col#deadline {width:10%}
+.delivery_dashboard > colgroup > col#submission {width:10%}
+.delivery_dashboard > thead > tr#title { background-color: #002D67; color: #FFE616; font-size:30px; height: 1.25cm; }
+.delivery_dashboard > thead > tr#month { background: #60C1CF; color:black; font-size:20px; height: 0.7cm }
+.delivery_dashboard > thead > tr#head { background: #C0C0C0}
+.delivery_dashboard > thead > tr > th { padding: 8px; border: 1px solid black; }
+.delivery_dashboard > tbody > tr > td { padding: 8px; border: 1px solid #ddd;}
+.delivery_dashboard > tbody > tr > td.center { padding: 8px; border: 1px solid #ddd; text-align: center }
+.delivery_dashboard > tbody > tr:nth-child(even) { background: whitesmoke }
+
+.chapter_identification { background: white; margin: 20px; padding: 2px 2px; border-color: black;
+                          border: 1px solid; width:97%; border-spacing: 5px; }
+.chapter_identification > colgroup > col#concept { width:33%; background-color: lightblue; text-align:right; }
+.chapter_identification > colgroup > col#value { width:66%; background-color: whitesmoke }
+.chapter_identification > tbody > tr.name { background-color: #002D67; color: #FFE616; font-size:30px; height: 1.25cm;}
+.chapter_identification > tbody > tr > td.value { position: relative; left: 10px }
+.chapter_identification > tbody > tr > td.key { text-align: right; position: relative; right: 10px; }
+
+
+.workgroup_identification { background: white; margin: 20px; padding: 2px 2px; border-color: black;
+                          border: 1px solid; width:97%; border-spacing: 5px; }
+.workgroup_identification > colgroup > col#concept { width:33%; background-color: lightblue; text-align:right; }
+.workgroup_identification > colgroup > col#value { width:66%; background-color: whitesmoke }
+.workgroup_identification > tbody > tr.name { background-color: #002D67; color: #FFE616; font-size:30px;  height: 1.25cm;}
+.workgroup_identification > tbody > tr > td.value { position: relative; left: 10px }
+.workgroup_identification > tbody > tr > td.key { text-align: right; position: relative; right: 10px; }
+
+.comp_identification { background: white; margin: 20px; padding: 2px 2px; border-color: black;
+                          border: 1px solid; width:97%; border-spacing: 5px; }
+.comp_identification > colgroup > col#concept { width:33%; background-color: lightblue; text-align:right; }
+.comp_identification > colgroup > col#value { width:66%; background-color: whitesmoke }
+.comp_identification > tbody > tr.name { background-color: #002D67; color: #FFE616; font-size:30px;  height: 1.25cm;}
+.comp_identification > tbody > tr > td.value { position: relative; left: 10px }
+.comp_identification > tbody > tr > td.key { text-align: right; position: relative; right: 10px; }
+
+.enabler_identification { background: white; margin: 20px; padding: 2px 2px; border-color: black;
+                          border: 1px solid; width:97%; border-spacing: 5px; }
+.enabler_identification > colgroup > col#concept { width:33%; background-color: lightblue; text-align:right; }
+.enabler_identification > colgroup > col#value { width:66%; background-color: whitesmoke }
+.enabler_identification > tbody > tr.name { background-color: #002D67; color: #FFE616; font-size:30px;  height: 1.25cm;}
+.enabler_identification > tbody > tr > td.value { position: relative; left: 10px }
+.enabler_identification > tbody > tr > td.key { text-align: right; position: relative; right: 10px; }
+
+.channel_identification { background: white; margin: 20px; padding: 2px 2px; border-color: black;
+                          border: 1px solid; width:97%; border-spacing: 5px; }
+.channel_identification > colgroup > col#concept { width:33%; background-color: lightblue; text-align:right; }
+.channel_identification > colgroup > col#value { width:66%; background-color: whitesmoke }
+.channel_identification > tbody > tr.name { background-color: #002D67; color: #FFE616; font-size:30px;  height: 1.25cm;}
+.channel_identification > tbody > tr > td.value { position: relative; left: 10px }
+.channel_identification > tbody > tr > td.key { text-align: right; position: relative; right: 10px; }
+
+.desk_identification { background: white; margin: 20px; padding: 2px 2px; border-color: black;
+                          border: 1px solid; width:97%; border-spacing: 5px; }
+.desk_identification > colgroup > col#concept { width:33%; background-color: lightblue; text-align:right; }
+.desk_identification > colgroup > col#value { width:66%; background-color: whitesmoke }
+.desk_identification > tbody > tr.name { background-color: #002D67; color: #FFE616; font-size:30px;  height: 1.25cm;}
+.desk_identification > tbody > tr > td.value { position: relative; left: 10px }
+.desk_identification > tbody > tr > td.key { text-align: right; position: relative; right: 10px; }
+
+
+.test_metrics { background: white; margin: 20px; padding: 2px 2px; border-color: black;
+                          border: 1px solid; width:97%; border-spacing: 5px; }
+.test_metrics > colgroup > col#concept { width:33%; background-color: lightblue; text-align:right; }
+.test_metrics > colgroup > col#value { width:66%; background-color: whitesmoke }
+.test_metrics > tbody > tr.name { background-color: #002D67; color: #FFE616; font-size:30px;  height: 1.25cm;}
+.test_metrics > tbody > tr > td.value { position: relative; left: 10px }
+.test_metrics > tbody > tr > td.key {  text-align:right;  }
+
+
+.backlog_dashboard { background: white; margin: 20px; padding: 1px 1px; border-color: black; border: 1px solid; width:97%; }
+.backlog_dashboard > thead > tr#title { background-color: #002D67; color: #FFE616; font-size:30px; height: 1.25cm; }
+.backlog_dashboard > colgroup > col#key {  }
+.backlog_dashboard > colgroup > col#type {  }
+.backlog_dashboard > colgroup > col#name { }
+.backlog_dashboard > colgroup > col#status { }
+.backlog_dashboard > colgroup > col#priority { }
+.backlog_dashboard > colgroup > col#timeSlot {}
+.backlog_dashboard > thead > tr > th { padding: 4px; border: 1px solid black; }
+.backlog_dashboard > tbody > tr > th { padding: 4px; border: 1px solid black; }
+.backlog_dashboard > tbody > tr > td { padding: 1px; border: 0px solid #ddd; font-size: 14px}
+.backlog_dashboard > tbody > tr.odd { background-color:whitesmoke}
+.backlog_dashboard > tbody > tr.even { background-color:white}
+.backlog_dashboard > tbody > tr#epics { background-color: indianred; font-size: 24px}
+.backlog_dashboard > tbody > tr#foreseen { background-color: lightseagreen; font-size: 20px}
+.backlog_dashboard > tbody > tr#working { background-color: tomato; font-size: 20px}
+.backlog_dashboard > tbody > tr#implemented { background-color: cornflowerblue; font-size: 20px}
+.backlog_dashboard > tbody > tr > td.statusOK {}
+.backlog_dashboard > tbody > tr > td.statusKO {color: red}
+.backlog_dashboard > tbody > tr > td.nameOK {}
+.backlog_dashboard > tbody > tr > td.nameKO { font-size:12px; font-style: oblique; background-color: lightsalmon}
+.backlog_dashboard > tbody > tr#impeded { background-color: darkred; color: yellow }
+.backlog_dashboard > tbody > tr#blockers {background-color: red; color: yellow}
+.backlog_dashboard > tbody > tr > td.center {text-align: center }
+
+
+.urgent_dashboard { background: white; margin: 20px; padding: 1px 1px; border-color: black; border: 1px solid; width:95%; }
+.urgent_dashboard > thead > tr#title { background-color: #002D67; color: #FFE616; font-size:30px; height: 1.25cm; }
+.urgent_dashboard > colgroup > col#key { width: 10%; }
+.urgent_dashboard > colgroup > col#type { width: 10%; }
+.urgent_dashboard > colgroup > col#name { width: 30%;}
+.urgent_dashboard > colgroup > col#status { width: 10%; }
+.urgent_dashboard > colgroup > col#priority { width: 8%; }
+.urgent_dashboard > colgroup > col#timeSlot { width: 10%;}
+.urgent_dashboard > colgroup > col#dueDate { width: 8%;}
+.urgent_dashboard > colgroup > col#assignee { width: 15%;}
+.urgent_dashboard > colgroup > col#links {width: 10%}
+.urgent_dashboard > thead > tr > th { padding: 4px; border: 1px solid black; }
+.urgent_dashboard > tbody > tr > th { padding: 4px; border: 1px solid black; }
+.urgent_dashboard > tbody > tr > td { padding: 1px; border: 0px solid #ddd; font-size: 14px}
+.urgent_dashboard > tbody > tr.odd { background-color:whitesmoke}
+.urgent_dashboard > tbody > tr.even { background-color:white}
+.urgent_dashboard > tbody > tr#overdue {background-color: orangered; color: yellow; font-size:22;}
+.urgent_dashboard > tbody > tr#impeded { background-color: darkred; color: yellow; font-size:22; }
+.urgent_dashboard > tbody > tr#blockers {background-color: red; color: yellow; font-size:22;}
+
+.help_board { background: white; margin: 20px; padding: 1px 1px; border-color: black; border: 1px solid; width:95%; }
+.help_board > thead > tr#title { background-color: #002D67; color: #FFE616; font-size:30px; height: 1.25cm; }
+.help_board > colgroup > col#key { width: 10%; }
+.help_board > colgroup > col#type { width: 10%; }
+.help_board > colgroup > col#name { width: 30%;}
+.help_board > colgroup > col#status { width: 10%; }
+.help_board > colgroup > col#priority { width: 8%; }
+.help_board > colgroup > col#timeSlot { width: 10%;}
+.help_board > colgroup > col#dueDate { width: 8%;}
+.help_board > colgroup > col#assignee { width: 15%;}
+.help_board > colgroup > col#links {width: 10%}
+.help_board > thead > tr > th { padding: 4px; border: 1px solid black; }
+.help_board > tbody > tr > th { padding: 4px; border: 1px solid black; }
+.help_board > tbody > tr > td { padding: 1px; border: 0px solid #ddd; font-size: 14px}
+.help_board > tbody > tr.odd { background-color:whitesmoke}
+.help_board > tbody > tr.even { background-color:white}
+.help_board > tbody > tr#overdue {background-color: orangered; color: yellow; font-size:22;}
+.help_board > tbody > tr#impeded { background-color: darkred; color: yellow; font-size:22; }
+.hekp_board > tbody > tr#blockers {background-color: red; color: yellow; font-size:22;}
+
+
+
+.enabler_deployment { background: white; margin: 20px; padding: 1px 1px; border-color: black; border: 1px solid}
+.enabler_deployment > thead > tr#dtitle  {background-color: #002D67; color: #FFE616; font-size:30px; height: 1.25cm; }
+
+
+.backlog_graphs { background: white; margin: 20px; padding: 1px 1px; border-color: black; border: 1px solid;
+    align:center}
+.backlog_graphs > colgroup > col.column {width: 400px}
+.backlog_graphs > tbody > tr > td { padding: 1px; border: 1px solid #ddd; font-size: 14px; }
+.backlog_graphs > tbody > tr > td.chart {
+    margin: 15px auto;
+    height: 270px;
+    border: 1px solid #ddd;
+}
+
+.enablers_graph { background: white;
+    margin-left:auto;
+    margin-right:auto;
+    padding: 1px 1px; border-color: black; border: 1px solid;}
+.enablers_graph > colgroup > col.column {width: 1100px}
+.enablers_graph > tbody > tr > td { padding: 1px; border: 1px solid #ddd; font-size: 14px; }
+.enablers_graph > tbody > tr > td.overview_chart {
+    height: 1300px;
+}
+
+.chapters_graph { background: white; margin: 20px; padding: 1px 1px; border-color: black; border: 1px solid;}
+.chapters_graph > tbody > tr > td { padding: 1px; border: 1px solid #ddd; font-size: 14px; }
+.chapters_graph > tbody > tr > td.overview_chart {
+
+    margin: 15px auto;
+    height: 300px;
+    width: 1100px;
+}
+.chapters_graphs > tbody > tr > td.chart {
+    margin: 15px auto;
+    height: 270px;
+    width: 350px;
+    border: 1px solid #ddd;
+}
+
+body {
+  font-family: Arial, "MS Trebuchet", sans-serif;
+  width: 100%;
+  margin: 0cm auto;
+  padding: 0;
+  background-color: whitesmoke;
+}
+#projectTime {text-align:center; margin: 10px 0 10px  0;}
+
+#site_header { width: 100%;}
+#site_header > h1 { background-color: #ffeb4f; color:darkblue; text-align:center; line-height:2; margin: 0 0 0 0;}
+#site_header > nav { background-color: white; line-height: 2; text-align: center;}
+#site_header > nav > ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+#site_header > nav > ul > li {
+    display: inline-block;
+    padding: 0 15px 0 15px;
+    list-style-type: none;
+	transition: all 0.2s;
+}
+#site_header > nav > ul > li > a { text-decoration: none;}
+#site_header > nav > ul > li:hover { background-color: rgb( 40, 44, 47 );}
+#site_header > nav > ul > li:hover > a { color: rgb( 255, 255, 255 ); }
+
+nav#menu {text-align: center;}
+nav#menu > ul {
+  list-style: none;
+  margin: 1px 0 10px 0;
+  padding: 0;
+}
+nav#menu > ul > li {
+  margin: 0 20px 0 0;
+  padding: 0;
+  display: inline-block;
+  list-style-type: none;;
+}
+
+#site_footer {
+    clear: both;
+    display: block;
+}
+
+#site_footer > nav { line-height: 2; text-align: center;}
+#site_footer > nav > ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+#site_footer nav > ul > li {
+  margin: 0 20px 0 0;
+  padding: 0;
+  display: inline;
+}
+
+#sidebar {
+    float: right;
+    width: 15%;
+}
+#sidebar > nav > ul > li {
+    list-style-type: none;
+}
+

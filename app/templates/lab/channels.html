@@ -1,0 +1,355 @@
+{% extends "lab/layout.html" %}
+{% block topic %} - Accounts - Statistics {% endblock %}
+
+{% block content %}
+    <section >
+
+        {% set stats = reporter.stats %}
+        <p style="text-align: center; margin-bottom: 0; font-weight: bold; font-size: 30" > {{ reporter.title }} DESK STATISTICS </p>
+        <p style="text-align: center; margin-bottom: 0; margin-top: 0">
+        ALL: n = {{ stats.n }};
+        {% if stats.n %}
+            min = {{ stats.min }} days;
+            max = {{ stats.max }} days;
+        {% endif %}
+        {% if stats.mean %}
+            mean = {{ '{0:0.1f}'.format(stats.mean) }} days;
+        {% endif %}
+        {% if stats.median %}
+            median = {{ '{0:0.1f}'.format(stats.median) }} days;
+        {% endif %}
+        {% if stats.mode %}
+            mode = {{ '{0:0.1f}'.format(stats.mode) }} days;
+        {% endif %}
+        {% if stats.stdev %}
+            std dev = {{ '{0:0.1f}'.format(stats.stdev) }} days;
+        {% endif %}
+        </p>
+
+        {% set stats = reporter.statsOfRecent %}
+        <p style="text-align: center; margin-bottom: 0; margin-top: 0; color:green">
+        CREATED IN LAST 60 DAYS: n = {{ stats.n }};
+        {% if stats.n %}
+            min = {{ stats.min }} days;
+            max = {{ stats.max }} days;
+        {% endif %}
+        {% if stats.mean %}
+            mean = {{ '{0:0.1f}'.format(stats.mean) }} days;
+        {% endif %}
+        {% if stats.median %}
+            median = {{ '{0:0.1f}'.format(stats.median) }} days;
+        {% endif %}
+        {% if stats.mode %}
+            mode = {{ '{0:0.1f}'.format(stats.mode) }} days;
+        {% endif %}
+        {% if stats.stdev %}
+            std dev = {{ '{0:0.1f}'.format(stats.stdev) }} days;
+        {% endif %}
+        </p>
+
+
+        {% set stats = reporter.statsOfPending %}
+        <p style="text-align: center; margin-bottom: 0; margin-top: 0; color:red">
+        PENDING: n = {{ stats.n }};
+        {% if stats.n %}
+            min = {{ stats.min }} days;
+            max = {{ stats.max }} days;
+        {% endif %}
+        {% if stats.mean %}
+            mean = {{ '{0:0.1f}'.format(stats.mean) }} days;
+        {% endif %}
+        {% if stats.median %}
+            median = {{ '{0:0.1f}'.format(stats.median) }} days;
+        {% endif %}
+        {% if stats.mode %}
+            mode = {{ '{0:0.1f}'.format(stats.mode) }} days;
+        {% endif %}
+        {% if stats.stdev %}
+            std dev = {{ '{0:0.1f}'.format(stats.stdev) }} days;
+        {% endif %}
+        </p>
+        <table class='desk_graphs'>
+            <colgroup>
+                <col class="column">
+                <col class="column">
+            </colgroup>
+
+            <tbody>
+            <tr>
+
+            <td id="evolution-graph" class="chart">
+        <script>
+            var chart = new Highcharts.Chart({
+
+            chart: {
+                renderTo: "evolution-graph",
+                plotBackgroundColor: null,
+                plotBorderWidth: 1,
+                plotShadow: false
+            },
+            title: {
+                text: "Desk Evolution"
+            },
+            legend: {
+                layout: 'horizontal',
+                align: 'center',
+                itemMarginTop: 20,
+                verticalAlign: 'top',
+                borderWidth: 0
+            },
+            xAxis: {
+                title: {
+                  text: "#Month"
+                },
+                categories: {{ reporter.evolution_graph_data.categories|safe }}
+            },
+            yAxis: {
+                title: {
+                    text: '# Issues'
+                },
+                floor: 0
+            },
+
+            plotOptions: {
+                column: {
+                    dataLabels: {
+                        enabled: true
+                    }
+                }
+            },
+            series: [
+                {{ reporter.evolution_graph_data.created|safe }},
+                {{ reporter.evolution_graph_data.resolved|safe }},
+                {{ reporter.evolution_graph_data.progress|safe }},
+                {{ reporter.evolution_graph_data.summary|safe }}
+            ]
+        });
+                </script>
+            </td>
+
+            <td id="resolutionTime-graph" class="chart">
+        <script>
+        var chart = new Highcharts.Chart({
+            chart: {
+                type: 'column',
+                renderTo: 'resolutionTime-graph'
+            },
+            title: {
+                text: 'Issues Resolution Time'
+            },
+            xAxis: {
+                type: 'category',
+                title: {
+                    text: "Age: #days"
+                },
+                categories: {{ reporter.resolutionTime_graph_data.categories|safe }},
+                labels: {
+                    rotation: -45,
+                    fontSize: '13px',
+                    fontFamily: 'Verdana, sans-serif'
+                }
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                  text: "#Issues"
+                }
+            },
+            legend: {
+                layout: 'horizontal',
+                align: 'center',
+                itemMarginTop: 20,
+                verticalAlign: 'top',
+                borderWidth: 0
+            },
+            tooltip: {
+                pointFormat: '<b>{point.y} issues</b>'
+            },
+            series: [{{ reporter.resolutionTime_graph_data.time|safe }},
+                     {{ reporter.resolutionTime_graph_data.recent|safe }},
+                     {{ reporter.resolutionTime_graph_data.age|safe }}]
+        });
+        </script>
+            </td>
+
+            </tr>
+        </table>
+
+    {% for cmp in reporter.components %}
+        {% set nnn =  reporter.setIssues(cmp) %}
+        {% set stats = reporter.stats %}
+        <p style="text-align: center;  margin-bottom: 0; font-weight: bold; font-size: 30"> {{ reporter.compNames[cmp] }} - {{ reporter.cmpLeader }}</p>
+        <p style="text-align: center; margin-bottom: 0; margin-top: 0">
+        ALL: n = {{ stats.n }};
+        {% if stats.n %}
+            min = {{ stats.min }} days;
+            max = {{ stats.max }} days;
+        {% endif %}
+        {% if stats.mean %}
+            mean = {{ '{0:0.1f}'.format(stats.mean) }} days;
+        {% endif %}
+        {% if stats.median %}
+            median = {{ '{0:0.1f}'.format(stats.median) }} days;
+        {% endif %}
+        {% if stats.mode %}
+            mode = {{ '{0:0.1f}'.format(stats.mode) }} days;
+        {% endif %}
+        {% if stats.stdev %}
+            std dev = {{ '{0:0.1f}'.format(stats.stdev) }} days;
+        {% endif %}
+        </p>
+
+        {% set stats = reporter.statsOfRecent %}
+        <p style="text-align: center; margin-bottom: 0; margin-top: 0; color:green">
+        CREATED IN LAST 60 DAYS: n = {{ stats.n }};
+        {% if stats.n %}
+            min = {{ stats.min }} days;
+            max = {{ stats.max }} days;
+        {% endif %}
+        {% if stats.mean %}
+            mean = {{ '{0:0.1f}'.format(stats.mean) }} days;
+        {% endif %}
+        {% if stats.median %}
+            median = {{ '{0:0.1f}'.format(stats.median) }} days;
+        {% endif %}
+        {% if stats.mode %}
+            mode = {{ '{0:0.1f}'.format(stats.mode) }} days;
+        {% endif %}
+        {% if stats.stdev %}
+            std dev = {{ '{0:0.1f}'.format(stats.stdev) }} days;
+        {% endif %}
+        </p>
+
+        {% set stats = reporter.statsOfPending %}
+        <p style="text-align: center; margin-bottom: 0; margin-top: 0; color:red">
+        PENDING: n = {{ stats.n }};
+        {% if stats.n %}
+            min = {{ stats.min }} days;
+            max = {{ stats.max }} days;
+        {% endif %}
+        {% if stats.mean %}
+            mean = {{ '{0:0.1f}'.format(stats.mean) }} days;
+        {% endif %}
+        {% if stats.median %}
+            median = {{ '{0:0.1f}'.format(stats.median) }} days;
+        {% endif %}
+        {% if stats.mode %}
+            mode = {{ '{0:0.1f}'.format(stats.mode) }} days;
+        {% endif %}
+        {% if stats.stdev %}
+            std dev = {{ '{0:0.1f}'.format(stats.stdev) }} days;
+        {% endif %}
+        </p>
+        {% if reporter.stats.n >= 1 %}
+        <table class='desk_graphs'>
+            <colgroup>
+                <col class="column">
+                <col class="column">
+            </colgroup>
+
+            <tbody>
+            <tr>
+            <td {{ { 'id': 'evolution-graph-%s'|format(cmp), 'class': 'chart' }|xmlattr }}>
+        <script>
+            var chart = new Highcharts.Chart({
+
+            chart: {
+                renderTo: "{{'evolution-graph-%s'|format(cmp) }}",
+                plotBackgroundColor: null,
+                plotBorderWidth: 1,
+                plotShadow: false
+            },
+            title: {
+                text: "Desk Evolution"
+            },
+            legend: {
+                layout: 'horizontal',
+                align: 'center',
+                itemMarginTop: 20,
+                verticalAlign: 'top',
+                borderWidth: 0
+            },
+            xAxis: {
+                title: {
+                  text: "#Month"
+                },
+                categories: {{ reporter.evolution_graph_data.categories|safe }}
+            },
+            yAxis: {
+                title: {
+                    text: '# Issues'
+                },
+                floor: 0
+            },
+
+            plotOptions: {
+                column: {
+                    dataLabels: {
+                        enabled: true
+                    }
+                }
+            },
+            series: [
+                {{ reporter.evolution_graph_data.created|safe }},
+                {{ reporter.evolution_graph_data.resolved|safe }},
+                {{ reporter.evolution_graph_data.progress|safe }},
+                {{ reporter.evolution_graph_data.summary|safe }}
+            ]
+        });
+                </script>
+            </td>
+
+
+            <td {{ {'id': 'resolutionTime-graph-%s'|format(cmp), 'class': 'chart'}|xmlattr }}>
+        <script>
+        var chart = new Highcharts.Chart({
+            chart: {
+                type: 'column',
+                renderTo: "{{'resolutionTime-graph-%s'|format(cmp) }}"
+            },
+            title: {
+                text: 'Issues Resolution Time'
+            },
+            xAxis: {
+                type: 'category',
+                title: {
+                  text: "Age: #days"
+                },
+                categories: {{ reporter.resolutionTime_graph_data.categories|safe }},
+                labels: {
+                    rotation: -45,
+                    fontSize: '13px',
+                    fontFamily: 'Verdana, sans-serif'
+                }
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                  text: "# Issues"
+                }
+            },
+            legend: {
+                layout: 'horizontal',
+                align: 'center',
+                itemMarginTop: 20,
+                verticalAlign: 'top',
+                borderWidth: 0
+            },
+            tooltip: {
+                pointFormat: '<b>{point.y} issues</b>'
+            },
+            series: [{{ reporter.resolutionTime_graph_data.time|safe }},
+                     {{ reporter.resolutionTime_graph_data.recent|safe }},
+                     {{ reporter.resolutionTime_graph_data.age|safe }}]
+        });
+        </script>
+            </td>
+
+
+            </tr>
+        </table>
+        {% endif %}
+    {% endfor %}
+
+    </section>
+{% endblock %}

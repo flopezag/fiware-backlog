@@ -1,0 +1,19 @@
+{% extends "workgroups/layout.html" %}
+{% import 'backlogLib.html' as bl %}
+{% import 'identificationLib.html' as idnt %}
+{% block topic %} - Overview {% endblock %}
+
+{% block submenu %}
+    {% set workgroupsBook = reporter.workgroupBook %}
+    <nav id='menu'>
+        <ul>
+        {% for item in reporter.workgroupBook %}
+            <li><a href="{{ url_for('.gbacklog', workgroupname=workgroupsBook[item].name) }}">{{ workgroupsBook[item].name }}</a></li>
+        {% endfor %}
+        </ul>
+    </nav>
+{% endblock %}
+{% block content %}
+    {{ bl.compositionBacklog('Work Groups', reporter) }}
+    {{ bl.drawWorkGroupsBacklog(reporter) }}
+{% endblock %}

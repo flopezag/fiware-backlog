@@ -1,0 +1,22 @@
+---
+
+- hosts: localhost
+  connection: local
+  vars_files:
+    - vars/main.yml
+  tasks:
+  - name: Create a new apache2 instance
+    os_server:
+      state: "{{ instance_state }}"
+      name: apache2
+      image: 2a9630d7-2328-4bbd-bbe7-e125c7008558
+      key_name: "{{ key_name }}"
+      timeout: 200
+      flavor: 3
+      network: "{{ network_internal_name }}"
+      security_groups: apache2,default
+      floating_ip_pools: "{{ network_external_name }}"
+      meta:
+        hostname: apache2
+        ansible_host_groups: apache2
+    register: apache2

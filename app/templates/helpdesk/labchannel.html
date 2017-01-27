@@ -1,0 +1,119 @@
+{% extends "helpdesk/layout.html" %}
+
+{% block tool %} Help Desk {% endblock %}
+{% block header %} Main Desk {% block topic %} - {{ channel.name }} Channel{% endblock %}{% endblock %}
+
+{% block content %}
+    <section>
+        {% set stats = reporter.stats %}
+        {% set stats = reporter.stats %}
+        <p style="text-align: center; margin-bottom: 0; font-weight: bold; font-size: 30" > {{ reporter.title }} HELP DESK CHANNEL PERFORMANCE </p>
+        <p style="text-align: center; margin-bottom: 0; margin-top: 0">
+        ALL: n = {{ stats.n }};
+        {{ hd.displayStats(stats) }}
+        </p>
+
+        {% set stats = reporter.statsOfRecent %}
+        <p style="text-align: center; margin-bottom: 0; margin-top: 0; color:green">
+        CREATED IN LAST 60 DAYS: n = {{ stats.n }};
+        {{ hd.displayStats(stats) }}
+        </p>
+
+        {% set stats = reporter.statsOfPending %}
+        <p style="text-align: center; margin-bottom: 0; margin-top: 0; color:red">
+        PENDING: n = {{ stats.n }};
+        {{ hd.displayStats(stats) }}
+        </p>
+
+
+        <table class='desk_graphs'>
+            <colgroup>
+                <col class="column">
+                <col class="column">
+            </colgroup>
+
+            <tbody>
+            {{ hd.drawEvolutionDesk(reporter) }}
+        </table>
+    </section>
+
+     <section>
+        <table class='help_board'>
+        <colgroup>
+            <col id="key">
+            <col id="name">
+            <col id="status">
+            <col id="priority">
+            <col id="age">
+            <col id="assignee">
+            <col id="links">
+        </colgroup>
+        <thead>
+        <tr id='title'><th colspan="8">HELP DESK CHANNEL</th></tr>
+        <tbody>
+        <tr id="unresolved"><th colspan="8">Unresolved Requests </th></tr>
+
+        {% for issue in data.unresolved|sort(attribute=sortedby) %}
+            {% if loop.first %}
+            <tr>
+                <th>Key</th><th>Summary</th><th>Status</th><th>Priority</th><th>Age</th><th>Assignee</th><th>Links</th>
+            </tr>
+            {% endif %}
+            <tr class="{{ loop.cycle('odd', 'even')}}">
+                {{ hd.displayChannelIssue(issue) }}
+            </tr>
+            {% if loop.last %}
+            <tr>
+                <td colspan="7"> >>> {{loop.length }} items found</td>
+            </tr>
+            {% endif %}
+        {% else %}
+            <tr>
+                <td colspan="7"> >>> No Issues found</td>
+            </tr>
+        {% endfor %}
+        </table>
+
+        <table class='help_board'>
+        <colgroup>
+            <col id="resolved">
+            <col id="key">
+            <col id="name">
+            <col id="status">
+            <col id="priority">
+            <col id="age">
+            <col id="assignee">
+            <col id="links">
+        </colgroup>
+        <tbody>
+        <tr style="background-color: yellowgreen"><th colspan="9">Resolved Requests in last 60 days</th></tr>
+        {% for issue in data.lastResolved|sort(attribute='resolutionDate', reverse=True)  %}
+            {% if loop.first %}
+            <tr>
+                <th>Resolution Date</th>
+                <th>Key</th>
+                <th>Summary</th>
+                <th>Status</th>
+                <th>Resolution</th>
+                <th>Priority</th>
+                <th>Age</th>
+                <th>Assignee</th>
+                <th>Links</th>
+            </tr>
+            {% endif %}
+            <tr class="{{ loop.cycle('odd', 'even')}}">
+                {{ hd.displayResolvedIssue(issue) }}
+            </tr>
+            {% if loop.last %}
+            <tr>
+                <td colspan="7"> >>> {{loop.length }} items found</td>
+            </tr>
+            {% endif %}
+        {% else %}
+            <tr>
+                <td colspan="7"> >>> No Issues found</td>
+            </tr>
+        {% endfor %}
+        </table>
+    </section>
+{% endblock %}

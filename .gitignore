@@ -87,3 +87,18 @@ ENV/
 
 # Rope project settings
 .ropeproject
+
+# IDE
+.idea/*
+
+# Python temporal object store
+store/*.pkl
+
+# Temporal files in deploy directory
+deploy/.openrc
+deploy/*.retry
+deploy/env
+deploy/*.pem
+
+# Site configuration files
+site_config/*.xml

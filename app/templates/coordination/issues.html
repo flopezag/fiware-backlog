@@ -1,0 +1,17 @@
+{% extends "coordination/layout.html" %}
+{% import 'backlogLib.html' as bl %}
+{% import 'identificationLib.html' as idnt %}
+{% block topic %} - Issues {% endblock %}
+{% block content %}
+    {{ idnt.globalComponentIdentifier(comp)  }}
+    {%  call bl.displayBacklog('Issues Management', reporter, sortedby) %}
+        <tr>
+            <th><a href="{{ url_for('.issues', sortedby='key') }}">Key</a></th>
+            <th><a href="{{ url_for('.issues', sortedby='issueType') }}">Type</a></th>
+            <th><a href="{{ url_for('.issues', sortedby='name') }}">Name</a></th>
+            <th><a href="{{ url_for('.issues', sortedby='status') }}">Status</a></th>
+            <th><a href="{{ url_for('.issues', sortedby='priority') }}">Priority</a></th>
+            <th><a href="{{ url_for('.issues', sortedby='timeSlot') }}">Time Slot</a></th>
+        </tr>
+    {% endcall %}
+{% endblock %}

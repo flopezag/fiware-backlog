@@ -1,0 +1,216 @@
+
+{% macro deskOverviewIdentifier(desk) %}
+    <table class='desk_identification'>
+        <colgroup>
+            <col id="concept">
+            <col id="value">
+        </colgroup>
+        <tbody>
+        <tr><td class="key">Desk:</td> <td class ="value">
+            <a href={{ caller() }}>{{ desk.name }}</a>
+
+        </td></tr>
+        <tr><td class="key">Leader:</td> <td class="value">{{ desk.leader }}</td></tr>
+        <tr><td class="key">Tracker:</td>
+            <td class="value">
+                <a href="http://jira.fiware.org/projects/{{ desk.tracker }}" target="_blank">http://jira.fiware.org/projects/{{ desk.tracker }}</a>
+            </td>
+        </tr>
+        <tr><td class="key">Inbox:</td>
+            <td class="value">
+                <a href="mailto:{{ desk.inbox }}" class="active">{{ desk.inbox }}</a>
+            </td>
+    </table>
+{% endmacro %}
+
+{% macro deskIdentifier(desk) %}
+    <table class='desk_identification'>
+        <colgroup>
+            <col id="concept">
+            <col id="value">
+        </colgroup>
+        <tbody>
+        <tr><td class="key">Desk:</td> <td class ="value">{{ desk.name }}</td></tr>
+        <tr><td class="key">Leader:</td> <td class="value">{{ desk.leader }}</td></tr>
+        <tr><td class="key">Tracker:</td>
+            <td class="value">
+                <a href="http://jira.fiware.org/projects/{{ desk.tracker }}" target="_blank">http://jira.fiware.org/projects/{{ desk.tracker }}</a>
+            </td>
+        </tr>
+        <tr><td class="key">Inbox:</td>
+            <td class="value">
+                <a href="mailto:{{ desk.inbox }}" class="active">{{ desk.inbox }}</a>
+            </td>
+        </tr>
+        <tr><td class="key">Channels: </td><td class="value">{{ caller() }}</td></tr>
+    </table>
+{% endmacro %}
+
+{% macro channelIdentifier(book, desk, channel) %}
+    {% set reporter = book[desk].channels[channel] %}
+    <table class='channel_identification'>
+        <colgroup>
+            <col id="concept">
+            <col id="value">
+        </colgroup>
+        <tbody>
+        <tr><td class="key">Desk:</td> <td class ="value">{{ book[desk].name }}</td></tr>
+        <tr><td class="key">Channel:</td> <td class="value">{{ reporter.name }}</td></tr>
+        <tr><td class="key">Leader:</td> <td class="value">{{ reporter.leader }}</td></tr>
+        <tr><td class="key">Tracker:</td> <td class="value"><a href="http://jira.fiware.org/projects/{{ reporter.tracker }}"
+                                                              target="_blank">http://jira.fiware.org/projects/{{ reporter.tracker }}</a></td></tr>
+        <tr><td class="key">Inbox:</td> <td class="value"><a href="mailto:{{ reporter.inbox }}" class="active">{{ reporter.inbox }}</a></td></tr>
+        <tr><td class="key">Desk's Channels:</td><td class="value">{{ caller() }}</td></tr>
+    </table>
+{% endmacro %}
+
+{% macro channelOnlyIdentifier(book, desk, channel) %}
+    {% set reporter = book[desk].channels[channel] %}
+    <table class='channel_identification'>
+        <colgroup>
+            <col id="concept">
+            <col id="value">
+        </colgroup>
+        <tbody>
+        <tr><td class="key">Desk:</td> <td class ="value">{{ book[desk].name }}</td></tr>
+        <tr><td class="key">Channel:</td> <td class="value">{{ reporter.name }}</td></tr>
+        <tr><td class="key">Leader:</td> <td class="value">{{ reporter.leader }}</td></tr>
+        <tr><td class="key">Tracker:</td> <td class="value"><a href="http://jira.fiware.org/projects/{{ reporter.tracker }}"
+                                                              target="_blank">http://jira.fiware.org/projects/{{ reporter.tracker }}</a></td></tr>
+        <tr><td class="key">Inbox:</td> <td class="value"><a href="mailto:{{ reporter.inbox }}" class="active">{{ reporter.inbox }}</a></td></tr>
+    </table>
+{% endmacro %}
+
+{% macro identifyChannel(channel) %}
+    <tr><td class="key">Channel:</td> <td class="value">{{ channel.name }}</td></tr>
+    <tr><td class="key">Leader:</td> <td class="value">{{ channel.leader }}</td></tr>
+     <tr><td class="key">Inbox:</td> <td class="value"><a href="mailto:{{ channel.inbox }}" class="active">{{ channel.inbox }}</a></td></tr>
+{% endmacro %}
+
+{% macro identifyHDNode(node) %}
+    <tr class="name"><td class="key">Node Name: </td> <td class="value">{{ node.name }}</td></tr>
+    <tr><td class="key">Node Support: </td> <td class="value">{{ node.owner|safe }}</td></tr>
+    <tr><td class="key">Node Mode: </td><td class="value">{{ node.mode }}</td></tr>
+    <tr><td class="key">Node Keyword: </td> <td class="value">{{ node.helpdeskKeyword }}</td></tr>
+{% endmacro %}
+
+{% macro workingGroupIdentifier(book, groupname) %}
+    {% set reporter = book[groupname] %}
+    <table class='workgroup_identification'>
+        <colgroup>
+            <col id="concept">
+            <col id="value">
+        </colgroup>
+        <tbody>
+        <tr><td class="key">Working Group: </td> <td class="value">{{ groupname }}</td></tr>
+        <tr><td class="key">Leader: </td> <td class="value">{{ reporter.leader }}</td></tr>
+        <tr><td class="key">Tracker: </td> <td class="value"><a href="http://jira.fiware.org/projects/{{ reporter.tracker }}"
+                                                              target="_blank">http://jira.fiware.org/projects/{{ reporter.tracker }}</a></td></tr>
+        {% if reporter.inbox %}
+            <tr><td class="key">Inbox: </td> <td class="value"><a href="mailto:{{ reporter.inbox }}" class="active">{{ reporter.inbox }}</a></td></tr>
+        {% endif %}
+        <tr><td class="key"># Components: </td> <td class ="value">{{ reporter.groups|length }}</td></tr>
+        <tr><td class="key">Components' Backlogs: </td><td class="value">{{ caller() }}</td></tr>
+    </table>
+{% endmacro %}
+
+{% macro workingGroupCompIdentifier(book, workgroupname, groupname) %}
+    {% set reporter = book[workgroupname].groups[groupname] %}
+    <table class='workgroup_identification'>
+        <colgroup>
+            <col id="concept">
+            <col id="value">
+        </colgroup>
+        <tbody>
+        <tr><td class="key">Component: </td><td class="value">{{ groupname }}</td></tr>
+        <tr><td class="key">Mode: </td><td class="value">{{ reporter.mode }}</td></tr>
+        <tr><td class="key">Owner: </td> <td class="value">{{ reporter.owner }}</td></tr>
+        <tr><td class="key">Backlog Keyword: </td> <td class="value">{{ reporter.backlogKeyword }}</td></tr>
+        <tr><td class="key">Tracker: </td> <td class="value"><a href="http://jira.fiware.org/projects/{{ reporter.tracker }}"
+                                                              target="_blank">http://jira.fiware.org/projects/{{ reporter.tracker }}</a></td></tr>
+        <tr><td class="key">Working Group: </td> <td class="value">{{ workgroupname }}</td></tr>
+        <tr><td class="key">Working Group's Backlogs: </td><td class="value">{{ caller() }}</td></tr>
+    </table>
+{% endmacro %}
+
+{% macro globalComponentIdentifier(comp) %}
+    <table class='comp_identification'>
+        <colgroup>
+            <col id="concept">
+            <col id="value">
+        </colgroup>
+        <tbody>
+        <tr><td class="key">Component: </td><td class="value">{{ comp.name }}</td></tr>
+        <tr><td class="key">Leader: </td> <td class="value">{{ comp.owner }} - {{ comp.leader }}</td></tr>
+        <tr><td class="key">Backlog Keyword: </td> <td class="value">{{ comp.backlogKeyword }}</td></tr>
+        <tr><td class="key">Tracker: </td>
+            <td class="value"><a href="http://jira.fiware.org/projects/{{ comp.tracker }}"
+                                 target="_blank">http://jira.fiware.org/projects/{{ comp.tracker }}</a>
+        </td></tr>
+    </table>
+{% endmacro %}
+
+
+
+{% macro identifyEnabler(enabler) %}
+    <tr class="name"><td class="key">Enabler Name: </td> <td class="value">{{ enabler.name }}</td></tr>
+    <tr><td class="key">Enabler Owner: </td>   <td class="value">{{ enabler.owner }} - {{ enabler.leader|safe }}</td></tr>
+    <tr><td class="key">Enabler Chapter: </td><td class="value">{{ enabler.chapter }}</td></tr>
+    <tr><td class="key">Enabler Type: </td><td class="value">{{ enabler.type }}</td></tr>
+    <tr><td class="key">Enabler Mode: </td><td class="value">{{ enabler.mode }}</td></tr>
+    <tr><td class="key">Enabler Dissemination: </td><td class="value">{{ enabler.dissemination }}</td> </tr>
+    <tr><td class="key">Enabler Keyword: </td> <td class="value">{{ enabler.backlogKeyword }}</td></tr>
+    <tr><td class="key">Tracker: </td> <td class="value"><a href="http://jira.fiware.org/projects/{{ enabler.tracker }}" target="_blank">http://jira.fiware.org/projects/{{ enabler.tracker }}</a></td></tr>
+{% endmacro %}
+
+{% macro identifyChapter(chapter) %}
+        <tr><td class="key">Chapter: </td> <td class="value">{{ chapter.name }}</td></tr>
+        <tr><td class="key">Leader: </td> <td class="value">{{ chapter.leader }}</td></tr>
+        {% if chapter.architect  %}
+            <tr><td class="key">Architect: </td> <td class="value">{{ chapter.architect }}</td></tr>
+        {% endif %}
+        <tr><td class="key">Tracker: </td> <td class="value"><a href="http://jira.fiware.org/projects/{{ chapter.tracker }}"
+                                                               target="_blank">http://jira.fiware.org/projects/{{ chapter.tracker }}</a></td></tr>
+{% endmacro %}
+
+
+{% macro chapterIdentifier(reporter, analyser) %}
+    <table class="chapter_identification">
+        <colgroup>
+            <col id="concept">
+            <col id="value">
+        </colgroup>
+        <tbody>
+        <tr><td class="key">Chapter: </td> <td class="value">{{ analyser.chaptername }}</td></tr>
+        <tr><td class="key">Leader: </td> <td class="value">{{ reporter.chapter.leader }}</td></tr>
+        {% if reporter.chapter.architect  %}
+            <tr><td class="key">Architect: </td> <td class="value">{{ reporter.chapter.architect }}</td></tr>
+        {% endif %}
+        <tr><td class="key">Tracker: </td> <td class="value"><a href="http://jira.fiware.org/projects/{{ reporter.chapter.tracker }}"
+                                                               target="_blank">http://jira.fiware.org/projects/{{ reporter.chapter.tracker }}</a></td></tr>
+        <tr><td class="key">Inbox: </td> <td class="value"><a href="mailto:{{ reporter.inbox }}" class="active">{{ reporter.chapter.inbox }}</a></td></tr>
+        <tr><td class="key">Backlog Composition: </td><td class="value"> {{ analyser.length }} Issues =
+            {{ analyser.issueType['Epic'] }} Epics +
+            {{ analyser.issueType['Feature'] }} Features +
+            {{ analyser.issueType['Story'] }} Stories +
+            {{ analyser.issueType['WorkItem'] }} WorkItems +
+            {{ analyser.issueType['Bug'] }} Bugs
+        </td></tr>
+        <tr><td class="key">Backlog Time Perspectives: </td><td class="value"> {{ analyser.length }} Issues =
+            {{ analyser.perspective['Implemented'] }} Implemented +
+            <b style="color:red"> {{ analyser.perspective['Working On'] }} Working On </b>+
+            {{ analyser.perspective['Foreseen'] }} Foreseen
+        </td> </tr>
+        <tr><td class="key"><b style="color:red">Sprint Backlog: </b> Status: </td>
+            <td class="value"> <b style="color:red"> {{ analyser.sprint_status.items()|sum(attribute="1") }}  Issues </b> =
+                {% for item in analyser.sprint_status %}
+                    {% if loop.first %}
+                        {{ analyser.sprint_status[item] }} {{ item }}
+                    {% else %}
+                        + {{ analyser.sprint_status[item] }} {{ item }}
+                    {% endif %}
+                {% endfor %}
+            </td></tr>
+        </tbody>
+    </table>
+{% endmacro %}

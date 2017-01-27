@@ -1,0 +1,31 @@
+{% extends "workgroups/layout.html" %}
+{% import 'backlogLib.html' as bl %}
+{% import 'identificationLib.html' as idnt %}
+
+{% block topic %} - {{ workgroupname }} {% endblock %}
+{% block content %}
+    <section>
+    {% call idnt.workingGroupCompIdentifier(book, workgroupname, groupname) %}
+        <form method="POST" action="{{ url_for('.gbacklog', workgroupname=workgroupname) }}" align="left">
+            {{ form.select}} <input type="submit" value="GO!!" style="width: 80px; height: 40px;" >
+        </form>
+    {% endcall %}
+
+    </section>
+    <section>
+        {{ bl.compositionBacklog(groupname, reporter) }}
+        {{ bl.drawBacklog(analyser) }}
+    </section>
+    <section>
+    {%  call bl.displayBacklog(groupname, reporter, sortedby) %}
+        <tr>
+            <th><a href="{{ url_for('.backlog', workgroupname=workgroupname, groupname=groupname, sortedby='key') }}">Key</a></th>
+            <th><a href="{{ url_for('.backlog', workgroupname=workgroupname, groupname=groupname, sortedby='issueType') }}">Type</a></th>
+            <th><a href="{{ url_for('.backlog', workgroupname=workgroupname, groupname=groupname, sortedby='name') }}">Name</a></th>
+            <th><a href="{{ url_for('.backlog', workgroupname=workgroupname, groupname=groupname, sortedby='status') }}">Status</a></th>
+            <th><a href="{{ url_for('.backlog', workgroupname=workgroupname, groupname=groupname, sortedby='priority') }}">Priority</a></th>
+            <th><a href="{{ url_for('.backlog', workgroupname=workgroupname, groupname=groupname, sortedby='timeSlot') }}">Time Slot</a></th>
+        </tr>
+    {% endcall %}
+    </section>
+{% endblock %}

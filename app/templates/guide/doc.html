@@ -1,0 +1,29 @@
+{%- extends "layout.html" %}
+
+{%- block title %}
+    {{ document.title }}
+{%- endblock %}
+
+{% block css %}
+    {{ super() }}
+    {{ document.css|safe }}
+    <link rel="stylesheet" href="/static/websupport-custom.css" type="text/css">
+{% endblock %}
+
+{%- block script %}
+    {{ super() }}
+    {{ document.script|safe }}
+{%- endblock %}
+
+{%- block submenu %}
+    {{ super() }}
+    {{ document.relbar|safe }}
+{%- endblock %}
+
+{%- block content %}
+    {{ document.body|safe }}
+{%- endblock %}
+
+{%- block sidebar %}
+    {{ document.sidebar|safe }}
+{%- endblock %}

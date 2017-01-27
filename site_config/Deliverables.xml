@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<deliverableList>
+    <!-- status: Planned, Scheduled, Closed                -->
+    <!-- resolution: Accepted, Rejected-NReq, Planned-NReq -->
+    <!-- List of deliverables and its corresponding tickets -->
+    <deliverable id="id of deliverable">
+        <title>Title of it</title>
+        <planned_month>month in which is planned to send it</planned_month>
+        <owner>owner</owner>
+        <leader>leader</leader>
+        <status>Delivered | no Delivered</status>
+        <delivery_issue>Jira ticket for delivery issue</delivery_issue>
+        <edition_issue>Jira ticket for adition issue</edition_issue>
+        <submission>
+            <date>final date of submission</date>
+        </submission>
+        <resolution></resolution>
+    </deliverable>
+
+    ...
+
+</deliverableList>

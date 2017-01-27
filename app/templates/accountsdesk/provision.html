@@ -1,0 +1,353 @@
+{% extends "accountsdesk/layout.html" %}
+{% block topic %} Provisioning {% endblock %}
+
+{% block content %}
+    <section>
+        {% set stats = reporter.stats %}
+        <p style="text-align: center; margin-bottom: 0; font-weight: bold; font-size: 30" > {{ reporter.title }} DESK </p>
+        <p style="text-align: center; margin-bottom: 0; margin-top: 0">
+        ALL: n = {{ stats.n }};
+        {% if stats.n %}
+            min = {{ stats.min }} days;
+            max = {{ stats.max }} days;
+        {% endif %}
+        {% if stats.mean %}
+            mean = {{ '{0:0.1f}'.format(stats.mean) }} days;
+        {% endif %}
+        {% if stats.median %}
+            median = {{ '{0:0.1f}'.format(stats.median) }} days;
+        {% endif %}
+        {% if stats.mode %}
+            mode = {{ '{0:0.1f}'.format(stats.mode) }} days;
+        {% endif %}
+        {% if stats.stdev %}
+            std dev = {{ '{0:0.1f}'.format(stats.stdev) }} days;
+        {% endif %}
+        </p>
+
+        {% set stats = reporter.statsOfRecent %}
+        <p style="text-align: center; margin-bottom: 0; margin-top: 0; color:green">
+        CREATED IN LAST 60 DAYS: n = {{ stats.n }};
+        {% if stats.n %}
+            min = {{ stats.min }} days;
+            max = {{ stats.max }} days;
+        {% endif %}
+        {% if stats.mean %}
+            mean = {{ '{0:0.1f}'.format(stats.mean) }} days;
+        {% endif %}
+        {% if stats.median %}
+            median = {{ '{0:0.1f}'.format(stats.median) }} days;
+        {% endif %}
+        {% if stats.mode %}
+            mode = {{ '{0:0.1f}'.format(stats.mode) }} days;
+        {% endif %}
+        {% if stats.stdev %}
+            std dev = {{ '{0:0.1f}'.format(stats.stdev) }} days;
+        {% endif %}
+        </p>
+
+        {% set stats = reporter.statsOfPending %}
+        <p style="text-align: center; margin-bottom: 0; margin-top: 0; color:red">
+        PENDING: n = {{ stats.n }};
+        {% if stats.n %}
+            min = {{ stats.min }} days;
+            max = {{ stats.max }} days;
+        {% endif %}
+        {% if stats.mean %}
+            mean = {{ '{0:0.1f}'.format(stats.mean) }} days;
+        {% endif %}
+        {% if stats.median %}
+            median = {{ '{0:0.1f}'.format(stats.median) }} days;
+        {% endif %}
+        {% if stats.mode %}
+            mode = {{ '{0:0.1f}'.format(stats.mode) }} days;
+        {% endif %}
+        {% if stats.stdev %}
+            std dev = {{ '{0:0.1f}'.format(stats.stdev) }} days;
+        {% endif %}
+        </p>
+        <table class='desk_graphs'>
+            <colgroup>
+                <col class="column">
+                <col class="column">
+            </colgroup>
+
+            <tbody>
+            <tr>
+
+            <td id="evolution-graph" class="chart">
+        <script>
+            var chart = new Highcharts.Chart({
+
+            chart: {
+                renderTo: "evolution-graph",
+                plotBackgroundColor: null,
+                plotBorderWidth: 1,
+                plotShadow: false
+            },
+            title: {
+                text: "Desk Evolution"
+            },
+            legend: {
+                layout: 'horizontal',
+                align: 'center',
+                itemMarginTop: 20,
+                verticalAlign: 'top',
+                borderWidth: 0
+            },
+            xAxis: {
+                title: {
+                  text: "#Month"
+                },
+                categories: {{ reporter.evolution_graph_data.categories|safe }}
+            },
+            yAxis: {
+                title: {
+                    text: '#Issues'
+                },
+                floor: 0
+            },
+
+            plotOptions: {
+                column: {
+                    dataLabels: {
+                        enabled: true
+                    }
+                }
+            },
+            series: [
+                {{ reporter.evolution_graph_data.created|safe }},
+                {{ reporter.evolution_graph_data.resolved|safe }},
+                {{ reporter.evolution_graph_data.progress|safe }},
+                {{ reporter.evolution_graph_data.summary|safe }}
+            ]
+        });
+                </script>
+            </td>
+
+            <td id="resolutionTime-graph" class="chart">
+        <script>
+        var chart = new Highcharts.Chart({
+            chart: {
+                type: 'column',
+                renderTo: 'resolutionTime-graph'
+            },
+            title: {
+                text: 'Issues Resolution Time'
+            },
+            xAxis: {
+                type: 'category',
+                title: {
+                  text: "Age: #days"
+                },
+                categories: {{ reporter.resolutionTime_graph_data.categories|safe }},
+                labels: {
+                    rotation: -45,
+                    fontSize: '13px',
+                    fontFamily: 'Verdana, sans-serif'
+                }
+            },
+            yAxis: {
+                title: {
+                    text: '#Issues'
+                },
+                min: 0
+            },
+            legend: {
+                layout: 'horizontal',
+                align: 'center',
+                itemMarginTop: 20,
+                verticalAlign: 'top',
+                borderWidth: 0
+            },
+            tooltip: {
+                pointFormat: '<b>{point.y} issues</b>'
+            },
+            series: [{{ reporter.resolutionTime_graph_data.time|safe }},
+                     {{ reporter.resolutionTime_graph_data.recent|safe }},
+                     {{ reporter.resolutionTime_graph_data.age|safe }}]
+        });
+        </script>
+            </td>
+
+            </tr>
+        </table>
+
+    </section>
+    <section id="urgent">
+        <table class='urgent_dashboard'>
+        <colgroup>
+            <col id="key">
+            <col id="component">
+            <col id="node">
+            <col id="name">
+            <col id="status">
+            <col id="priority">
+            <col id="age">
+            <col id="assignee">
+            <col id="links">
+        </colgroup>
+        <thead>
+        <tr id='title'><th colspan="9">PROVISIONING DESK</th></tr>
+        <tbody>
+
+        <tr id="overdue"><th colspan="9">Unresolved Requests </th></tr>
+        {% for issue in issuesList.unresolved %}
+            {% if loop.first %}
+            <tr>
+                <th><a href="{{ url_for('.provision', sortedby='key') }}">Key</a></th>
+                <th><a href="{{ url_for('.provision', sortedby='cmpName') }}">Channel</a></th>
+                <th><a href="{{ url_for('.provision', sortedby='node') }}">Node</a></th>
+                <th><a href="{{ url_for('.provision', sortedby='name') }}">Name</a></th>
+                <th><a href="{{ url_for('.provision', sortedby='status') }}">Status</a></th>
+                <th><a href="{{ url_for('.provision', sortedby='priority') }}">Priority</a></th>
+                <th><a href="{{ url_for('.provision', sortedby='age') }}"> Age</a></th>
+                <th><a href="{{ url_for('.provision', sortedby='assignee') }}">Assignee</a></th>
+                <th>Links</th>
+            </tr>
+            {% endif %}
+            <tr class="{{ loop.cycle('odd', 'even')}}">
+                <td><a href="{{ issue.url }}" target=_blank> {{ issue.key }}</a> </td>
+                {% if issue.cmpName == 'Unassigned' %}
+                    <td style = "color: red"> {{ issue.cmpName }}</td>
+                {% else %}
+                    <td> {{ issue.cmpName }}</td>
+                {% endif %}
+                {% if issue.node == 'Unknown' %}
+                    <td style = "color: red"> {{ issue.node }}</td>
+                {% else %}
+                    <td> {{ issue.node }}</td>
+                {% endif %}
+                <td>{{ issue.name }}</td>
+                <td> {{ issue.status }} </td>
+                {% if issue.priority == 'Blocker' %}
+                <td style= "background-color: red"> {{ issue.priority }} </td>
+                {% else %}
+                   <td> {{ issue.priority }} </td>
+                {% endif %}
+                <td style = "text-align: center"> {{ issue.age }}</td>
+                {% if issue.assignee == 'None' %}
+                    <td style = "color: red"> {{ issue.assignee }}</td>
+                {% else %}
+                    <td> {{ issue.assignee }}</td>
+                {% endif %}
+                {% if issue.links %}
+                    <td>
+                    {% for link in issue.links %}
+                        {% if loop.first %}
+                            {% if link.status == 'Closed' %}
+                                <a style="text-decoration: line-through" href="{{ link.url }}">{{ link }}</a>
+                            {% else %}
+                                <a href="{{ link.url }}">{{ link }}</a>
+                            {% endif %}
+                        {% else %}
+                            {% if link.status == 'Closed' %}
+                               <br><a style="text-decoration: line-through" href="{{ link.url }}">{{ link }}</a>
+                            {% else %}
+                                <br><a href="{{ link.url }}">{{ link }}</a>
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                    </td>
+                {% else %}
+                    <td></td>
+                {% endif %}
+            </tr>
+            {% if loop.last %}
+            <tr>
+                <td colspan="8"> >>> {{loop.length }} items found</td>
+            </tr>
+            {% endif %}
+        {% else %}
+            <tr>
+                <td colspan="8"> >>> No Issues found</td>
+            </tr>
+        {% endfor %}
+        </table>
+
+        <table class='urgent_dashboard'>
+        <colgroup>
+            <col id="resolved">
+            <col id="key">
+            <col id="name">
+            <col id="status">
+            <col id="priority">
+            <col id="age">
+            <col id="node">
+            <col id="assignee">
+            <col id="links">
+        </colgroup>
+        <tbody>
+        <tr style="background-color: yellowgreen"><th colspan="9">Resolved Requests created in last 60 days </th></tr>
+        {% for issue in allList.recent %}
+            {% if loop.first %}
+            <tr>
+                <th>Resolution Date</th>
+                <th>Key</th>
+                <th>Summary</th>
+                <th>Status</th>
+                <th>Priority</th>
+                <th>Age</th>
+                <th>Node</th>
+                <th>Assignee</th>
+                <th>Links</th>
+            </tr>
+            {% endif %}
+            <tr class="{{ loop.cycle('odd', 'even')}}">
+                <td style = "text-align: center">{{ issue.resolved }}</td>
+                <td><a href="{{ issue.url }}" target=_blank> {{ issue.key }}</a> </td>
+                <td>{{ issue.name }}</td>
+                <td> {{ issue.status }} </td>
+                {% if issue.priority == 'Blocker' %}
+                <td style= "background-color: red"> {{ issue.priority }} </td>
+                {% else %}
+                   <td> {{ issue.priority }} </td>
+                {% endif %}
+                <td style = "text-align: center"> {{ issue.age }}</td>
+                {% if issue.node == 'Unknown' %}
+                    <td style = "color: red"> {{ issue.node }}</td>
+                {% else %}
+                    <td> {{ issue.node }}</td>
+                {% endif %}
+                {% if issue.assignee == 'None' %}
+                    <td style = "color: red"> {{ issue.assignee }}</td>
+                {% else %}
+                    <td> {{ issue.assignee }}</td>
+                {% endif %}
+                {% if issue.links %}
+                    <td>
+                    {% for link in issue.links %}
+                        {% if loop.first %}
+                            {% if link.status == 'Closed' %}
+                                <a style="text-decoration: line-through" href="{{ link.url }}">{{ link }}</a>
+                            {% else %}
+                                <a href="{{ link.url }}">{{ link }}</a>
+                            {% endif %}
+                        {% else %}
+                            {% if link.status == 'Closed' %}
+                               <br><a style="text-decoration: line-through" href="{{ link.url }}">{{ link }}</a>
+                            {% else %}
+                                <br><a href="{{ link.url }}">{{ link }}</a>
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                    </td>
+                {% else %}
+                    <td></td>
+                {% endif %}
+            </tr>
+            {% if loop.last %}
+            <tr>
+                <td colspan="7"> >>> {{loop.length }} items found</td>
+            </tr>
+            {% endif %}
+        {% else %}
+            <tr>
+                <td colspan="7"> >>> No Issues found</td>
+            </tr>
+        {% endfor %}
+        </table>
+
+
+    </section>
+{% endblock %}

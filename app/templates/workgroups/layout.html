@@ -1,0 +1,14 @@
+{% extends "layout.html" %}
+{% block tool %} Backlog {% endblock %}
+{% block header %} Working Groups {% block topic %} {% endblock %}{% endblock %}
+
+{% block submenu %}
+    {% set workGroupBook = book %}
+    <nav id='menu'>
+        <ul>
+        {% for item in workGroupBook %}
+            <li><a href="{{ url_for('.gbacklog', workgroupname=workGroupBook[item].name) }}">{{ workGroupBook[item].name }}</a></li>
+        {% endfor %}
+        </ul>
+    </nav>
+{% endblock %}

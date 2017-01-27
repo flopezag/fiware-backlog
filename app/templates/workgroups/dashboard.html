@@ -1,0 +1,33 @@
+{% extends "workgroups/layout.html" %}
+{% import 'backlogLib.html' as bl %}
+{% import 'identificationLib.html' as idnt %}
+{% block topic %} - {{ workgroupname }} {% endblock %}
+{% block content %}
+    <section>
+    {% call idnt.workingGroupIdentifier(book, workgroupname) %}
+        <form method="POST" action="{{ url_for('.gbacklog', workgroupname=workgroupname) }}" align="left">
+            {{ form.select}} <input type="submit" value="GO!!" style="width: 80px; height: 40px;" >
+        </form>
+    {% endcall %}
+    </section>
+    <section>
+        {{ bl.compositionBacklog(workgroupname, analyser) }}
+        {{ bl.drawWorkGroupBacklog(analyser) }}
+    </section>
+    <section>
+        {{  bl.compositionBacklog('Coordination', reporter) }}
+        {%  call bl.displayBacklog('Coordination', reporter, sortedby) %}
+            <tr>
+                <th><a href="{{ url_for('.gbacklog', workgroupname=workgroupname, sortedby='key') }}">Key</a></th>
+                <th><a href="{{ url_for('.gbacklog', workgroupname=workgroupname, sortedby='issueType') }}">Type</a></th>
+                <th><a href="{{ url_for('.gbacklog', workgroupname=workgroupname, sortedby='name') }}">Name</a></th>
+                <th><a href="{{ url_for('.gbacklog', workgroupname=workgroupname, sortedby='status') }}">Status</a></th>
+                <th><a href="{{ url_for('.gbacklog', workgroupname=workgroupname, sortedby='priority') }}">Priority</a></th>
+                <th><a href="{{ url_for('.gbacklog', workgroupname=workgroupname, sortedby='timeSlot') }}">Time Slot</a></th>
+            </tr>
+        {% endcall %}
+    </section>
+    <section>
+        {{ bl.displayNoBacklog('No Component Assigned', noBacklog) }}
+    </section>
+{% endblock %}

@@ -1,0 +1,24 @@
+{% extends "lab/layout.html" %}
+{% import 'backlogLib.html' as bl %}
+{% import 'identificationLib.html' as idnt %}
+{% block tool %} Backlog {% endblock %}
+{% block header %} Lab {% block topic %} - Deployment {% endblock %}  {% endblock %}
+{
+{% block content %}
+    <section>
+        {{ bl.compositionBacklog('Lab-Deployment', analyser) }}
+        {{ bl.drawBacklog(analyser) }}
+    </section>
+    <section>
+    {%  call bl.displayBacklog('Deployment', reporter, sortedby) %}
+        <tr>
+            <th><a href="{{ url_for('.deployment', sortedby='key') }}">Key</a></th>
+            <th><a href="{{ url_for('.deployment', sortedby='issueType') }}">Type</a></th>
+            <th><a href="{{ url_for('.deployment', sortedby='name') }}">Name</a></th>
+            <th><a href="{{ url_for('.deployment', sortedby='status') }}">Status</a></th>
+            <th><a href="{{ url_for('.deployment', sortedby='priority') }}">Priority</a></th>
+            <th><a href="{{ url_for('.deployment', sortedby='timeSlot') }}">Time Slot</a></th>
+        </tr>
+    {% endcall %}
+    </section>
+{% endblock %}
