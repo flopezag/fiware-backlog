@@ -1,0 +1,6 @@
+{% extends "!layout.html" %}
+{% block rootrellink %}
+    <li><a href="http://backlog.fiware.org">Backlog Website</a>|&nbsp;</li>
+    <li><a href="{{ pathto('search') }}">Search</a>|&nbsp;</li>
+    {{ super() }}
+{% endblock %}

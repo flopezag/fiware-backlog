@@ -105,31 +105,32 @@ def requestFromChannel(channelname):
 @login_required
 def provision():
     try:
-        issuesFactory = IssuesFactory.getInstance()
-        accountList = issuesFactory.getIssuesFromRequest('lab.accounts.unresolved')
+        issues_factory = IssuesFactory.getInstance()
+        account_list = issues_factory.getIssuesFromRequest('lab.accounts.unresolved')
     except Exception:
         # print(Exception)
-        accountList = IssuesList.fromFile('lab.accounts.unresolved')
-        flash('Data from local storage obtained at {}'.format(accountList.timestamp))
+        account_list = IssuesList.fromFile('lab.accounts.unresolved')
+        flash('Data from local storage obtained at {}'.format(account_list.timestamp))
 
-    requestIssues = [issue for issue in accountList if re.match(r'Assign Resources [\w\s]+ for:', issue.reference)]
-    accountList = IssuesList('lab.accountsImpl.unresolved.requests', requestIssues)
-    accountList.sort(key=attrgetter('age'), reverse=True)
-    accountList.sort(key=attrgetter('priority'))
+    request_issues = [issue for issue in account_list if re.match(r'Assign Resources [\w\s]+ for:', issue.reference)]
+    account_list = IssuesList('lab.accountsImpl.unresolved.requests', request_issues)
+    account_list.sort(key=attrgetter('age'), reverse=True)
+    account_list.sort(key=attrgetter('priority'))
     if request.args.get('sortedby'):
         sortedby = request.args.get('sortedby')
-        accountList.sort(key=accountList.sortDict[sortedby], reverse=True)
+        account_list.sort(key=account_list.sortDict[sortedby], reverse=True)
 
-    requestIssues =[issue for issue in IssuesList.fromFile('lab.accounts')
-                    if re.match(r'Assign Resources [\w\s]+ for:', issue.reference)]
-    accountLabList = IssuesList('lab.accountsImpl.requests', requestIssues)
-    accountLabList.sort(key=attrgetter('age'))
-    reporter = TrackerDeskReporter(accountLabList, 'FLUA', 'ACCOUNTS PROVISIONING')
+    request_issues = [issue for issue in IssuesList.fromFile('lab.accounts')
+                      if re.match(r'Assign Resources [\w\s]+ for:', issue.reference)]
+
+    accountlab_list = IssuesList('lab.accountsImpl.requests', request_issues)
+    accountlab_list.sort(key=attrgetter('age'))
+    reporter = TrackerDeskReporter(accountlab_list, 'FLUA', 'ACCOUNTS PROVISIONING')
 
     return render_template('accountsdesk/provision.html',
                            reporter=reporter,
-                           issuesList=accountList,
-                           allList=accountLabList,
+                           issuesList=account_list,
+                           allList=accountlab_list,
                            calendar=agileCalendar)
 
 
@@ -139,15 +140,15 @@ def provisionInNode(nodename):
     nodes = labsBookByName['Lab'].nodes
 
     try:
-        issuesFactory=IssuesFactory.getInstance()
-        accountLabList = issuesFactory.getIssuesFromRequest('lab.accounts')
+        issues_factory = IssuesFactory.getInstance()
+        accountlab_list = issues_factory.getIssuesFromRequest('lab.accounts')
     except Exception:
-        accountLabList = IssuesList.fromFile('lab.accounts')
-        flash('Data from local storage obtained at {}'.format(accountLabList.timestamp))
+        accountlab_list = IssuesList.fromFile('lab.accounts')
+        flash('Data from local storage obtained at {}'.format(accountlab_list.timestamp))
 
-    accountLabList = [issue for issue in accountLabList if re.match(r'Assign Resources [\w\s]+ for:', issue.reference)]
+    accountlab_list = [issue for issue in accountlab_list if re.match(r'Assign Resources [\w\s]+ for:', issue.reference)]
 
-    reporter = TrackerDeskReporter(accountLabList, 'FLUA', 'ACCOUNTS PROVISIONING')
+    reporter = TrackerDeskReporter(accountlab_list, 'FLUA', 'ACCOUNTS PROVISIONING')
 
     return render_template('accountsdesk/provisionInNode.html',
                            reporter=reporter,
