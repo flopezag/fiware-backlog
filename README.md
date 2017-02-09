@@ -38,9 +38,9 @@ process is only about the python dependencies, because the python code do not ne
 installation.
 
 1. Clone this repository.
-2. Create virtualenv: 'virtualenv -p python3.6 env
-3. Activate the virtualenv: 'source env/bin/activate
-4. Install dependencies: 'pip install -r requirements.txt'
+2. Create virtualenv: 'virtualenv -p python3.6 env'.
+3. Activate the virtualenv: 'source env/bin/activate'.
+4. Install dependencies: 'pip install -r requirements.txt'.
 
 [Top](#top)
 

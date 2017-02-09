@@ -1,0 +1,34 @@
+<VirtualHost *:{{ http_port }}>
+	# The ServerName directive sets the request scheme, hostname and port that
+	# the server uses to identify itself. This is used when creating
+	# redirection URLs. In the context of virtual hosts, the ServerName
+	# specifies what hostname must appear in the request's Host: header to
+	# match this virtual host. For the default virtual host (this file) this
+	# value is not decisive as it is used as a last resort host regardless.
+	# However, you must set it for any further virtual host explicitly.
+
+    ServerName {{ servername }}
+    ServerAdmin fernando.lopez@{{ domain }}
+
+    Alias /guide /var/www/{{ server_name }}/docs/build/html
+    <Directory /var/www/{{ server_name }}/docs/build/html>
+        Require all granted
+    </Directory>
+
+    WSGIScriptAlias / /var/www/{{ server_name }}/{{ server_name }}.wsgi
+
+    <Directory /var/www/{{ server_name }}>
+        Require all granted
+    </Directory>
+
+    WSGIScriptReloading On
+    WSGIPassAuthorization On
+    WSGIDaemonProcess {{ server_name }} user=www-data group=www-data threads=25 maximum-requests=1000 home=/var/www/{{ server_name }}
+    WSGIProcessGroup {{ server_name }}
+    WSGIApplicationGroup %{GLOBAL}
+
+    LogLevel info
+    ErrorLog /var/www/{{ server_name }}/logs/error.log
+    CustomLog /var/www/{{ server_name }}/logs/access.log combined
+
+</VirtualHost>

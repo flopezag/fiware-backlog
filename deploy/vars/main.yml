@@ -4,7 +4,7 @@ instance_state: present
 
 # The name of the key pair you will use to log in
 # as set in OpenStack (see the OpenStack security dashboard)
-key_name: apache2.pem
+key_name: apache2
 
 # Id of the networks to run in (can be found in the OpenStack
 # dashboard)
@@ -17,3 +17,15 @@ user: ubuntu
 
 # Name of apache2 user
 apache2_user: ubuntu
+
+# HTTP Port of the applicaiton
+http_port: 80
+
+# Domain of the application
+domain: fiware.org
+
+# Name of server (github repository name)
+server_name: fiware-backlog
+
+# Apache2 ServerName variable
+servername: localhost
