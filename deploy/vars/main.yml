@@ -28,4 +28,4 @@ domain: fiware.org
 server_name: fiware-backlog
 
 # Apache2 ServerName variable
-servername: localhost
+servername: backlog
