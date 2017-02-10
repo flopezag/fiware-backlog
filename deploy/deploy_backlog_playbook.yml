@@ -8,12 +8,13 @@
 
   vars:
     ssh_public_key_content: "{{ lookup('file', ssh_public_key ) }}"
+
   vars_files:
     - vars/main.yml
  
   pre_tasks:
-    - name: Add apt-get repository to install python-3.6 on Ubuntu 14.04
-      apt_repository: repo='ppa:jonathonf/python-3.6'
+    #- name: Add apt-get repository to install python-3.6 on Ubuntu 14.04
+    #  apt_repository: repo='ppa:jonathonf/python-3.6'
 
     - name: Update APT cache
       apt: update_cache=yes
@@ -24,8 +25,8 @@
     - name: install virtualenv
       apt: name=python-virtualenv state=present update_cache=yes
 
-    - name: install python3.6
-      apt: name=python3.6 state=present update_cache=yes
+    #- name: install python3.6
+    #  apt: name=python3.6 state=present update_cache=yes
 
     - name: disable net.ipv6.conf.all.disable_ipv6
       sysctl: name=net.ipv6.conf.all.disable_ipv6 value=1 state=present
@@ -39,22 +40,63 @@
     - name: distribute host file
       template: src=templates/hosts.j2 dest=/etc/hosts
 
-    # Install apache2
-    - name: install apache2
-      apt: name=apache2 update_cache=yes state=latest
+    # Install apache2 and git
+    - name: Install apache2, git and wsgi module
+      apt: name={{ item }} update_cache=yes state=latest
+      with_items:
+        - apache2
+        - git
+        - libapache2-mod-wsgi-py3
 
     - name: enabled mod_rewrite
       apache2_module: name=rewrite state=present
       notify:
         - restart apache2
 
-    # Install backlog code
-    - name: Install git
-      apt: name=git state=present update_cache=yes
-
     - name: git clone backlog code
       # Example read-write git checkout from github
-      git: repo=https://github.com/flopezag/fiware-backlog.git dest=/var/www/fiware-backlog
+      git: repo=https://github.com/flopezag/fiware-backlog.git dest=/var/www/{{ server_name }}
+
+    - name: Manually create the initial virtualenv
+      command: virtualenv -p python3.4 /var/www/{{ server_name }}/env
+
+    - name: Install requirements
+      pip:
+        requirements: /var/www/{{ server_name }}/requirements.txt
+        virtualenv: /var/www/{{ server_name }}/env
+        virtualenv_python: python3.4
+
+    - name: "Create virtualenv"
+      shell: virtualenv -p python2.7 /var/www/{{ server_name }}/docs/env
+             creates="/var/www/{{ server_name }}/docs/env/bin/activate"
+
+    - name: Install requirements for html generation
+      pip:
+        requirements: /var/www/{{ server_name }}/docs/requirements.txt
+        virtualenv: /var/www/{{ server_name }}/docs/env
+        virtualenv_python: python2.7
+
+    #- name: Manually create sphinx doc content
+    #  shell: source /var/www/{{ server_name }}/docs/env/bin/activate; /var/www/{{ server_name }}/docs/make html
+
+    - name: create virtual host file
+      template: src=virtualhost.conf.j2 dest=/etc/apache2/sites-available/{{ server_name }}.conf
+
+    - name: Create WSGI server
+      template: src=server.wsgi.j2 dest=/var/www/{{ server_name }}/{{ server_name }}.wsgi
+
+    - name: Remove 000-default.conf file from sites-enabled
+      file: path='/etc/apache2/sites-enabled/000-default.conf' state=absent
+
+    - name: Create logs directory for backlog tools
+      file: path='/var/www/{{ server_name }}/logs' state=directory mode=0755
+
+    - name: a2ensite {{ server_name }}
+      command: a2ensite {{ server_name }}
+      args:
+        creates: /etc/apache2/sites-enabled/{{ server_name }}.conf
+      notify:
+        - restart apache2
 
   handlers:
     - name: restart apache2
