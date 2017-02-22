@@ -61,4 +61,7 @@ def create_app(config_name):
     from .workgroups import workgroups as workgroups_blueprint
     app.register_blueprint(workgroups_blueprint, url_prefix='/workgroups')
 
+    from .api import api as api_blueprint
+    app.register_blueprint(api_blueprint, url_prefix='/api')
+
     return app
