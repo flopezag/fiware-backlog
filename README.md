@@ -51,6 +51,12 @@ are needed to execute the scripts. It contains sensible information and it is no
 upload to the github repository. Please contact with the owner of the repository
 if you want to use it.
 
+Additionally, there is a configuration file whose name is backlog.ini that have to
+contain the user and password used in the connection to the backlog tool using the
+API. It is mandatory that you provide the data on them. Last but not least this file
+should be located in /etc/fiware.d directory or a environment variable whose name
+have to be BACKLOG_SETTINGS_FILE should point to the file (with complete path).
+
 [Top](#top)
 
 ## License
