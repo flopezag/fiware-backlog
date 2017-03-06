@@ -102,3 +102,6 @@ deploy/*.pem
 
 # Site configuration files
 site_config/*.xml
+
+# Configuration of Backlog API
+kconfig/backlog.ini
