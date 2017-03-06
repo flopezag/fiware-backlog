@@ -97,7 +97,7 @@ def helpdesk(nodename):
     if deck.source == 'store':
         flash('Data from local storage obtained at {}'.format(deck.timestamp))
     sortedby = request.args.get('sortedby') if request.args.get('sortedby') else 'age'
-    reporter = DeckReporter(deck)
+    reporter = DeckReporter(nodename, deck)
     return render_template('lab/node_helpdesk.html',
                            node = node,
                            sortedby = sortedby,

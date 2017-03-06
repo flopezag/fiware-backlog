@@ -130,7 +130,7 @@ def helpdesk(enablername):
 
     sortedby = request.args.get('sortedby') if request.args.get('sortedby') else 'age'
 
-    reporter = DeckReporter(deck)
+    reporter = DeckReporter(enabler.chapter, deck)
 
     return render_template('enablers/helpdesk.html',
                            enabler=enabler,

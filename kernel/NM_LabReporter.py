@@ -19,7 +19,7 @@ class LabReporter(BacklogReporter, DeckReporter):
         deck = Deck(*Data.getChannel(channel.key))
         BacklogReporter.__init__(self, backlog)
         # super(BacklogReporter).__init__(backlog)
-        DeckReporter.__init__(self, deck)
+        DeckReporter.__init__(self, lab.name, deck)
         # super(DeckReporter).__init__(deck)
         self.save()
 

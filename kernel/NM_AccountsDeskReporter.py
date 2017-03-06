@@ -37,7 +37,7 @@ class ChannelDeck(ADeck):
 class ChannelReporter(DeckReporter, Recorder):
     def __init__(self, channel, deck):
         self.channel = channel
-        DeckReporter.__init__(self, deck)
+        DeckReporter.__init__(self, channel.name, deck)
         Recorder.__init__(self, 'FIWARE.AccChannelReporter.' + channel.name + '.pkl')
         self.save()
 
