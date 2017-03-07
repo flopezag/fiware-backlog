@@ -70,7 +70,7 @@ def updateBacklogsLocalStorage():
 
 def updateLab():
     try:
-        lab = LabReporter()
+        LabReporter()
         logging.debug("Created Lab Reporter")
     except Exception as error:
         logging.exception(error)
@@ -84,30 +84,28 @@ def updateIssuesLocalStorage():
         return
     for topic in ('upcoming', 'impeded', 'blockers', 'overdue', 'aged'):
         try:
-            issues = factory.getUrgentIssues(topic)
+            factory.getUrgentIssues(topic)
             logging.debug("Created urgent issues for topic {}".format(topic))
         except Exception as error:
             logging.exception(error)
 
-
     for topic in ('main', 'main.lab', 'main.tech', 'coaches', 'tools'):
         try:
-            issues = factory.getUnresolvedHelpDeskIssues(topic)
+            factory.getUnresolvedHelpDeskIssues(topic)
             logging.debug("Created unresolved Help Desk Issues for topic {}".format(topic))
         except Exception as error:
             logging.exception(error)
 
-
     for topic in ('main', 'main.lab', 'main.tech', 'coaches', 'tools'):
-        issues = factory.getAllHelpDeskIssues(topic)
+        factory.getAllHelpDeskIssues(topic)
 
     for topic in ('lab.accounts',):
-        issues = factory.getIssuesFromRequest(topic)
+        factory.getIssuesFromRequest(topic)
 
 
 def updateComponentsLeaders():
     try:
-        book = ComponentLeaders()
+        ComponentLeaders()
         logging.debug("Updated components leaders")
     except Exception as error:
         logging.exception(error)
@@ -118,7 +116,7 @@ def updateHelpDesk():
         desk = helpdeskBookByName[deskname]
         try:
             data = DeskDeck(desk, *Data.getDesk(desk))
-            reporter = DeskReporter(desk, data)
+            DeskReporter(desk, data)
             logging.debug("Updating deskReporter {}".format(desk.name))
         except Exception as error:
             logging.exception(error)
@@ -129,7 +127,7 @@ def updateAccountsDesk():
         desk = accountsdeskBookByName[deskname]
         try:
             data = ADeck(*Data.getAccountDeskRequests())
-            deskReporter = aDeskReporter(desk, data)
+            aDeskReporter(desk, data)
             logging.debug("Updated deskReporter {}".format(desk.name))
         except Exception as error:
             logging.exception(error)
@@ -141,14 +139,14 @@ def updateWorkGroups():
         try:
             #backlog = WorkGroupBacklog(*Data.getWorkGroup(workgroup.key))
             backlog = DevBacklog(*Data.getWorkGroup(workgroup.key))
-            reporter = WorkGroupReporter(workgroup, backlog)
+            WorkGroupReporter(workgroup, backlog)
             logging.debug("Updated workGroupReporter {}".format(workgroup.name))
         except Exception as error:
             logging.exception(error)
 
     try:
         backlog = WorkGroupBacklog(*Data.getWorkGroups())
-        reporter = WorkGroupsReporter(backlog)
+        WorkGroupsReporter(backlog)
         logging.debug("Updated workGroupsReporter")
     except Exception as error:
         logging.exception(error)

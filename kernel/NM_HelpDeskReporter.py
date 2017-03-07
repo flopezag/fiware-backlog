@@ -17,7 +17,7 @@ __author__ = 'Manuel Escriche'
 
 
 class DeckReporter:
-    def __init__(self, chaptername=None, deck=None):
+    def __init__(self, chaptername, deck):
         self.chaptername = chaptername
         self.timestamp = deck.timestamp
         self.stats = self._stats(deck)
