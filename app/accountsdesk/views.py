@@ -39,7 +39,7 @@ def requests():
     if request.method == 'POST':
         channelname = dict(options)[int(form.select.data)]
 
-        return redirect(url_for('.requestToChannel', channelname=channelname))
+        return redirect(url_for('.requestFromChannel', channelname=channelname))
 
     form.select.choices = options
 
@@ -73,11 +73,14 @@ def requestFromChannel(channelname):
     deskname = 'Accounts-Desk'
     desk = accountsdeskBookByName[deskname]
     options = [(n, item) for n, item in enumerate(desk.channels)]
+
     if request.method == 'POST':
         channelname = dict(options)[int(form.select.data)]
-        return redirect(url_for('.requestFomChannel', channelname=channelname))
+        return redirect(url_for('.requestFromChannel', channelname=channelname))
+
     form.select.choices = options
     channel = desk.channels[channelname]
+
     if refresh:
         data = ADeck(*Data.getAccountChannelRequests(channel))
         if data.source == 'store':

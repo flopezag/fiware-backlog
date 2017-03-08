@@ -43,7 +43,7 @@ def enabler_helpdesk(enablername):
     # print(enablername)
     enabler = enablersBook[enablername]
     deck = EnablerDeck(enabler, *Data.getEnablerHelpDesk(enablername))
-    reporter = DeckReporter(deck)
+    reporter = DeckReporter(enabler.chapter, deck)
 
     try:
         resolution_level = deck.resolution_level

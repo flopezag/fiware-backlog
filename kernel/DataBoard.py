@@ -1,9 +1,10 @@
-__author__ = "Manuel Escriche <mev@tid.es>"
-
 from kconfig import settings
 from kconfig import enablersBook, helpdeskCompBook
 from kconfig import trackersBook, workGroupBook
 from kernel.DataFactory import DataFactory
+
+__author__ = "Manuel Escriche <mev@tid.es>"
+
 
 class Data:
 
@@ -31,10 +32,12 @@ class Data:
     @staticmethod
     def getDesk(desk):
         return DataFactory(settings.storeHome).getTrackerData(desk.tracker)
+
     @staticmethod
     def getFocusedDesk(desk):
         jql = "project = {} AND (resolution = Unresolved OR resolutiondate <= 60d)".format(desk.tracker)
         return DataFactory(settings.storeHome).getQueryData('{}.focused'.format(desk.tracker), jql)
+
     @staticmethod
     def getChannel(channel):
         return DataFactory(settings.storeHome).getComponentData(channel.id)
@@ -53,6 +56,7 @@ class Data:
     def getAccountDeskRequests():
         jql = "project = FLUA AND issuetype = UpgradeAccount"
         return DataFactory(settings.storeHome).getQueryData('account.requests', jql)
+
     @staticmethod
     def getFocusedAccountDeskRequest():
         jql = "project = FLUA AND issuetype = UpgradeAccount AND (resolution = Unresolved OR resolutiondate <= 60d)"
@@ -62,26 +66,21 @@ class Data:
     def getAccountChannelRequests(channnel):
         jql = "component = {} AND issuetype = UpgradeAccount".format(channnel.key)
         return DataFactory(settings.storeHome).getQueryData('account.requests', jql)
+
     @staticmethod
     def getFocusedAccountChannelRequest(channel):
         jql = "component = {} AND issuetype = UpgradeAccount AND (resolution = Unresolved OR resolutiondate <= 60d)".format(channel.key)
         return DataFactory(settings.storeHome).getQueryData('account.focusedRequests', jql)
 
-
-
-
-
-
     @staticmethod
     def getAccountDeskProvisioning():
         jql = "project = FLUA AND issuetype = AccountUpgradeByNode"
         return DataFactory(settings.storeHome).getQueryData('account.provisioning', jql)
+
     @staticmethod
     def getFocusedAccountDeskProvisioning():
         jql = "project = FLUA AND issuetype = AccountUpgradeByNode AND (resolution = Unresolved OR resolutiondate <= 60d)"
         return DataFactory(settings.storeHome).getQueryData('account.focusedProvisioning', jql)
-
-
 
     @staticmethod
     def getEnablerHelpDesk(enablername):
