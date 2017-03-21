@@ -16,38 +16,29 @@ to their corresponding JIRA holder components and assigned for its resolution.
 +---------------------------+--------------------------+--------------------------------+
 | Email Channel             | JIRA Component           | Leader                         |
 +===========================+==========================+================================+
-| fiware-general-help       | `GENERAL-HELP`_          | ATOS - Malena Donato           |
+| fiware-general-help       | `GENERAL-HELP`_          | FF - Stefano de Panfilis       |
 +---------------------------+--------------------------+--------------------------------+
-| fiware-speakers-req       | `SPEAKERS-REQ`_          | ATOS - Malena Donato           |
+| fiware-speakers-req       | `SPEAKERS-REQ`_          | OGILVY - Ángeles Tejado        |
 +---------------------------+--------------------------+--------------------------------+
-| fiware-feedback           | `FEEDBACK`_              | ENG - Davide dalle Carbonare   |
+| fiware-tech-help          | `TECH-HELP`_             | FF - Fernando López            |
 +---------------------------+--------------------------+--------------------------------+
-| fiware-tech-help          | `TECH-HELP`_             | TID - Manuel Escriche          |
+| fiware-training-req       | `TRAINING-REQ`_          | OGILVY - Ángeles Tejado        |
 +---------------------------+--------------------------+--------------------------------+
 | fiware-lab-help           | `LAB-HELP`_              | ENG - Alfonso PietroPaolo      |
 +---------------------------+--------------------------+--------------------------------+
-| fiware-ops-help           | `OPS-HELP`_              | CREATE - Federico Facca        |
+| fiware-collaboration-req  | `COLLABORATION-REQ`_     | FF - Juanjo Hierro             |
 +---------------------------+--------------------------+--------------------------------+
-| fiware-collaboration-req  | `COLLABORATION-REQ`_     | ATOS - Malena Donato           |
-+---------------------------+--------------------------+--------------------------------+
-| fiware-smart-cities-req   | `SMART-CITIES-REQ`_      | TID - Sergio García Gómez      |
-+---------------------------+--------------------------+--------------------------------+
-| fiware-open-data-req      | `OPEN_DATA-REQ`_         | TID - Sergio García Gómez      |
-+---------------------------+--------------------------+--------------------------------+
-| fiware-mundus-req         | `MUNDUS-REQ`_            | CREATE - Federico Facca        |
+| fiware-mundus-req         | `MUNDUS-REQ`_            | INTERINNOV - Geraldine Quetin  |
 +---------------------------+--------------------------+--------------------------------+
 
 The help desk has also a dedicated section for the accelerators: :ref:`coaches_helpdesk`
 
 .. _GENERAL-HELP: https://jira.fiware.org/secure/IssueNavigator.jspa?reset=true&jqlQuery=project+%3D+HELP+AND+component+%3D+FIWARE-GENERAL-HELP
 .. _SPEAKERS-REQ: https://jira.fiware.org/secure/IssueNavigator.jspa?reset=true&jqlQuery=project+%3D+HELP+AND+component+%3D+FIWARE-SPEAKERS-REQ
-.. _FEEDBACK: https://jira.fiware.org/secure/IssueNavigator.jspa?reset=true&jqlQuery=project+%3D+HELP+AND+component+%3D+FIWARE-FEEDBACK
 .. _TECH-HELP: https://jira.fiware.org/secure/IssueNavigator.jspa?reset=true&jqlQuery=project+%3D+HELP+AND+component+%3D+FIWARE-TECH-HELP
+.. _TRAINING-REQ: https://jira.fiware.org/browse/HELP-6248?jql=project%20%3D%20HELP%20AND%20component%20%3D%20FIWARE-TRAINING-REQ
 .. _LAB-HELP: https://jira.fiware.org/secure/IssueNavigator.jspa?reset=true&jqlQuery=project+%3D+HELP+AND+component+%3D+FIWARE-LAB-HELP
-.. _OPS-HELP: https://jira.fiware.org/secure/IssueNavigator.jspa?reset=true&jqlQuery=project+%3D+HELP+AND+component+%3D+FIWARE-OPS-HELP
 .. _COLLABORATION-REQ: https://jira.fiware.org/secure/IssueNavigator.jspa?reset=true&jqlQuery=project+%3D+HELP+AND+component+%3D+FIWARE-COLLABORATION-REQ
-.. _SMART-CITIES-REQ: https://jira.fiware.org/secure/IssueNavigator.jspa?reset=true&jqlQuery=project+%3D+HELP+AND+component+%3D+FIWARE-SMART-CITIES-REQ
-.. _OPEN_DATA-REQ: https://jira.fiware.org/secure/IssueNavigator.jspa?reset=true&jqlQuery=project+%3D+HELP+AND+component+%3D+FIWARE-OPEN-DATA-REQ
 .. _MUNDUS-REQ: https://jira.fiware.org/secure/IssueNavigator.jspa?reset=true&jqlQuery=project+%3D+HELP+AND+component+%3D+FIWARE-MUNDUS-REQ
 
 .. _main_helpdesk:
@@ -188,56 +179,10 @@ Each channel has its corresponding coach responsible for attending incoming requ
 +----------------------------------+--------------------------+--------------------------------+
 | Email Channel                    | JIRA Component           | Leader                         |
 +==================================+==========================+================================+
-| fiware-ceedtech-coaching         | `CEED Tech`_             | CONSOFT - Marco Terrinoni      |
-+----------------------------------+--------------------------+--------------------------------+
-| fiware-creatifi-coaching         | `CreatiFI`_              | CREATE - Silvio Cretti         |
-+----------------------------------+--------------------------+--------------------------------+
-| fiware-europeanpioneers-coaching | `EuropeanPioneers`_      | ORANGE - Thierry Nagellen      |
-+----------------------------------+--------------------------+--------------------------------+
-| fiware-fabulous-coaching         | `FABulous`_              | ENG - Pasquale Vitale          |
-+----------------------------------+--------------------------+--------------------------------+
-| fiware-fiadopt-coaching          | `FI-ADOPT`_              | ATOS - Omer Ozdemir            |
-+----------------------------------+--------------------------+--------------------------------+
-| fiware-fic3-coaching             | `FI-C3`_                 | EGLOBALMARK - Franck Le Gall   |
-+----------------------------------+--------------------------+--------------------------------+
-| fiware-fiche-coaching            | `FICHe`_                 | EGLOBALMARK - Franck Le Gall   |
-+----------------------------------+--------------------------+--------------------------------+
-| fiware-finish-coaching           | `Finish`_                | ATOS - Omer Ozdemir            |
-+----------------------------------+--------------------------+--------------------------------+
-| fiware-finodex-coaching          | `FINODEX`_               | ENG - Pasquale Vitale          |
-+----------------------------------+--------------------------+--------------------------------+
-| fiware-fractals-coaching         | `FRACTALS`_              | ATOS - Omer Ozdemir            |
-+----------------------------------+--------------------------+--------------------------------+
-| fiware-frontiercities-coaching   | `FrontiersCities`_       | ENG  - Francesco Arigliano     |
-+----------------------------------+--------------------------+--------------------------------+
-| fiware-impact-coaching           | `IMPACT`_                | TID  - Leandro Guillén         |
-+----------------------------------+--------------------------+--------------------------------+
-| fiware-incense-coaching          | `INCENSe`_               | ENG  - Pasquale Andriani       |
-+----------------------------------+--------------------------+--------------------------------+
-| fiware-smartagrifood-coaching    | `SmartAgriFood2`_        | ATOS - Omer Ozdemir            |
-+----------------------------------+--------------------------+--------------------------------+
-| fiware-soulfi-coaching           | `SOUL-FI`_               | TID  - Leandro Guillén         |
-+----------------------------------+--------------------------+--------------------------------+
-| fiware-speedup-coaching          | `SpeedUp Europe`_        | TID  - Leandro Guillén         |
+| fiware-coaching                  | `FIWARE-COACHING`_       | FF - Fernando López            |
 +----------------------------------+--------------------------+--------------------------------+
 
-.. _CEED Tech: https://jira.fiware.org/secure/IssueNavigator.jspa?reset=true&jqlQuery=project+%3D+HELC+AND+component+%3D+%22CEED+Tech%22
-.. _CreatiFI: https://jira.fiware.org/secure/IssueNavigator.jspa?reset=true&jqlQuery=project+%3D+HELC+AND+component+%3D+CreatiFI
-.. _EuropeanPioneers: https://jira.fiware.org/secure/IssueNavigator.jspa?reset=true&jqlQuery=project+%3D+HELC+AND+component+%3D+EuropeanPioneers
-.. _FABulous: https://jira.fiware.org/secure/IssueNavigator.jspa?reset=true&jqlQuery=project+%3D+HELC+AND+component+%3D+FABulous
-.. _FI-ADOPT: https://jira.fiware.org/secure/IssueNavigator.jspa?reset=true&jqlQuery=project+%3D+HELC+AND+component+%3D+FI-ADOPT
-.. _FI-C3: https://jira.fiware.org/secure/IssueNavigator.jspa?reset=true&jqlQuery=project+%3D+HELC+AND+component+%3D+FI-C3
-.. _FICHe: https://jira.fiware.org/secure/IssueNavigator.jspa?reset=true&jqlQuery=project+%3D+HELC+AND+component+%3D+FICHe
-.. _Finish: https://jira.fiware.org/secure/IssueNavigator.jspa?reset=true&jqlQuery=project+%3D+HELC+AND+component+%3D+Finish
-.. _FINODEX: https://jira.fiware.org/secure/IssueNavigator.jspa?reset=true&jqlQuery=project+%3D+HELC+AND+component+%3D+FINODEX
-.. _FRACTALS: https://jira.fiware.org/secure/IssueNavigator.jspa?reset=true&jqlQuery=project+%3D+HELC+AND+component+%3D+FRACTALS
-.. _FrontiersCities: https://jira.fiware.org/secure/IssueNavigator.jspa?reset=true&jqlQuery=project+%3D+HELC+AND+component+%3D+FrontierCities
-.. _IMPACT: https://jira.fiware.org/secure/IssueNavigator.jspa?reset=true&jqlQuery=project+%3D+HELC+AND+component+%3D+IMPACT
-.. _INCENSe: https://jira.fiware.org/secure/IssueNavigator.jspa?reset=true&jqlQuery=project+%3D+HELC+AND+component+%3D+INCENSe
-.. _SmartAgriFood2: https://jira.fiware.org/secure/IssueNavigator.jspa?reset=true&jqlQuery=project+%3D+HELC+AND+component+%3D+SmartAgriFood2
-.. _SOUL-FI: https://jira.fiware.org/secure/IssueNavigator.jspa?reset=true&jqlQuery=project+%3D+HELC+AND+component+%3D+SOUL-FI
-.. _SpeedUp Europe: https://jira.fiware.org/secure/IssueNavigator.jspa?reset=true&jqlQuery=project+%3D+HELC+AND+component+%3D+%22SpeedUp+Europe%22
-
+.. _FIWARE-COACHING: https://jira.fiware.org/issues/?jql=project%20%3D%20HELC%20AND%20component%20%3D%20FIWARE-Coaching
 
 .. figure:: _static/helpdesk_coaches_main.jpg
    :align: center
