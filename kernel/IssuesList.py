@@ -23,12 +23,16 @@ class LinkedIssue(dict):
         self['status'] = item[_type]['fields']['status']['name']
         self['key'] = item[_type]['key']
         self['url'] = 'https://jira.fiware.org/browse/{}'.format(self['key'])
+
     @property
     def type(self): return self['type']
+
     @property
     def status(self): return self['status']
+
     @property
     def key(self): return self['key']
+
     @property
     def url(self): return self['url']
 
@@ -38,10 +42,11 @@ class LinkedIssue(dict):
     def __repr__(self):
         return self['key']
 
+
 class SimpleIssue(dict):
     def __init__(self, issue):
         super().__init__()
-        #pprint.pprint(issue)
+        # pprint.pprint(issue)
         self['key'] = issue['key']
         self['id'] = issue['id']
         self['project'] = issue['fields']['project']['key']
@@ -49,9 +54,11 @@ class SimpleIssue(dict):
         self['summary'] = issue['fields']['summary'].strip()
         self['status'] = issue['fields']['status']['name']
         self['description'] = issue['fields']['description']
+
         try:
             self['priority'] = issue['fields']['priority']['name']
-        except: self['priority'] = 'Major'
+        except:
+            self['priority'] = 'Major'
 
         self['issueType'] = issue['fields']['issuetype']['name']
         self['reporter'] = issue['fields']['reporter']['displayName']
@@ -59,17 +66,20 @@ class SimpleIssue(dict):
         if issue['fields']['resolution'] != None:
             self['resolution'] = issue['fields']['resolution']['name'] \
             if 'name' in issue['fields']['resolution'] else None
-        else: self['resolution'] = None
+        else:
+            self['resolution'] = None
 
         if issue['fields']['assignee'] != None:
             self['assignee'] = issue['fields']['assignee']['displayName'] \
                 if 'displayName' in issue['fields']['assignee'] else None
-        else: self['assignee'] = None
+        else:
+            self['assignee'] = None
 
         if 'duedate' in issue['fields']:
             self['duedate'] = datetime.strptime(issue['fields']['duedate'][:10], '%Y-%m-%d').date() \
                 if issue['fields']['duedate'] else None
-        else: self['duedate'] = None
+        else:
+            self['duedate'] = None
 
         self['created'] = datetime.strptime(issue['fields']['created'][:10], '%Y-%m-%d').date()
         self['updated'] = datetime.strptime(issue['fields']['updated'][:10], '%Y-%m-%d').date()
@@ -77,7 +87,8 @@ class SimpleIssue(dict):
         if 'resolutiondate' in issue['fields']:
             self['resolved'] = datetime.strptime(issue['fields']['resolutiondate'][:10], '%Y-%m-%d').date()  \
                 if issue['fields']['resolutiondate'] else None
-        else: self['resolved'] = None
+        else:
+            self['resolved'] = None
 
         self['version'] = 'Unscheduled'
         self['nVersions'] = 0
@@ -85,23 +96,28 @@ class SimpleIssue(dict):
             self['nVersions'] = len(issue['fields']['fixVersions'])
             if len(issue['fields']['fixVersions']) > 0:
                 self['version'] = issue['fields']['fixVersions'][0]['name']
-                self['releaseDate'] = datetime.strptime(issue['fields']['fixVersions'][0]['releaseDate'][:10], '%Y-%m-%d').date()
+                self['releaseDate'] = \
+                    datetime.strptime(issue['fields']['fixVersions'][0]['releaseDate'][:10], '%Y-%m-%d').date()
 
         self['jurl'] = "http://jira.fiware.org/browse/{}".format(issue['key'])
-        #print(self['jurl'])
+        # print(self['jurl'])
 
-        #self['cmpName'] = helpdeskBook.get_compName(self['component'])
+        # self['cmpName'] = helpdeskBook.get_compName(self['component'])
         if not len(self['component']):
             self['cmpName'] = 'Unassigned'
         else:
             try:
                 self['cmpName'] = tComponentsBook[self['component'][0]].name
-            except: self['cmpName'] = 'Unknown'
-        #print(self['component'], self['cmpName'])
+            except:
+                self['cmpName'] = 'Unknown'
+        # print(self['component'], self['cmpName'])
 
         _version = self['version'].split()
-        if len(_version) == 1: version = 'Unscheduled'
-        else: version = _version[1]
+
+        if len(_version) == 1:
+            version = 'Unscheduled'
+        else:
+            version = _version[1]
 
         self['links'] = None
         if 'issuelinks' in issue['fields']:
@@ -118,111 +134,141 @@ class SimpleIssue(dict):
     @property
     def links(self):
         return self['links']
+
     @property
     def key(self):
         return self['key']
+
     @property
     def nkey(self):
         return int(self['key'].split('-')[1])
+
     @property
     def name(self):
         return self.shortReference if self.name_test() else self.reference
+
     @property
     def shortReference(self):
         _name = self['summary'].split('.')
         return '.'.join(_name[2:])
+
     @property
     def reference(self):
         return self['summary']
+
     @property
     def description(self):
         return self['description']
+
     @property
     def reporter(self):
         return self['reporter']
+
     @property
     def issueType(self):
         return self['issueType']
+
     @property
     def priority(self):
         return self['priority']
+
     @property
     def status(self):
         return self['status']
+
     @property
     def resolution(self):
         return self['resolution']
+
     @property
     def resolved(self):
         return self['resolved']
+
     @property
     def updated(self):
         return self['updated']
+
     @property
     def created(self):
         return self['created']
+
     @property
     def nVersions(self):
         return self['nVersions']
+
     @property
     def timeSlot(self):
         return self['version']
+
     @property
     def nTimeSlot(self):
         return self['version'].split()[1]
+
     @property
     def assignee(self):
         return self['assignee'] if self['assignee'] else 'None'
+
     @property
     def age_(self):
         if self['resolved']:
             return self['resolved'] - self['created']
         else: return date.today() - self['created']
+
     @property
     def age(self):
         if self['resolved']:
             return (self['resolved'] - self['created']).days
-        else: return (date.today() - self['created']).days
+        else:
+            return (date.today() - self['created']).days
+
     @property
     def duedate(self):
         return self['duedate']
+
     @property
     def delay(self):
         if self['resolved'] and self['duedate']:
             return (self['resolved'] - self['duedate']).days
         return (date.today() - self.duedate).days
+
     @property
     def upcoming(self):
         return (self.duedate - date.today()).days
+
     @property
     def project(self):
         return self['project']
+
     @property
     def components(self):
         return self['component']
+
     @property
     def cmpName(self):
         return self['cmpName']
+
     @property
     def node(self):
         return tHelpDeskNodesBook.getNode(self.assignee)
+
     @property
     def url(self):
         return self['jurl']
 
+
 class IssuesList(list):
-    _sortDict = {'keyn': lambda x:x.nkey,
-                 'key': lambda x:x.key,
-                 'issueType': lambda x:x.issueType,
-                 'name': lambda x:x.name,
-                 'status': lambda x:x.status,
-                 'priority': lambda x:x.priority,
-                 'timeSlot': lambda x:x.timeSlot,
-                 'assignee': lambda x:x.assignee,
-                 'duedate': lambda x:x.duedate,
-                 'age': lambda x:x.age,
-                 'delay': lambda x:x.delay,
-                 'upcoming': lambda x:x.upcoming,
+    _sortDict = {'keyn': lambda x: x.nkey,
+                 'key': lambda x: x.key,
+                 'issueType': lambda x: x.issueType,
+                 'name': lambda x: x.name,
+                 'status': lambda x: x.status,
+                 'priority': lambda x: x.priority,
+                 'timeSlot': lambda x: x.timeSlot,
+                 'assignee': lambda x: x.assignee,
+                 'duedate': lambda x: x.duedate,
+                 'age': lambda x: x.age,
+                 'delay': lambda x: x.delay,
+                 'upcoming': lambda x: x.upcoming,
                  'cmpName': lambda x: x.cmpName,
                  'node': lambda x: x.node}
 
@@ -230,8 +276,8 @@ class IssuesList(list):
         super().__init__()
         self.listName = name
         self.timestamp = datetime.now().strftime("%Y%m%d-%H%M")
-        self.filename = 'FIWARE.issuesList.'+ self.listName +'.'+ self.timestamp + '.pkl'
-        #print('+', self.filename)
+        self.filename = 'FIWARE.issuesList.' + self.listName + '.' + self.timestamp + '.pkl'
+        # print('+', self.filename)
         if issuesList:
             for issue in issuesList:
                 self.append(issue)
@@ -252,7 +298,7 @@ class IssuesList(list):
     @classmethod
     def fromData(cls, name, data):
         issuesList = [SimpleIssue(issue) for issue in data]
-        #print(name)
+        # print(name)
         return cls(name, issuesList)
 
     @property
@@ -267,7 +313,10 @@ class IssuesList(list):
     @classmethod
     def fromFile(cls, name):
         fileList = os.listdir(settings.storeHome)
-        mfilter = re.compile(r'\bFIWARE[.]issuesList[.](?P<name>[\w\.\-\d]+)[.](?P<day>\d{8})[-](?P<time>\d{4})[.]pkl\b')
+
+        mfilter = \
+            re.compile(r'\bFIWARE[.]issuesList[.](?P<name>[\w\.\-\d]+)[.](?P<day>\d{8})[-](?P<time>\d{4})[.]pkl\b')
+
         record = namedtuple('record', 'filename, day, time')
         filelist = [record(mfilter.match(f).group(0),
                            mfilter.match(f).group('day'),
@@ -281,17 +330,22 @@ class IssuesList(list):
 
     def clean(self):
         fileList = os.listdir(settings.storeHome)
-        mfilter = re.compile(r'\bFIWARE[.]issuesList[.](?P<name>[\w\.\-\d]+)[.](?P<day>\d{8})[-](?P<time>\d{4})[.]pkl\b')
+
+        mfilter = \
+            re.compile(r'\bFIWARE[.]issuesList[.](?P<name>[\w\.\-\d]+)[.](?P<day>\d{8})[-](?P<time>\d{4})[.]pkl\b')
+
         record = namedtuple('record', 'filename, day, time')
         filelist = [record(mfilter.match(f).group(0),
                            mfilter.match(f).group('day'),
                            mfilter.match(f).group('time')) for f in fileList if mfilter.match(f)
                     if mfilter.match(f).group('name') == self.listName]
+
         filelist.sort(key=attrgetter('day', 'time'), reverse=True)
         toRemove = filelist[5:]
         if len(toRemove) > 0:
             for item in toRemove:
                 os.remove(os.path.join(settings.storeHome, item.filename))
+
 
 class IssuesFactory:
     _fields = '*navigable'
@@ -315,33 +369,39 @@ class IssuesFactory:
     def getAllHelpDeskIssues(self, request):
         startAt = 0
         if request == 'main':
-            payload = { 'fields':IssuesFactory.fields,
-                        'maxResults':1000, 'startAt':startAt,
-                        'jql':'project=HELP'}
+            payload = {'fields': IssuesFactory.fields,
+                       'maxResults': 1000, 'startAt': startAt,
+                       'jql': 'project=HELP'}
             try:
                 data = self.connector.search(payload)
             except:
                 raise Exception
 
             totalIssues, receivedIssues = data['total'], len(data['issues'])
+
             while totalIssues > receivedIssues:
                 payload['startAt'] = receivedIssues
                 try:
                     _data = self.connector.search(payload)
-                except:raise Exception
+                except:
+                    raise Exception
+
                 data['issues'].extend(_data['issues'])
                 receivedIssues = len(data['issues'])
+
             return IssuesList.fromData('helpdesk.main', data['issues'])
 
         if request == 'main.lab':
             labId = helpdeskCompBook['Lab'].key
-            payload = { 'fields':IssuesFactory.fields,
-                        'maxResults':1000, 'startAt':startAt,
-                        'jql':'component={}'.format(labId)}
+            payload = {'fields': IssuesFactory.fields,
+                       'maxResults': 1000, 'startAt': startAt,
+                       'jql': 'component={}'.format(labId)}
             try:
                 data = self.connector.search(payload)
             except: raise Exception
+
             totalIssues, receivedIssues = data['total'], len(data['issues'])
+
             while totalIssues > receivedIssues:
                 payload['startAt'] = receivedIssues
                 data['issues'].extend(self.connector.search(payload)['issues'])
@@ -350,99 +410,126 @@ class IssuesFactory:
 
         if request == 'main.tech':
             labId = helpdeskCompBook['Tech'].key
-            payload = { 'fields':IssuesFactory.fields,
-                        'maxResults':1000, 'startAt':startAt,
-                        'jql':'component={}'.format(labId)}
+            payload = {'fields': IssuesFactory.fields,
+                       'maxResults': 1000, 'startAt': startAt,
+                       'jql': 'component={}'.format(labId)}
             try:
                 data = self.connector.search(payload)
-            except: raise Exception
+            except:
+                raise Exception
+
             totalIssues, receivedIssues = data['total'], len(data['issues'])
+
             while totalIssues > receivedIssues:
                 payload['startAt'] = receivedIssues
                 data['issues'].extend(self.connector.search(payload)['issues'])
                 receivedIssues = len(data['issues'])
+
             return IssuesList.fromData('helpdesk.main.tech', data['issues'])
 
         if request == 'coaches':
-            payload = { 'fields':IssuesFactory.fields,
-                        'maxResults':1000, 'startAt':startAt,
-                        'jql':'project=HELC' }
+            payload = {'fields': IssuesFactory.fields,
+                       'maxResults': 1000, 'startAt': startAt,
+                       'jql': 'project=HELC'}
             try:
                 data = self.connector.search(payload)
-            except: raise Exception
+            except:
+                raise Exception
+
             totalIssues, receivedIssues = data['total'], len(data['issues'])
+
             while totalIssues > receivedIssues:
                 payload['startAt'] = receivedIssues
                 data['issues'].extend(self.connector.search(payload)['issues'])
                 receivedIssues = len(data['issues'])
+
             return IssuesList.fromData('helpdesk.coaches', data['issues'])
 
         if request == 'tools':
-            payload = { 'fields':IssuesFactory.fields,
-                        'maxResults':1000, 'startAt':startAt,
-                        'jql':'project=SUPP' }
+            payload = {'fields': IssuesFactory.fields,
+                       'maxResults': 1000, 'startAt': startAt,
+                       'jql': 'project=SUPP'}
             try:
                 data = self.connector.search(payload)
-            except: raise Exception
+            except:
+                raise Exception
+
             totalIssues, receivedIssues = data['total'], len(data['issues'])
+
             while totalIssues > receivedIssues:
                 payload['startAt'] = receivedIssues
                 data['issues'].extend(self.connector.search(payload)['issues'])
                 receivedIssues = len(data['issues'])
+
             return IssuesList.fromData('helpdesk.tools', data['issues'])
 
     def getUnresolvedHelpDeskIssues(self, request):
         startAt = 0
         if request == 'main':
-            payload = { 'fields':IssuesFactory.fields,
-                        'maxResults':1000, 'startAt':startAt,
-                        'jql':'project=HELP AND resolution = Unresolved'}
+            payload = {'fields': IssuesFactory.fields,
+                       'maxResults': 1000, 'startAt': startAt,
+                       'jql': 'project=HELP AND resolution = Unresolved'}
             try:
                 data = self.connector.search(payload)
-            except: raise Exception
+            except:
+                raise Exception
+
             unresolvedIssues = IssuesList.fromData('helpdesk.main.unresolved', data['issues'])
+
             return unresolvedIssues
 
         if request == 'main.lab':
             labId = helpdeskCompBook['Lab'].key
-            payload = { 'fields':IssuesFactory.fields,
-                        'maxResults':1000, 'startAt':startAt,
-                        'jql':'component={} AND resolution = Unresolved'.format(labId)}
+            payload = {'fields': IssuesFactory.fields,
+                       'maxResults': 1000, 'startAt': startAt,
+                       'jql': 'component={} AND resolution = Unresolved'.format(labId)}
             try:
                 data = self.connector.search(payload)
-            except: raise Exception
+            except:
+                raise Exception
+
             unresolvedIssues = IssuesList.fromData('helpdesk.main.lab.unresolved', data['issues'])
+
             return unresolvedIssues
 
         if request == 'main.tech':
             techId = helpdeskCompBook['Tech'].key
-            payload = { 'fields':IssuesFactory.fields,
-                        'maxResults':1000, 'startAt':startAt,
-                        'jql':'component={} AND resolution = Unresolved'.format(techId)}
+            payload = {'fields': IssuesFactory.fields,
+                       'maxResults': 1000, 'startAt': startAt,
+                       'jql': 'component={} AND resolution = Unresolved'.format(techId)}
             try:
                 data = self.connector.search(payload)
-            except: raise Exception
+            except:
+                raise Exception
+
             unresolvedIssues = IssuesList.fromData('helpdesk.main.tech.unresolved', data['issues'])
+
             return unresolvedIssues
 
         if request == 'coaches':
-            payload = { 'fields':IssuesFactory.fields,
-                        'maxResults':1000, 'startAt':startAt,
-                        'jql':'project=HELC AND resolution = Unresolved' }
+            payload = {'fields': IssuesFactory.fields,
+                       'maxResults': 1000, 'startAt': startAt,
+                       'jql': 'project=HELC AND resolution = Unresolved' }
             try:
                 data = self.connector.search(payload)
-            except: raise Exception
+            except:
+                raise Exception
+
             unresolvedIssues = IssuesList.fromData('helpdesk.coaches.unresolved', data['issues'])
+
             return unresolvedIssues
 
         if request == 'tools':
-            payload = { 'fields':IssuesFactory.fields,
-                        'maxResults':1000, 'startAt':startAt,
-                        'jql':'project=SUPP AND resolution = Unresolved'}
+            payload = {'fields': IssuesFactory.fields,
+                       'maxResults': 1000, 'startAt': startAt,
+                       'jql': 'project=SUPP AND resolution = Unresolved'}
             try:
                 data = self.connector.search(payload)
-            except: raise Exception
+            except:
+                raise Exception
+
             unresolvedIssues = IssuesList.fromData('helpdesk.tools.unresolved', data['issues'])
+
             return unresolvedIssues
 
     def getUrgentIssues(self, request):
@@ -539,6 +626,7 @@ class IssuesFactory:
 
         issues_list = IssuesList.fromData(request, data['issues'])
         return issues_list
+
 
 if __name__ == "__main__":
     pass

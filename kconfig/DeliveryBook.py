@@ -4,6 +4,7 @@ from datetime import date, datetime
 from collections import OrderedDict
 from . import calendar
 from kernel.Jira import JIRA
+import re
 
 __author__ = "Manuel Escriche <mev@tid.es>"
 
@@ -15,7 +16,9 @@ class Workflow:
     __instance = None
 
     def __init__(self):
-        if Workflow.__instance: return
+        if Workflow.__instance:
+            return
+
         self.scheduled = ('Scheduled',)
         self.active = ('Planned',) + self.scheduled
         self.delivered = ('Delivered',)
@@ -24,12 +27,16 @@ class Workflow:
         self.submitted = ('Scheduled', 'Delivered', 'Accepted', 'Rejected-NReq')
         self.assessed = ('Accepted', 'Rejected-NReq')
         Workflow.__instance = self
+
     @property
     def open(self): return self.active + self.delivered
+
     @property
     def resolved(self): return self.closed + self.excluded
+
     @property
     def status(self): return self.active + self.delivered + self.resolved
+
     @property
     def pending(self):
         return self.active
@@ -37,8 +44,10 @@ class Workflow:
 
 workflow = Workflow()
 
+
 class Issue:
     jira = JIRA()
+
     def __init__(self, id):
         self.id = id
         self.url = 'http://{}/browse/{}'.format('jira.fiware.org', self.id)
@@ -47,6 +56,7 @@ class Issue:
 
 class Deliverable:
     jira = JIRA()
+
     def __init__(self, deliverable):
         tagsList = [child.tag for child in deliverable]
         self.id = deliverable.get('id')
@@ -55,20 +65,33 @@ class Deliverable:
         self.owner = deliverable.find('owner').text if 'owner' in tagsList else "Unknown"
         self.leader = deliverable.find('leader').text if 'leader' in tagsList else "Unknown"
         self.status = deliverable.find('status').text if 'status' in tagsList else "Planned"
-        try: self.delivery_issue = Issue(deliverable.find('delivery_issue').text)
-        except Exception: self.delivery_issue = None
-        try : self.edition_issue = Issue(deliverable.find('edition_issue').text)
-        except Exception: self.edition_issue = None
+
+        try:
+            self.delivery_issue = Issue(deliverable.find('delivery_issue').text)
+        except Exception:
+            self.delivery_issue = None
+
+        try:
+            self.edition_issue = Issue(deliverable.find('edition_issue').text)
+        except Exception:
+            self.edition_issue = None
+
         self.resolution = deliverable.find('resolution').text if 'resolution' in tagsList else "Undefined"
         self.deadline = calendar.getMonth(self.month)[1]
         self.submissions = list()
         if 'submission' in tagsList:
             for _date in deliverable.find('submission').findall('date'):
                 self.submissions.append(datetime.strptime(_date.text, '%d-%m-%Y').date())
-                #self.submissions.append(date(int(__date[6:11]), int(__date[3:5]), int(__date[0:2])))
+                # self.submissions.append(date(int(__date[6:11]), int(__date[3:5]), int(__date[0:2])))
+
     @property
     def month(self):
-        return int(self.n_month[1:])
+        try:
+            value = int(self.n_month[1:])
+        except Exception as e:
+            value = int(re.match('M([0-9]*) \(M[0-9]*\)', self.n_month).group(1))
+
+        return value
 
     @property
     def first_submission(self):
@@ -119,30 +142,30 @@ class DeliverableBook(OrderedDict):
         self.codeHome = os.path.dirname(os.path.abspath(__file__))
         self.configHome = os.path.join(os.path.split(self.codeHome)[0], 'site_config')
         xmlfile = os.path.join(self.configHome, 'Deliverables.xml')
-        #print(xmlfile)
+        # print(xmlfile)
         tree = ET.parse(xmlfile)
         root = tree.getroot()
         for _deliverable in root.findall('deliverable'):
             name = _deliverable.get('id')
             self[name] = Deliverable(_deliverable)
-            #print(self[name])
+            # print(self[name])
 
     @property
     def dashboard(self):
-        #last two deliveries
+        # last two deliveries
         deliveries = [item for item in self.values() if item.status in workflow.delivered]
-        deliveries.sort(key=lambda e:e.last_submission, reverse=True)
+        deliveries.sort(key=lambda e: e.last_submission, reverse=True)
         _dashboard = deliveries[:4]
         _dashboard.reverse()
-        #planned
+        # planned
         working = [item for item in self.values() if item.status in workflow.active]
-        delayed = [item for item in working  if item.isDelayed]
-        #print('delayed=', delayed)
+        delayed = [item for item in working if item.isDelayed]
+        # print('delayed=', delayed)
         _dashboard += delayed
         upcoming = [item for item in working if item.isUpcoming]
-        #print('upcoming=', upcoming)
+        # print('upcoming=', upcoming)
         _dashboard += upcoming
-        _dashboard.sort(key=lambda e:e.deadline)
+        _dashboard.sort(key=lambda e: e.deadline)
         return _dashboard
 
     @property
@@ -154,6 +177,7 @@ class DeliverableBook(OrderedDict):
         return [item for item in self.values() if item.isPending]
 
 # deliveryBook = DeliverableBook()
+
 
 if __name__ == "__main__":
     pass
